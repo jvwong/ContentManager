@@ -1,0 +1,35 @@
+// -------------------------- START Configurations ---------------------------//
+// -------------------------- END Configurations -----------------------------//
+
+// -------------------------- START Tasks ------------------------------------//
+// -------------------------- END Tasks --------------------------------------//
+
+// -------------------------- START Gradle -----------------------------------//
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    //Spring
+    compile 'org.springframework.data:spring-data-commons:1.11.0.RELEASE'
+    compile 'org.springframework.data:spring-data-jpa:1.9.0.RELEASE'
+
+    // Java
+    compile 'org.eclipse.persistence:javax.persistence:2.1.0'
+
+    // XML
+    compile 'com.fasterxml.jackson.core:jackson-core:2.6.2'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.2'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
+	
+}
+// -------------------------- END Gradle -------------------------------------//
+
+// -------------------------- START Eclipse ----------------------------------//
+eclipse {
+    project {
+        comment = 'Model representation'
+    }
+}
+// -------------------------- END Eclipse ------------------------------------//

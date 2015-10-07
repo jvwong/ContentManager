@@ -1,0 +1,25 @@
+// -------------------------- START Configurations ---------------------------//
+// -------------------------- END Configurations -----------------------------//
+
+// -------------------------- START Tasks ------------------------------------//
+// -------------------------- END Tasks --------------------------------------//
+
+// -------------------------- START Gradle -----------------------------------//
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // Spring    
+    compile 'org.springframework.data:spring-data-jpa:1.9.0.RELEASE'
+	
+	// Hibernate
+	compile 'org.hibernate:hibernate-entitymanager:5.0.2.Final'
+	
+	//H2
+	compile 'com.h2database:h2:1.4.188'
+	
+	compile project(':cm-model')
+}
+// -------------------------- END Gradle -------------------------------------//

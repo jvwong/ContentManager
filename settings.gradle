@@ -1,0 +1,8 @@
+include 'cm-web', 'cm-repository', 'cm-model'
+
+rootProject.name = 'ContentManager'
+
+rootProject.children.each {
+    //iterate through all subprojects accessible through root project
+    it.buildFileName = it.name + '.gradle' - 'cm-'
+}
