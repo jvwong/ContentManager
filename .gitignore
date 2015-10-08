@@ -2,6 +2,9 @@ build/
 bin/
 .classpath
 .project
-gradle*
 .settings
-
+gradle*
+.gradle/
+*iml
+*.ipr
+*.iws
