@@ -59,7 +59,7 @@ task printVersion {
 allprojects {
     group = 'com.example.cm'
     version = readVersion()
-    apply plugin: 'eclipse'
+    apply plugin: 'idea'
 }
 
 subprojects {
@@ -85,13 +85,3 @@ task wrapper(type: Wrapper){
     gradleVersion = '2.6'
 }
 // -------------------------- END Gradle -------------------------------------//
-
-// -------------------------- START Eclipse ----------------------------------//
-eclipse {
-    project {
-    	name = 'ContentManager'
-    	comment = 'A content management application'
-    	referencedProjects 'cm-web', 'cm-repository', 'cm-model'
-    }
-}
-// -------------------------- END Eclipse ------------------------------------//

@@ -1,4 +1,3 @@
-apply plugin: 'eclipse-wtp'
 apply plugin: 'war'
 
 // -------------------------- START Configurations ---------------------------//
@@ -38,7 +37,7 @@ repositories {
 }
 
 dependencies {
-		
+
     // Spring
     compile 'org.springframework:spring-webmvc:4.2.1.RELEASE'
     compile 'org.springframework:spring-web:4.2.1.RELEASE'
@@ -52,53 +51,25 @@ dependencies {
     // Thymeleaf
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
 	compile 'org.thymeleaf:thymeleaf-spring4:2.1.4.RELEASE'
-	
+
 	// Hibernate
 	compile 'org.hibernate:hibernate-validator:5.2.1.Final'
 	compile 'javax.validation:validation-api:1.1.0.Final'
-		
+
 	//Logging
 	compile 'org.slf4j:slf4j-api:1.6.6'
 	runtime 'org.slf4j:jcl-over-slf4j:1.6.6'
 	runtime 'org.slf4j:slf4j-log4j12:1.6.6'
-		
-    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'	
+
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
 	// Cargo
 	// Declare dependency info using map containing group, name, and version
     cargo group: cargoGroup, name: 'cargo-core-uberjar', version: cargoVersion
 	// (Shortcut) dependency declaration as string using above
     cargo "$cargoGroup:cargo-ant:$cargoVersion"
-	
+
 	compile project(':cm-repository')
 	compile project(':cm-model')
 }
 // -------------------------- END Gradle -------------------------------------//
-
-// -------------------------- START Eclipse ----------------------------------//
-eclipse {
-    project {
-        comment = 'Web components for managing items'
-    }
-
-//	classpath {
-//        plusConfigurations << configurations.functTestCompile
-//        plusConfigurations << configurations.functTestRuntime
-//    }
-
-    wtp {
-        component {
-            contextPath = 'cm'
-        }
-
-        facet {
-            file {
-                withXml { xml ->
-                    def node = xml.asNode()
-                    node.appendNode('installed', [facet: 'wst.jsdt.web', version: '1.0'])
-                }
-            }
-        }
-    }
-}
-// -------------------------- END Eclipse -----------------------------------//
