@@ -77,6 +77,14 @@ subprojects {
 		testCompile 'org.springframework:spring-test:4.2.1.RELEASE'
     }
     sourceCompatibility = 1.8
+
+    idea {    
+        module {
+            downloadSources = true
+            downloadJavadoc = false
+        }
+    }
+
 }
 // -------------------------- END Projects -----------------------------------//
 
@@ -85,3 +93,18 @@ task wrapper(type: Wrapper){
     gradleVersion = '2.6'
 }
 // -------------------------- END Gradle -------------------------------------//
+
+// -------------------------- START IDEA -------------------------------------//
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+
+        ipr.withXml { provider ->
+            def node = provider.asNode()
+            def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
+            gradleSettings.appendNode('option', [name: 'linkedProjectPath', value: '$PROJECT_DIR$/build.gradle'])
+        }
+    }
+}
+// -------------------------- END IDEA ---------------------------------------//

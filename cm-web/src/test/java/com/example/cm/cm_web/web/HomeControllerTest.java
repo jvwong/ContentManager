@@ -7,8 +7,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.cm.cm_web.web.HomeController;
-
 public class HomeControllerTest {
 
   @Test
