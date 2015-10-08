@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,22 +63,18 @@ public class ArticleController {
 	
 	/**
 	 * @param id article ID
-	 * @param pageNumber page number
-	 * @param req request
-	 * @param res response
 	 * @return logical view name
 	 * @throws IOException if there's an I/O exception
 	 */
-//	@RequestMapping(value = "/{id}/{page}", method = RequestMethod.GET)
-//	public String getArticlePage(@PathVariable String id, @PathVariable("page") Integer pageNumber, Model model) {
-//		log.debug("Serving {}, page {}", id, pageNumber);
-//		Article article = articleDao.getPage(id, pageNumber);
-//		Page page = article.getPages().get(pageNumber - 1);
-//		model.addAttribute(article);
-//		model.addAttribute("articlePage", page);
-//		model.addAttribute("pageNumber", pageNumber);
-//		return getFullViewName("articlePage");
-//	}
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String getArticlePage(
+			@PathVariable String id,
+			Model model) {
+
+		Article article = articleRepository.findOne(Long.parseLong(id));
+		model.addAttribute("article", article);
+		return getFullViewName("articlePage");
+	}
 	
 	private String getFullViewName(String path){
 		return "/articles/" + path;

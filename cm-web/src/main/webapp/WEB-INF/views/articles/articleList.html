@@ -6,6 +6,9 @@
 		<link rel="stylesheet" type="text/css" th:href="@{/resources/styles/base.css}"></link>
 	</head>
 	<body>
+		<div id="header" th:include="page :: header"></div>
+
+
 		<h1>Articles</h1>		
 		<div>
 			<div><span class="add icon"><a id="uploadLink" href="#">Upload article</a></span></div>
@@ -26,7 +29,10 @@
 			<div th:each="article: ${articleList}">				
 				<div class="articleItem">
 					<div class="articleTitle">
-						<a th:href="@{/article/article/id}" th:text="${article.title}">Title</a>
+						ID: <span th:text="${article.id}">ID</span>
+					</div>
+					<div class="articleTitle">
+						<a th:href="@{/articles/} + ${article.id}" th:text="${article.title}">Title</a>
 					</div>
 					<div class="articleCreatedBy">
 						Author: <span th:text="${article.createdBy}">Created By</span>
@@ -41,5 +47,6 @@
 			</div>
 		</div>
 
+		<div id="footer" th:include="page :: copy"></div>
 	</body>
 </html>

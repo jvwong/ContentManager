@@ -1,34 +1,32 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head>
-		<title><c:out value="${article.title}" /> - Page <c:out value="${pageNumber}" /></title>
-		<link rel="stylesheet" type="text/css" href="${shCoreDefaultCssUrl}" />
-		<link rel="stylesheet" type="text/css" href="${articlesCssUrl}" />				
+		<title>Articles</title>
+		<link rel="stylesheet" type="text/css" th:href="@{/resources/styles/base.css}"></link>
 	</head>
 	<body>
-		<div><jsp:include page="pageNav.jsp" /></div>
-		
-		<c:choose>
-			<c:when test="${pageNumber == 1}">
-				<h1 id="articleTitle"><c:out value="${article.title}" /></h1>
-				<div style="margin:20px 0">
-					<c:if test="${not empty article.author}">
-						<div id="byline"><c:out value="${article.author}" /></div>
-					</c:if>
-					<c:if test="${not empty article.publishDate}">
-						<div id="dateline"><span class="date icon"><fmt:formatDate value="${article.publishDate}" /></span></div>
-					</c:if>
+		<div id="header" th:include="page :: header"></div>
+
+		<h1>Article</h1>
+
+		<div id="articlePage">
+			<div class="article">
+				<div class="articleCreatedBy">
+					Title: <span th:text="${article.title}">Title</span>
 				</div>
-				<div id="deck">
-					<c:out value="${article.description}" />
+				<div class="articleCreatedBy">
+					Author: <span th:text="${article.createdBy}">Created By</span>
 				</div>
-			</c:when>
-			<c:otherwise>
-				<h4><c:out value="${article.title}" /></h4>
-			</c:otherwise>
-		</c:choose>
-		
-		<c:out value="${articlePage.content}" escapeXml="false" />
-		
-		<div><jsp:include page="pageNav.jsp" /></div>
+				<div class="articleCreatedDate">
+					Created: <span th:text="${article.createdDate}">Created Date</span>
+				</div>
+				<div class="articleDescription">
+					Description: <span th:text="${article.description}">Description</span>
+				</div>
+			</div>
+		</div>
+
+		<div id="footer" th:include="page :: copy"></div>
 	</body>
 </html>

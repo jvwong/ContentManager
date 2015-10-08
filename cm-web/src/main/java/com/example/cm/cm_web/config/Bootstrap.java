@@ -1,6 +1,6 @@
 package com.example.cm.cm_web.config;
 
-//import javax.servlet.MultipartConfigElement;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -33,12 +33,12 @@ public class Bootstrap implements WebApplicationInitializer {
                 "cmWebDispatcher", new DispatcherServlet(webContext)
         );
         dispatcher.setLoadOnStartup(1);
-        // dispatcher.setMultipartConfig(
-		// 		new MultipartConfigElement(
-		// 				"/home/jeffrey/Projects/CMS/src/main/webapp/tmp/auth/user/uploads",
-		// 				2097152, // max size (bytes) file
-		// 				4194304, // max size (bytes) total request
-		// 				0));
+        dispatcher.setMultipartConfig(
+		 		new MultipartConfigElement(
+		 				"/home/jeffrey/Projects/CMS/src/main/webapp/tmp/auth/user/uploads",
+		 				2097152, // max size (bytes) file
+		 				4194304, // max size (bytes) total request
+		 				0));
         dispatcher.addMapping("/");
 
         // /*
