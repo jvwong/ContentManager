@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+    <head>
+        <title></title>
+    </head>
+
+    <body>
+        <!-- Header -->
+        <div th:fragment="header">
+            <a th:href="@{/}">
+                <img th:src="@{/resources/images/cms.png}" border="0" />
+            </a>
+
+            <!-- Authentication switch -->
+            <div th:switch="${#authorization.expression('isAuthenticated()')}">
+                <div th:case="${false}">
+                    <a th:href="@{/auth/login}">Login</a>
+                </div>
+                <div th:case="${true}">
+                    <ul class="navigation">
+                        <li>
+                            <span>
+                                Logged in: <span sec:authentication="name"></span>
+                            </span>
+                        </li>
+                        <li>
+                            <a th:href="@{/auth/profile}">Profile</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/articles}">Articles</a>
+                        </li>
+                    </ul>
+                    <div>
+                        <form method="POST"
+                              th:action="@{/auth/logout}">
+                            <input type="submit" value="Logout" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

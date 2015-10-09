@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <head>
+        <title>Articles</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/resources/styles/base.css}"></link>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header">&nbsp;</div>
+
+        <h1>Create Article</h1>
+
+        <div id="articleForm">
+            <form method="POST"
+                  th:object="${articleForm}"
+                  enctype="multipart/form-data"
+                  th:action="@{/articles/}">
+
+                <div class="errors" th:if="${#fields.hasErrors('*')}">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}"
+                            th:text="${err}">Input is incorrect</li>
+                    </ul>
+                </div>
+                <div class="errors" th:if="${message}">
+                    <span th:text="${message}">Flash Message</span>
+                </div>
+
+                <label th:class="${#fields.hasErrors('title')} ? 'error'">Title</label>:
+                <input type="text" th:field="*{title}"
+                       th:class="${#fields.hasErrors('title')}? 'error'" /><br/>
+
+                <label th:class="${#fields.hasErrors('description')} ? 'error'">Description</label>:
+                <input type="text" th:field="*{description}"
+                       th:class="${#fields.hasErrors('description')}? 'error'" /><br/>
+
+                <label th:class="${#fields.hasErrors('keywords')} ? 'error'">Keywords</label>:
+                <input type="text" th:field="*{keywords}"
+                       th:class="${#fields.hasErrors('keywords')}? 'error'" /><br/>
+
+                <input type="submit" value="Add" />
+            </form>
+
+        </div>
+
+        <div th:replace="fragments/footer :: copy">&nbsp;</div>
+    </body>
+</html>
