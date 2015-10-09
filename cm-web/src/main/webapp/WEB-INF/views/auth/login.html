@@ -7,12 +7,10 @@
 		      th:href="@{/resources/styles/base.css}"></link>
 	</head>
 	<body onload='document.f.username.focus();'>
-		<div id="header" th:include="page :: header"></div>
-		
+		<div th:replace="fragments/header :: header">&nbsp;</div>
+
 		<div id="content">
-		
-			<a th:href="@{/auth/register}">Register</a>			
-			
+			<a th:href="@{/auth/register}">Register</a>
 			<form name='f' 
 				  th:action='@{/auth/login}' 
 				  method='POST'>  		 		

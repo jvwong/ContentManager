@@ -5,8 +5,7 @@ import java.io.IOException;
 import com.example.cm.cm_web.config.annotation.WebController;
 import com.example.cm.cm_repository.repository.ArticleRepository;
 import com.example.cm.cm_model.domain.Article;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @WebController
 @RequestMapping(value = "/articles")
 public class ArticleController {
-	private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
+	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger();
 	
 	private ArticleRepository articleRepository;
 

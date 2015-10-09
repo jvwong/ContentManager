@@ -8,13 +8,13 @@
 			  th:href="@{/resources/styles/base.css}"></link>
 	</head>
 	<body>
-		<div id="header" th:include="page :: header"></div>
+		<div th:replace="fragments/header :: header">&nbsp;</div>
 
 		<div id="content">
 			<h1 th:text="#{home.welcome}">Welcome to CMS</h1>
 			<a th:href="@{/auth/register}">Register</a><br/>
 		</div>
 
-		<div id="footer" th:include="page :: copy"></div>
+		<div th:replace="fragments/footer :: copy">&nbsp;</div>
 	</body>
 </html>

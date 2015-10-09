@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -96,14 +98,15 @@ public class AuthController {
 		}	
 	}
 	
-	@RequestMapping(value="/profile/{username}", method=RequestMethod.GET)
-	public String showSpitterProfile(
-			@PathVariable String username,
-			Model model) {
-				
+	@RequestMapping(value="/profile", method=RequestMethod.GET)
+	public String showSpitterProfile(Model model) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String uname = auth.getName(); //get logged in username
+
 		if(!model.containsAttribute("username")){
-			CMSUser cmsUser = cmsUserRepository.findByUsername(username);
-		    model.addAttribute("cmsUser", cmsUser);		   
+			CMSUser user = cmsUserRepository.findByUsername(uname);
+		    model.addAttribute("user", user);
 		}
 		
 		return "/auth/profile";	 

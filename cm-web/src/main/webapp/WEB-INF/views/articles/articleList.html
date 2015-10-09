@@ -6,9 +6,7 @@
 		<link rel="stylesheet" type="text/css" th:href="@{/resources/styles/base.css}"></link>
 	</head>
 	<body>
-		<div id="header" th:include="page :: header"></div>
-
-
+		<div th:replace="fragments/header :: header">&nbsp;</div>
 		<h1>Articles</h1>		
 		<div>
 			<div><span class="add icon"><a id="uploadLink" href="#">Upload article</a></span></div>
@@ -47,6 +45,6 @@
 			</div>
 		</div>
 
-		<div id="footer" th:include="page :: copy"></div>
+		<div th:replace="fragments/footer :: copy">&nbsp;</div>
 	</body>
 </html>
