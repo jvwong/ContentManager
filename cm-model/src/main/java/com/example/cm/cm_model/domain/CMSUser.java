@@ -8,11 +8,13 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
 @Table(name = "CMSUser", uniqueConstraints = {
- 	// 	@UniqueConstraint(name = "username", columnNames = {"username"}),
-// 		@UniqueConstraint(name = "email", columnNames = {"email"})
+ 	 	@UniqueConstraint(name = "username", columnNames = {"username"}),
+ 		@UniqueConstraint(name = "email", columnNames = {"email"})
 })
 @AttributeOverride(name = "id", column = @Column(name = "UserId"))
 public class CMSUser extends DateAuditedEntity{
@@ -22,6 +24,32 @@ public class CMSUser extends DateAuditedEntity{
     private String password;
 	private String email;
 	private String role;
+
+	public CMSUser(){
+		this(null, null, null, null, null);
+	}
+
+	public CMSUser(String fullName,
+				   String username,
+				   String password,
+				   String email,
+				   String role){
+		this(null, fullName, username, password, email, role);
+	}
+
+	public CMSUser(Long id,
+				   String fullName,
+				   String username,
+				   String password,
+				   String email,
+				   String role){
+		this.setId(id);
+		this.fullName = fullName;
+		this.username = username;
+		this.password = password;
+		this.password = email;
+		this.password = role;
+	}
 
 	public String getFullName() {
 		return fullName;
@@ -67,5 +95,26 @@ public class CMSUser extends DateAuditedEntity{
 	@JsonProperty
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public boolean equals(Object that) {
+		return EqualsBuilder.reflectionEquals(this, that, "username", "email");
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this, "username", "email");
+	}
+
+	@Override
+	public String toString() {
+		return "[CMSUser: id=" + this.getId()
+				+ ", createdDate=" + this.getCreatedDate()
+				+ ", fullName=" + this.fullName
+				+ ", role=" + this.role
+				+ ", username=" + this.username
+				+ ", email=" + this.email
+				+ "]";
 	}
 }

@@ -11,7 +11,7 @@ import com.example.cm.cm_web.config.annotation.RestEndpointAdvice;
 @Configuration
 @EnableWebMvc 
 @ComponentScan(
-        basePackages = "org.cms.rest",
+        basePackages = {"com.example.cm.cm_web.rest"},
         useDefaultFilters = false,
         includeFilters = @ComponentScan.Filter({
         	RestEndpoint.class,

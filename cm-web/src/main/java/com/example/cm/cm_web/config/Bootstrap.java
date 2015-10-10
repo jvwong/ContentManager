@@ -1,14 +1,14 @@
 package com.example.cm.cm_web.config;
 
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 public class Bootstrap implements WebApplicationInitializer {
 
@@ -41,20 +41,20 @@ public class Bootstrap implements WebApplicationInitializer {
 		 				0));
         dispatcher.addMapping("/");
 
-        // /*
-    	//  * RESTful web service application context configuration
-    	//  */
-        // AnnotationConfigWebApplicationContext restContext =
-        //         new AnnotationConfigWebApplicationContext();
-        // restContext.register(RestServletContextConfiguration.class);
-        // DispatcherServlet servlet = new DispatcherServlet(restContext);
-        // // Recognize OPTIONS requests
-        // servlet.setDispatchOptionsRequest(true);
-        // dispatcher = servletContext.addServlet(
-        //         "cmsRestDispatcher", servlet
-        // );
-        // dispatcher.setLoadOnStartup(2);
-        // dispatcher.addMapping("/services/*");
+        /*
+        * RESTful web service application context configuration
+        */
+        AnnotationConfigWebApplicationContext restContext
+                = new AnnotationConfigWebApplicationContext();
+        restContext.register(RestServletContextConfiguration.class);
+        DispatcherServlet servlet = new DispatcherServlet(restContext);
+        // Recognize OPTIONS requests
+        servlet.setDispatchOptionsRequest(true);
+        dispatcher = servletContext.addServlet(
+             "cmRestDispatcher", servlet
+        );
+        dispatcher.setLoadOnStartup(2);
+        dispatcher.addMapping("/services/*");
 		
         // Activate the profile
         servletContext.setInitParameter("spring.profiles.active", "dev");
