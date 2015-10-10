@@ -62,10 +62,10 @@ dependencies {
 	compile 'javax.validation:validation-api:1.1.0.Final'
 
     // Message Conversion
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.2'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.6.2'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.2'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
+    runtime 'com.fasterxml.jackson.core:jackson-databind:2.6.2'
+    runtime 'com.fasterxml.jackson.core:jackson-core:2.6.2'
+    runtime 'com.fasterxml.jackson.core:jackson-annotations:2.6.2'
+    runtime 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
     testCompile 'com.google.code.gson:gson:2.4'
 
 	//Logging
@@ -78,6 +78,9 @@ dependencies {
     // Mockito
     testCompile "org.mockito:mockito-core:1.10.19"
     testCompile "org.hamcrest:hamcrest-library:1.3"
+
+    // jayway - to test JSON paths
+    testCompile 'com.jayway.jsonpath:json-path-assert:2.0.0'
 
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 

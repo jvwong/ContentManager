@@ -9,7 +9,6 @@ import org.junit.Before;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
