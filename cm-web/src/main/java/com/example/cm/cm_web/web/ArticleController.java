@@ -1,18 +1,19 @@
 package com.example.cm.cm_web.web;
 
-import java.io.IOException;
-
-import com.example.cm.cm_web.config.annotation.WebController;
-import com.example.cm.cm_repository.repository.ArticleRepository;
 import com.example.cm.cm_model.domain.Article;
+import com.example.cm.cm_repository.repository.ArticleRepository;
+import com.example.cm.cm_web.config.annotation.WebController;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
+import java.io.IOException;
 
 
 /**
@@ -31,32 +32,51 @@ public class ArticleController {
 	}
 	
 	/**
-	 * @param file multipart file
+	 * Create Article
+	 */
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String createArticle(
+			@Valid Article article,
+			RedirectAttributes model,
+			Errors errors) {
+
+		if (errors.hasErrors()) {
+			logger.info("Article errors encountered");
+			model.addFlashAttribute("errors", errors);
+			return getFullViewName("/create");
+		}
+
+		Article saved = articleRepository.save(article);
+
+		if(saved != null){
+			logger.info("Saving: {}", saved.toString());
+			model.addAttribute("id", saved.getId());
+			model.addFlashAttribute("article", saved);
+			return "redirect:/articles/{id}";
+		}
+
+		return getFullViewName("articleForm");
+	}
+
+	/**
+	 * Create Article
 	 * @return logical view name
 	 */
-	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String createArticle(@RequestParam("file") MultipartFile file) {
-		if (file.isEmpty()) {
-			return "redirect:/article/articles";
-		}
-		
-		// Article article = articleConverter.convert(file);
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public String createArticleForm(Model model) {
+
 		Article article = new Article();
-		logger.debug("Creating article: {}", article);
-		
-		// articleDao.createOrUpdate(article);
-		return "redirect:/article/articleList";
+		model.addAttribute("article", article);
+		return getFullViewName("articleForm");
 	}
-	
+
 	/**
 	 * @param model model
 	 * @return article list
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String getArticleList(Model model) {
-		logger.debug("Getting article list");
-		
-		model.addAttribute("articleList", articleRepository.findAll());		
+	public String articleList(Model model) {
+		model.addAttribute("articleList", articleRepository.findAll());
 		return getFullViewName("articleList");		
 	}
 	
@@ -66,7 +86,7 @@ public class ArticleController {
 	 * @throws IOException if there's an I/O exception
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String getArticlePage(
+	public String getArticle(
 			@PathVariable String id,
 			Model model) {
 

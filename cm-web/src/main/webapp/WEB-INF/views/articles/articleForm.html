@@ -12,9 +12,9 @@
 
         <div id="articleForm">
             <form method="POST"
-                  th:object="${articleForm}"
-                  enctype="multipart/form-data"
-                  th:action="@{/articles/}">
+                  th:object="${article}"
+                  enctype="application/x-www-form-urlencoded"
+                  th:action="@{/articles/create}">
 
                 <div class="errors" th:if="${#fields.hasErrors('*')}">
                     <ul>

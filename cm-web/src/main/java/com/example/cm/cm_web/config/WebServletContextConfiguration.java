@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.validation.Validator;
-//import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -19,6 +19,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.cm.cm_web.config.annotation.WebController;
 import com.example.cm.cm_web.config.annotation.WebControllerAdvice;
@@ -35,8 +36,8 @@ import com.example.cm.cm_web.config.annotation.WebControllerAdvice;
 )
 public class WebServletContextConfiguration extends WebMvcConfigurerAdapter {
 
-//	@Autowired
-//	SpringValidatorAdapter validator;
+	@Autowired
+	SpringValidatorAdapter validator;
 
 	/*
 	 * Declare view resolver
@@ -90,10 +91,10 @@ public class WebServletContextConfiguration extends WebMvcConfigurerAdapter {
 		return new StandardServletMultipartResolver();
 	}
 
-//	// Tell web MVC to use the validator in RootContextConfiguration
-//	@Override
-//    public Validator getValidator()
-//    {
-//        return this.validator;
-//    }
+	// Tell web MVC to use the validator in RootContextConfiguration
+	@Override
+    public Validator getValidator()
+    {
+        return this.validator;
+    }
 }

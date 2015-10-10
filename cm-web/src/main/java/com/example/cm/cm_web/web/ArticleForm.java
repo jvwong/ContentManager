@@ -1,21 +1,14 @@
 package com.example.cm.cm_web.web;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.example.cm.cm_model.domain.Article;
-import com.example.cm.cm_model.domain.Page;
 
 public class ArticleForm {
 	
 	private String title;
 	private String author;
-	private Date publishDate;
 	private String description;
 	private String keywords;
-	private List<Page> pages = new ArrayList<Page>();
-		
+
 	public String getTitle() {
 		return title;
 	}
@@ -30,14 +23,6 @@ public class ArticleForm {
 
 	public void setAuthor(String author) {
 		this.author = author;
-	}
-
-	public Date getPublishDate() {
-		return publishDate;
-	}
-
-	public void setPublishDate(Date publishDate) {
-		this.publishDate = publishDate;
 	}
 
 	public String getDescription() {
@@ -56,16 +41,11 @@ public class ArticleForm {
 		this.keywords = keywords;
 	}
 
-	public List<Page> getPages() {
-		return pages;
-	}
-
-	public void setPages(List<Page> pages) {
-		this.pages = pages;
-	}
-  
 	public Article toArticle() {
 		Article article = new Article();
+		article.setTitle(this.title);
+		article.setDescription(this.description);
+		article.setKeywords(this.keywords);
 		return article;
 	}
 }

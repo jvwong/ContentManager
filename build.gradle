@@ -68,13 +68,17 @@ subprojects {
     dependencies {
         compile 'javax.inject:javax.inject:1'
 
-		//Spring
+        compile 'org.apache.commons:commons-lang3:3.4'
+
+        //Spring
 		compile 'org.springframework:spring-context:4.2.1.RELEASE'
 		compile 'org.springframework:spring-aspects:4.2.1.RELEASE'
 
 		//Testing
 		testCompile 'junit:junit:4.11'
+        testCompile "junit:junit-dep:4.11"
 		testCompile 'org.springframework:spring-test:4.2.1.RELEASE'
+        testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
     }
     sourceCompatibility = 1.8
 

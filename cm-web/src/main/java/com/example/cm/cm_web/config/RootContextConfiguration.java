@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Configuration
@@ -35,24 +37,24 @@ public class RootContextConfiguration {
         return messageSource;
     }
 
-    // // Explicitly declare the validation method
-    // // Set the validation messages to the same as the internationalization
-    // @Bean
-    // public LocalValidatorFactoryBean localValidatorFactoryBean()
-    // {
-    //     LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-    //     validator.setValidationMessageSource(this.messageSource());
-    //     return validator;
-    // }
-    //
-    // // Enable method validation
-    // @Bean
-    // public MethodValidationPostProcessor methodValidationPostProcessor()
-    // {
-    //     MethodValidationPostProcessor processor =
-    //             new MethodValidationPostProcessor();
-    //     processor.setValidator(this.localValidatorFactoryBean());
-    //     return processor;
-    // }
+     // Explicitly declare the validation method
+     // Set the validation messages to the same as the internationalization
+     @Bean
+     public LocalValidatorFactoryBean localValidatorFactoryBean()
+     {
+         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+         validator.setValidationMessageSource(this.messageSource());
+         return validator;
+     }
+
+     // Enable method validation
+     @Bean
+     public MethodValidationPostProcessor methodValidationPostProcessor()
+     {
+         MethodValidationPostProcessor processor =
+                 new MethodValidationPostProcessor();
+         processor.setValidator(this.localValidatorFactoryBean());
+         return processor;
+     }
 
 }

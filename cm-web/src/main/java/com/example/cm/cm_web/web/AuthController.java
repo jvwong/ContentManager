@@ -88,7 +88,7 @@ public class AuthController {
 
 			// When InternalResourceViewResolver sees the "redirect: " prefix
 			// on the view specification, it will redirect 
-			return "redirect:/auth/profile/{username}";
+			return "redirect:/auth/profile";
 			
 		} catch (DataIntegrityViolationException dee) {			
 			String message = "Error: " + dee.getMostSpecificCause().getMessage();

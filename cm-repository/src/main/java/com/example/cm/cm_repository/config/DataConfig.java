@@ -35,7 +35,7 @@ public class DataConfig {
 //		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 //		dataSource.setUrl("jdbc:mysql://localhost:3306/cms");
 //		dataSource.setUsername("cmsUser");
-//		dataSource.setPassword("cmsPassword");		
+//		dataSource.setPassword("cmsPassword");
 //		return dataSource;
 		
 		JndiDataSourceLookup lookup = new JndiDataSourceLookup();
@@ -67,7 +67,8 @@ public class DataConfig {
 	@Bean 
 	public JpaVendorAdapter jpaVendorAdapter(){
 		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-		adapter.setDatabase(Database.MYSQL);
+		adapter.setDatabase(Database.H2);
+//		adapter.setDatabase(Database.MYSQL);
 		adapter.setShowSql(false);
 		adapter.setGenerateDdl(true);		
 		//adapter.setDatabasePlatform("org.hiberate.dialect.MySQL5Dialect");

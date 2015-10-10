@@ -9,12 +9,12 @@ INSERT INTO  CMSUser VALUES (2, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
 'fullname2', 'ROLE_CMSUSER', 'u2@mail.com');
 
 INSERT INTO  Article VALUES (0, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
-'asdasdasd', 'asdasdasd', 0, 
+'asdasdasd', 'asdasdasd',
 'title0', 'description0', 'keywords0');
 INSERT INTO  Article VALUES (1, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
-'asdasdasd', 'asdasdasd', 0, 
+'asdasdasd', 'asdasdasd',
 'title1', 'description1', 'keywords1');
 INSERT INTO  Article VALUES (2, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
-'asdasdasd', 'asdasdasd', 0, 
+'asdasdasd', 'asdasdasd',
 'title2', 'description2', 'keywords2');
 
