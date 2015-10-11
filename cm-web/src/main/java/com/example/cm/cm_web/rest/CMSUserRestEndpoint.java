@@ -32,7 +32,8 @@ public class CMSUserRestEndpoint {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public CMSUserRestEndpoint(CMSUserRepository CMSUserRepository,
+	public CMSUserRestEndpoint(
+			CMSUserRepository CMSUserRepository,
 			PasswordEncoder passwordEncoder){
 		this.cmsUserRepository = CMSUserRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -44,12 +45,12 @@ public class CMSUserRestEndpoint {
 	}
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> CMSUser(
-	      @PathVariable("id") long id) {
+	public CMSUser cmsUserDetail(
+	      @PathVariable("id") Long id) {
 
-		CMSUser CMSUser = cmsUserRepository.findOne(id);
-		if(CMSUser == null) throw new GenericNotFoundException(id, CMSUser.class.getSimpleName());
-		return new ResponseEntity<CMSUser>(CMSUser, HttpStatus.OK);
+		CMSUser cmsUser = cmsUserRepository.findOne(id);
+		if(cmsUser == null) throw new GenericNotFoundException(id, CMSUser.class.getSimpleName());
+		return cmsUser;
 	}
 
 	@RequestMapping(
@@ -57,17 +58,20 @@ public class CMSUserRestEndpoint {
 			method=RequestMethod.POST,
 			consumes="application/json")
 	public ResponseEntity<CMSUser> saveCMSUser(
-			@RequestBody CMSUser CMSUser,
+			@RequestBody CMSUser cmsUser,
 			UriComponentsBuilder ucb){
+
+		logger.info("Saving CMSUSer: {}", cmsUser.toString());
 
 		try{
 
 			HttpHeaders headers = new HttpHeaders();
 
 			// NullPointerException
-			CMSUser.setPassword(passwordEncoder.encode(CMSUser.getPassword()));
+			cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
+
 			// DataIntegrityViolationException
-			CMSUser CMSUserSaved = cmsUserRepository.save(CMSUser);
+			CMSUser CMSUserSaved = cmsUserRepository.save(cmsUser);
 
 			URI locationUri =
 					ucb.path("/services/rest/user")
@@ -75,13 +79,13 @@ public class CMSUserRestEndpoint {
 					   .build()
 					   .toUri();
 			headers.setLocation(locationUri);
-			return  new ResponseEntity<CMSUser>(CMSUserSaved, headers, HttpStatus.CREATED);
+			return  new ResponseEntity<>(CMSUserSaved, headers, HttpStatus.CREATED);
 
 		} catch (NullPointerException npe) {
-			return new ResponseEntity<CMSUser>(HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 
 		} catch (DataIntegrityViolationException dee) {
-			return new ResponseEntity<CMSUser>(HttpStatus.CONFLICT);
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
 }

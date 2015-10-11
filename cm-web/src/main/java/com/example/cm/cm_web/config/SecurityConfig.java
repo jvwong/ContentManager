@@ -89,10 +89,12 @@ public class SecurityConfig {
 				.antMatcher("/services/rest/**")
 				
 				.authorizeRequests()
-					.antMatchers("/services/rest/auth")
+					.antMatchers(HttpMethod.POST, "/services/rest/auth")
 						.permitAll()
-//					.antMatchers(HttpMethod.POST, "/services/rest/auth")
-//						.permitAll()
+
+					.antMatchers(HttpMethod.GET, "/services/rest/user")
+						.hasAuthority("ROLE_ADMIN")
+
 					.antMatchers("/services/rest/**")
 						.hasAuthority("ROLE_CMSUSER")			
 					.anyRequest()

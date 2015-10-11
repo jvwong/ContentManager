@@ -68,6 +68,7 @@ public class AuthRestEndpointTest {
         mockMvc.perform(post("/rest/auth")
                 .contentType("application/json;charset=UTF-8")
                 .content(jsonOut))
+
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 

@@ -47,8 +47,8 @@ public class CMSUser extends DateAuditedEntity{
 		this.fullName = fullName;
 		this.username = username;
 		this.password = password;
-		this.password = email;
-		this.password = role;
+		this.email = email;
+		this.role = role;
 	}
 
 	public String getFullName() {
@@ -111,6 +111,7 @@ public class CMSUser extends DateAuditedEntity{
 	public String toString() {
 		return "[CMSUser: id=" + this.getId()
 				+ ", createdDate=" + this.getCreatedDate()
+				+ ", password=" + this.password
 				+ ", fullName=" + this.fullName
 				+ ", role=" + this.role
 				+ ", username=" + this.username
