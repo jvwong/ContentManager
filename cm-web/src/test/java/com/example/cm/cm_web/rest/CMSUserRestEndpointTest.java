@@ -50,7 +50,7 @@ public class CMSUserRestEndpointTest {
      * Return the list of users
      **/
     @Test
-    public void cmsUserListADMIN() throws Exception {
+    public void cmsUserList() throws Exception {
         List<CMSUser> list = new ArrayList<>();
         list.add(mockUser);
 
@@ -109,7 +109,8 @@ public class CMSUserRestEndpointTest {
 
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-        ;
+                .andExpect(header().string("location", containsString("/services/rest/user/" + savedUser.getId())))
+                ;
 
         Mockito.verify(mockRepository, Mockito.atLeastOnce()).save(mockUser);
     }

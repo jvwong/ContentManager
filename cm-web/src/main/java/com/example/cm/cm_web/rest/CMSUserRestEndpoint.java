@@ -74,7 +74,7 @@ public class CMSUserRestEndpoint {
 			CMSUser CMSUserSaved = cmsUserRepository.save(cmsUser);
 
 			URI locationUri =
-					ucb.path("/services/rest/user")
+					ucb.path("/services/rest/user/")
 					   .path(String.valueOf(CMSUserSaved.getId()))
 					   .build()
 					   .toUri();
