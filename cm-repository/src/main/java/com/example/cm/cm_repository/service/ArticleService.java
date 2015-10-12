@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
  * @author jvwong
  */
 public interface ArticleService {
-    Page<Article> articleList(Integer pageNumber);
+    Page<Article> articleList(Integer pageNumber, Integer pageSize);
 }
 
 

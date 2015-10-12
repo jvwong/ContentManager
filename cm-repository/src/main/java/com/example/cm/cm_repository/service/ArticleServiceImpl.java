@@ -16,14 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class ArticleServiceImpl implements ArticleService {
-    private static final int PAGE_SIZE = 10;
 
     @Autowired
     private ArticleRepository articleRepository;
 
-    public Page<Article> articleList(Integer pageNumber) {
+    public Page<Article> articleList(Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest =
-                new PageRequest(pageNumber - 1, PAGE_SIZE, Sort.Direction.DESC, "createdDate");
+                new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
         return articleRepository.findAll(pageRequest);
     }
 }

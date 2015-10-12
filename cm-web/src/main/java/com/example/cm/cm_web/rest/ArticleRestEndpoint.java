@@ -29,8 +29,9 @@ public class ArticleRestEndpoint {
      */
     @RequestMapping(value="", method= RequestMethod.GET)
     public Page<Article> articleList(
-            @RequestParam(value="1", defaultValue="1") Integer pageNumber
+            @RequestParam(value="page", defaultValue="1") Integer pageNumber,
+            @RequestParam(value="size", defaultValue="10") Integer pageSize
     ){
-        return articleService.articleList(pageNumber);
+        return articleService.articleList(pageNumber, pageSize);
     }
 }

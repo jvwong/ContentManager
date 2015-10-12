@@ -2,7 +2,6 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.Article;
 import com.example.cm.cm_model.domain.CMSUser;
-import com.example.cm.cm_repository.repository.ArticleRepository;
 import com.example.cm.cm_repository.service.ArticleService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,8 +10,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -20,7 +17,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -59,18 +55,21 @@ public class ArticleRestEndpointTest {
     public void articleListTest() throws Exception {
 
         int pageNumber = 1;
+        int pageSize = 10;
 
         Page<Article> mockPage = new PageImpl<>(articleList);
-        Mockito.when(mockArticleService.articleList(1)).thenReturn(mockPage);
+        Mockito.when(mockArticleService.articleList(pageNumber,pageSize))
+                .thenReturn(mockPage);
 
-        mockMvc.perform(get("/rest/articles/?page=" + pageNumber))
+        mockMvc.perform(get("/rest/articles/?page=" + pageNumber + "&size=" + pageSize))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.content", isA(Collection.class)))
                 .andExpect(jsonPath("$.content", hasSize(articleList.size())))
                 ;
 
-        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).articleList(pageNumber);
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce())
+                .articleList(pageNumber, pageSize);
     }
 
 //    /*
