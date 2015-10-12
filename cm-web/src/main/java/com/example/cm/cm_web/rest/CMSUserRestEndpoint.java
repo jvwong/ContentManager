@@ -53,6 +53,12 @@ public class CMSUserRestEndpoint {
 		return cmsUser;
 	}
 
+	/**
+	 * Should not be able to create an ROLE_ADMIN....??????
+	 * @param cmsUser
+	 * @param ucb
+	 * @return
+	 */
 	@RequestMapping(
 			value="",
 			method=RequestMethod.POST,

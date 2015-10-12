@@ -94,6 +94,8 @@ public class SecurityConfig {
 
 					.antMatchers(HttpMethod.GET, "/services/rest/user")
 						.hasAuthority("ROLE_ADMIN")
+					.antMatchers(HttpMethod.POST, "/services/rest/user")
+						.permitAll()
 
 					.antMatchers("/services/rest/**")
 						.hasAuthority("ROLE_CMSUSER")			
