@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_model.domain.CMSUser;
-import com.example.cm.cm_web.exceptions.GenericNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +24,12 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class CMSUserService implements UserDetailsService{
-	private static final Logger logger = LoggerFactory.getLogger(CMSUserService.class);
+public class CMSUserDetailsService implements UserDetailsService{
+	private static final Logger logger = LoggerFactory.getLogger(CMSUserDetailsService.class);
 	private final CMSUserRepository cmsUserRepository;
 	
 	@Autowired
-	public CMSUserService(CMSUserRepository cmsUserRepository) {
+	public CMSUserDetailsService(CMSUserRepository cmsUserRepository) {
 		this.cmsUserRepository = cmsUserRepository;
 	}
 	

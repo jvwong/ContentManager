@@ -3,6 +3,7 @@ package com.example.cm.cm_web.rest;
 import com.example.cm.cm_model.domain.Article;
 import com.example.cm.cm_repository.service.ArticleService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
+import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,8 @@ public class ArticleRestEndpoint {
      */
     @RequestMapping(value="/{id}/", method=RequestMethod.GET)
     public Article articleDetail(@PathVariable("id") Long id){
-        return articleService.article(id);
+        Article found = articleService.article(id);
+        if(found == null) throw new ResourceNotFoundException(id, Article.class.getName());
+        return found;
     }
 }

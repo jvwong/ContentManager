@@ -4,7 +4,7 @@ import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
-import com.example.cm.cm_web.exceptions.GenericNotFoundException;
+import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class CMSUserRestEndpoint {
 	      @PathVariable("id") Long id) {
 
 		CMSUser cmsUser = cmsUserRepository.findOne(id);
-		if(cmsUser == null) throw new GenericNotFoundException(id, CMSUser.class.getSimpleName());
+		if(cmsUser == null) throw new ResourceNotFoundException(id, CMSUser.class.getSimpleName());
 		return cmsUser;
 	}
 

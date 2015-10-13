@@ -2,7 +2,7 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_web.config.annotation.RestEndpointAdvice;
 import com.example.cm.cm_web.exceptions.Error;
-import com.example.cm.cm_web.exceptions.GenericNotFoundException;
+import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
 import com.example.cm.cm_web.exceptions.MissingCredentialsException;
 import com.example.cm.cm_web.exceptions.MissingEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,27 +30,27 @@ public class RestExceptionHandler {
         this.messageSource = messageSource;
     }
 
-	@ExceptionHandler(GenericNotFoundException.class)
-	@ResponseStatus(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED)
-    public Error objectNotFound(GenericNotFoundException e) {
-		return new Error(404, e.getClassName() + " [" + e.getId() + "] not found");
+	@ExceptionHandler(ResourceNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+    public Error resourceNotFound(ResourceNotFoundException e) {
+		return new Error(e.getId(), "Resource could not be located");
 	}
 
 	@ExceptionHandler(BadCredentialsException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public Error objectNotFound(BadCredentialsException e) {
+    public Error badCredentials(BadCredentialsException e) {
 		return new Error(401, e.getMessage());
 	}
 
 	@ExceptionHandler(MissingEntityException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Error objectNotFound(MissingEntityException e) {
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+    public Error missingEntity(MissingEntityException e) {
 		return new Error(400, "Bad/missing " + e.getClassName());
 	}
 
 	@ExceptionHandler(MissingCredentialsException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Error objectNotFound(MissingCredentialsException e) {
+    public Error missingCrendentials(MissingCredentialsException e) {
 		return new Error(400, e.getClassName() + " missing credential [" + e.getMessage() + "]");
 	}
 

@@ -93,4 +93,22 @@ public class ArticleRestEndpointTest {
         Mockito.verify(mockArticleService, Mockito.atLeastOnce())
                 .article(articleList.get(0).getId());
     }
+
+    /*
+     * Return a non-existent article's details
+     **/
+    @Test
+    public void articleDetailFailTest() throws Exception {
+
+        Long badId = (long) articleList.size();
+        Mockito.when(mockArticleService.article(badId)).thenReturn(null);
+
+        mockMvc.perform(get("/rest/articles/" + badId.toString() + "/")
+                .accept("application/json;charset=UTF-8"))
+                .andExpect(status().isNotFound())
+        ;
+
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce())
+                .article(badId);
+    }
 }

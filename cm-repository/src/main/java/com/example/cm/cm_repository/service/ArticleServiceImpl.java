@@ -1,7 +1,6 @@
 package com.example.cm.cm_repository.service;
 
 import com.example.cm.cm_model.domain.Article;
-import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findAll(pageRequest);
     }
 
-    public Article article(Long id) {
+    public Article article(Long id){
         return articleRepository.findOne(id);
     }
 }
