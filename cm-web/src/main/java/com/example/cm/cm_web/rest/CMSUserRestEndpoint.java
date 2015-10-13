@@ -1,26 +1,23 @@
 package com.example.cm.cm_web.rest;
 
-import java.net.URI;
-import java.util.List;
-
-import com.example.cm.cm_web.config.annotation.RestEndpoint;
-import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_model.domain.CMSUser;
+import com.example.cm.cm_repository.repository.CMSUserRepository;
+import com.example.cm.cm_repository.service.CMSUserService;
+import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.GenericNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 
 @RestEndpoint
@@ -29,22 +26,37 @@ public class CMSUserRestEndpoint {
 	private static final Logger logger = LoggerFactory.getLogger(CMSUserRestEndpoint.class);
 
 	private CMSUserRepository cmsUserRepository;
+	private CMSUserService cmsUserService;
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	public CMSUserRestEndpoint(
 			CMSUserRepository CMSUserRepository,
+			CMSUserService cmsUserService,
 			PasswordEncoder passwordEncoder){
 		this.cmsUserRepository = CMSUserRepository;
+		this.cmsUserService = cmsUserService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	@RequestMapping(value="", method=RequestMethod.GET)
-	public List<CMSUser> cmsUserList(){
-		return cmsUserRepository.findAll();
+	/**
+	 * Retrieve a paged list of User instances
+	 * @return
+	 */
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public Page<CMSUser> cmsUserList(
+			@RequestParam(value="page", defaultValue="1") Integer pageNumber,
+			@RequestParam(value="size", defaultValue="10") Integer pageSize
+	){
+		return cmsUserService.cmsUserList(pageNumber, pageSize);
 	}
 
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	/**
+	 * Retrieve a particular User instance
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/{id}/", method=RequestMethod.GET)
 	public CMSUser cmsUserDetail(
 	      @PathVariable("id") Long id) {
 
@@ -54,13 +66,13 @@ public class CMSUserRestEndpoint {
 	}
 
 	/**
-	 * Should not be able to create an ROLE_ADMIN....??????
-	 * @param cmsUser
-	 * @param ucb
-	 * @return
+	 * Create a User instance
+	 * @param cmsUser The user instance to create
+	 * @param ucb The uri component builder to return
+	 * @return ResponseEntity<CMSUser>
 	 */
 	@RequestMapping(
-			value="",
+			value="/",
 			method=RequestMethod.POST,
 			consumes="application/json")
 	public ResponseEntity<CMSUser> saveCMSUser(

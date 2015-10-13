@@ -94,6 +94,10 @@ public class SecurityConfig {
 
 					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/(\\d+/)?")
 						.hasAuthority("ROLE_ADMIN")
+					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/me/")
+						.hasAuthority("ROLE_CMSUser")
+					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/.*")
+						.hasAuthority("ROLE_ADMIN")
 					.regexMatchers(HttpMethod.POST, "\\A/services/rest/users/\\z")
 						.permitAll()
 

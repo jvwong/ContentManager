@@ -2,22 +2,27 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.repository.CMSUserRepository;
+import com.example.cm.cm_repository.service.CMSUserService;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.Matchers.*;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
  * @author jvwong
@@ -30,19 +35,40 @@ public class CMSUserRestEndpointTest {
     private MockMvc mockMvc;
     private CMSUser mockUser;
     private CMSUserRepository mockRepository;
+    private CMSUserService mockCmsUserService;
     private PasswordEncoder mockPasswordEncoder;
+    private List<CMSUser> cmsUserList;
 
     @Before
     public void setUp() {
         mockPasswordEncoder = Mockito.mock(PasswordEncoder.class);
+        mockCmsUserService = Mockito.mock(CMSUserService.class);
         mockRepository = Mockito.mock(CMSUserRepository.class);
 
         CMSUserRestEndpoint endpoint = new CMSUserRestEndpoint(
-                mockRepository, mockPasswordEncoder);
+                mockRepository, mockCmsUserService, mockPasswordEncoder);
         mockMvc = standaloneSetup(endpoint).build();
 
-        mockUser = new CMSUser(24L, "fullname1", "username1", "password1",
+        mockUser = new CMSUser(24L, "fullname24", "username24", "password24",
+                "email24@email.com", "CMSUser");
+        CMSUser cmsUser0 = new CMSUser(0L, "fullname0", "username0", "password0",
+                "email0@email.com", "CMSUser");
+        CMSUser cmsUser1 = new CMSUser(1L, "fullname1", "username1", "password1",
                 "email1@email.com", "CMSUser");
+        CMSUser cmsUser2 = new CMSUser(2L, "fullname2", "username2", "password2",
+                "email2@email.com", "CMSUser");
+        CMSUser cmsUser3 = new CMSUser(3L, "fullname3", "username3", "password3",
+                "email3@email.com", "CMSUser");
+        CMSUser cmsUser4 = new CMSUser(4L, "fullname4", "username4", "password4",
+                "email4@email.com", "CMSUser");
+
+        cmsUserList = Arrays.asList(
+                cmsUser0,
+                cmsUser1,
+                cmsUser2,
+                cmsUser3,
+                cmsUser4);
+
     }
 
 
@@ -50,18 +76,20 @@ public class CMSUserRestEndpointTest {
      * Return the list of users
      **/
     @Test
-    public void cmsUserList() throws Exception {
-        List<CMSUser> list = new ArrayList<>();
-        list.add(mockUser);
+    public void cmsUserListTest() throws Exception {
+        int pageNumber = 1;
+        int pageSize = 3;
+        Page<CMSUser> mockPage = new PageImpl<>(cmsUserList);
+        Mockito.when(mockCmsUserService.cmsUserList(pageNumber, pageSize)).thenReturn(mockPage);
 
-        Mockito.when(mockRepository.findAll()).thenReturn(list);
-
-        mockMvc.perform(get("/rest/users/"))
+        mockMvc.perform(get("/rest/users/?page=" + pageNumber + "&size=" + pageSize))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$.content", isA(Collection.class)))
+                .andExpect(jsonPath("$.content", hasSize(cmsUserList.size())))
+        ;
 
-        Mockito.verify(mockRepository, Mockito.atLeastOnce()).findAll();
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).cmsUserList(pageNumber, pageSize);
     }
 
     /*
@@ -73,7 +101,7 @@ public class CMSUserRestEndpointTest {
         Mockito.when(mockRepository.findOne(mockUser.getId()))
                 .thenReturn(mockUser);
 
-        mockMvc.perform(get("/rest/users/" + mockUser.getId()))
+        mockMvc.perform(get("/rest/users/" + mockUser.getId() + "/"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.id", is(mockUser.getId().intValue())))
