@@ -24,4 +24,10 @@ public class CMSUserServiceImpl implements CMSUserService {
                 new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
         return cmsUserRepository.findAll(pageRequest);
     }
+
+    public CMSUser findUser(String username){
+
+        CMSUser cmsUser = cmsUserRepository.findByUsername(username);
+        return cmsUser;
+    }
 }

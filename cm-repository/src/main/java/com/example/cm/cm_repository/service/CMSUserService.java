@@ -8,4 +8,5 @@ import org.springframework.data.domain.Page;
  */
 public interface CMSUserService {
     Page<CMSUser> cmsUserList(Integer pageNumber, Integer pageSize);
+    CMSUser findUser(String username);
 }

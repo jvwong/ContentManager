@@ -38,7 +38,7 @@ public class ArticleRestEndpoint {
 
     /**
      * Retrieve a particular article instance
-     * @return a page of articles wrapped in {@link Page} object
+     * @return an {@link Article}
      */
     @RequestMapping(value="/{id}/", method=RequestMethod.GET)
     public Article articleDetail(@PathVariable("id") Long id){

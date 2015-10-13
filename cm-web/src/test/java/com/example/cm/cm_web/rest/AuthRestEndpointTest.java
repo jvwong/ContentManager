@@ -1,7 +1,7 @@
 package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
-import com.example.cm.cm_repository.repository.CMSUserRepository;
+import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.security.TokenAuthenticationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +29,7 @@ public class AuthRestEndpointTest {
 
     private MockMvc mockMvc;
     private CMSUser mockUser;
-    private CMSUserRepository mockRepository;
+    private CMSUserService mockService;
     private AuthenticationManager mockAuthManager;
     private Authentication authRequest;
 
@@ -37,11 +37,11 @@ public class AuthRestEndpointTest {
     public void setUp() {
         TokenAuthenticationService mockTokenAuthenticationService
                 = Mockito.mock(TokenAuthenticationService.class);
-        mockRepository = Mockito.mock(CMSUserRepository.class);
+        mockService = Mockito.mock(CMSUserService.class);
         mockAuthManager = Mockito.mock(AuthenticationManager.class);
 
         AuthRestEndpoint endpoint = new AuthRestEndpoint(
-                mockTokenAuthenticationService,mockRepository, mockAuthManager
+                mockTokenAuthenticationService, mockService, mockAuthManager
         );
 
         mockMvc = standaloneSetup(endpoint).build();
@@ -52,7 +52,7 @@ public class AuthRestEndpointTest {
                 = new UsernamePasswordAuthenticationToken(
                 mockUser.getUsername(), mockUser.getPassword());
 
-        Mockito.when(mockRepository.findByUsername(mockUser.getUsername())).thenReturn(mockUser);
+        Mockito.when(mockService.findUser(mockUser.getUsername())).thenReturn(mockUser);
         Mockito.when(mockAuthManager.authenticate(authRequest)).thenReturn(null);
     }
 
@@ -72,7 +72,7 @@ public class AuthRestEndpointTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
-        Mockito.verify(mockRepository, Mockito.atLeastOnce()).findByUsername(mockUser.getUsername());
+        Mockito.verify(mockService, Mockito.atLeastOnce()).findUser(mockUser.getUsername());
         Mockito.verify(mockAuthManager, Mockito.atLeastOnce()).authenticate(authRequest);
     }
 

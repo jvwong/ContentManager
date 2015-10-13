@@ -1,7 +1,7 @@
 package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
-import com.example.cm.cm_repository.repository.CMSUserRepository;
+import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.MissingCredentialsException;
 import com.example.cm.cm_web.exceptions.MissingEntityException;
@@ -25,14 +25,14 @@ public class AuthRestEndpoint {
 
 	private TokenAuthenticationService tokenAuthenticationService;
 	private AuthenticationManager authenticationManager;
-	private CMSUserRepository cmsUserRepository;
+	private CMSUserService cmsUserService;
 
 	@Autowired
 	public AuthRestEndpoint(
 			TokenAuthenticationService tokenAuthenticationService,
-			CMSUserRepository cmsUserRepository,
+			CMSUserService cmsUserService,
 			AuthenticationManager authenticationManager){
-		this.cmsUserRepository = cmsUserRepository;
+		this.cmsUserService = cmsUserService;
 		this.tokenAuthenticationService = tokenAuthenticationService;
 		this.authenticationManager = authenticationManager;
 	}
@@ -43,8 +43,6 @@ public class AuthRestEndpoint {
 			consumes="application/json;charset=UTF-8")
 	public CMSUser authenticate(@RequestBody CMSUser cmsUser,
 			HttpServletResponse  httpResponse){
-
-		logger.info("Incoming CMSUser: {}", cmsUser.toString());
 
 		// Throws NullPointerException
 		if(cmsUser.getUsername() == null){
@@ -63,7 +61,7 @@ public class AuthRestEndpoint {
 		authenticationManager.authenticate(authRequest);
 
 		// If it succeeds only then will the addAuthentication proceed.
-		CMSUser saved = cmsUserRepository.findByUsername(cmsUser.getUsername());
+		CMSUser saved = cmsUserService.findUser(cmsUser.getUsername());
 		tokenAuthenticationService.addAuthentication(httpResponse, saved);
 
 		if(saved == null) throw new MissingEntityException(CMSUser.class.getName());

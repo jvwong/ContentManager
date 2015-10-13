@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_model.domain.CMSUser;
+import com.example.cm.cm_web.exceptions.GenericNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,5 @@ public class CMSUserService implements UserDetailsService{
 		}		
 		
 		throw new UsernameNotFoundException("User '" + username + "' not found.");
-	}	
+	}
 }
