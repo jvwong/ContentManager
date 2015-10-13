@@ -71,15 +71,10 @@ public class CMSUserRestEndpoint {
 	 * @param ucb The uri component builder to return
 	 * @return ResponseEntity<CMSUser>
 	 */
-	@RequestMapping(
-			value="/",
-			method=RequestMethod.POST,
-			consumes="application/json")
+	@RequestMapping(value="/", method=RequestMethod.POST)
 	public ResponseEntity<CMSUser> saveCMSUser(
 			@RequestBody CMSUser cmsUser,
 			UriComponentsBuilder ucb){
-
-		logger.info("Saving CMSUSer: {}", cmsUser.toString());
 
 		try{
 

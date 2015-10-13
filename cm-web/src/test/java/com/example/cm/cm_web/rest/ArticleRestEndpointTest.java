@@ -75,19 +75,22 @@ public class ArticleRestEndpointTest {
                 .articleList(pageNumber, pageSize);
     }
 
-//    /*
-//     * Return a given article's details
-//     **/
-//    @Test
-//    public void articleDetailTest() throws Exception {
-//
-//        Mockito.when(mockRepository.findOne(mockArticle.getId())).thenReturn(mockArticle);
-//
-//        mockMvc.perform(get("/rest/article/" + mockArticle.getId()))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType("application/json;charset=UTF-8"))
-//                .andExpect(jsonPath("$", hasSize(1)));
-//
-//        Mockito.verify(mockRepository, Mockito.atLeastOnce()).findAll();
-//    }
+    /*
+     * Return a given article's details
+     **/
+    @Test
+    public void articleDetailTest() throws Exception {
+
+        Mockito.when(mockArticleService.article(articleList.get(0).getId()))
+                .thenReturn(articleList.get(0));
+
+        mockMvc.perform(get("/rest/articles/" + articleList.get(0).getId() + "/")
+                    .accept("application/json;charset=UTF-8"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+        ;
+
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce())
+                .article(articleList.get(0).getId());
+    }
 }

@@ -96,7 +96,7 @@ public class CMSUserRestEndpointTest {
      * Return a particular user
      **/
     @Test
-    public void cmsUserDetail() throws Exception {
+    public void cmsUserDetailTest() throws Exception {
 
         Mockito.when(mockRepository.findOne(mockUser.getId()))
                 .thenReturn(mockUser);
@@ -119,7 +119,7 @@ public class CMSUserRestEndpointTest {
      * Create a CMSUser instance
      **/
     @Test
-    public void saveCMSUser() throws Exception {
+    public void saveCMSUserTest() throws Exception {
 
         CMSUser savedUser = new CMSUser(24L, "fullname1", "username1", "password1",
                 "email1@email.com", "CMSUser");
