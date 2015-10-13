@@ -89,12 +89,12 @@ public class SecurityConfig {
 				.antMatcher("/services/rest/**")
 				
 				.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/services/rest/auth")
+					.antMatchers(HttpMethod.POST, "/services/rest/auth/")
 						.permitAll()
 
-					.antMatchers(HttpMethod.GET, "/services/rest/user")
+					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/(\\d+/)?")
 						.hasAuthority("ROLE_ADMIN")
-					.antMatchers(HttpMethod.POST, "/services/rest/user")
+					.regexMatchers(HttpMethod.POST, "\\A/services/rest/users/\\z")
 						.permitAll()
 
 					.antMatchers("/services/rest/**")
@@ -104,10 +104,10 @@ public class SecurityConfig {
 					.and()
 					
 				.sessionManagement()
-					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)					
-				.and()
-				
-				.csrf()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+					.and()
+
+					.csrf()
 					.disable()
 				
 				.addFilterBefore(new RestAuthenticationFilter(tokenAuthenticationService),

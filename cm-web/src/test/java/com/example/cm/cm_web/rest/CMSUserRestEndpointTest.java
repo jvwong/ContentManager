@@ -56,7 +56,7 @@ public class CMSUserRestEndpointTest {
 
         Mockito.when(mockRepository.findAll()).thenReturn(list);
 
-        mockMvc.perform(get("/rest/user/"))
+        mockMvc.perform(get("/rest/users/"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(1)));
@@ -66,7 +66,6 @@ public class CMSUserRestEndpointTest {
 
     /*
      * Return a particular user
-     * This should be admin protected
      **/
     @Test
     public void cmsUserDetail() throws Exception {
@@ -74,7 +73,7 @@ public class CMSUserRestEndpointTest {
         Mockito.when(mockRepository.findOne(mockUser.getId()))
                 .thenReturn(mockUser);
 
-        mockMvc.perform(get("/rest/user/" + mockUser.getId()))
+        mockMvc.perform(get("/rest/users/" + mockUser.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.id", is(mockUser.getId().intValue())))
@@ -103,7 +102,7 @@ public class CMSUserRestEndpointTest {
         Gson gson = new Gson();
         String jsonOut = gson.toJson(mockUser);
 
-        mockMvc.perform(post("/rest/user/")
+        mockMvc.perform(post("/rest/users/")
                 .contentType("application/json;charset=UTF-8")
                 .content(jsonOut))
 

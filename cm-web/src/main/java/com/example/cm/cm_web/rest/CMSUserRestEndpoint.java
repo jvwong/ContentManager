@@ -24,7 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 @RestEndpoint
-@RequestMapping(value="/rest/user")
+@RequestMapping(value="/rest/users")
 public class CMSUserRestEndpoint {
 	private static final Logger logger = LoggerFactory.getLogger(CMSUserRestEndpoint.class);
 

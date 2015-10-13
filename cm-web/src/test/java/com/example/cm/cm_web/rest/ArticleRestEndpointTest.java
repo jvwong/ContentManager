@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,8 +29,6 @@ public class ArticleRestEndpointTest {
     private static final int PAGE_SIZE = 50;
 
     private MockMvc mockMvc;
-    private CMSUser mockUser;
-    private Article mockArticle;
     private ArticleService mockArticleService;
     private List<Article> articleList;
 
@@ -39,12 +38,18 @@ public class ArticleRestEndpointTest {
         ArticleRestEndpoint endpoint = new ArticleRestEndpoint(mockArticleService);
         mockMvc = standaloneSetup(endpoint).build();
 
-        mockArticle = new Article(24L, "title1", "descritpion1", "keywords1");
-        mockUser = new CMSUser(24L, "fullname1", "username1", "password1",
-                "email1@email.com", "CMSUser");
+        Article mockArticle0 = new Article(0L, "title0", "descritpion0", "keywords0");
+        Article mockArticle1 = new Article(1L, "title1", "descritpion1", "keywords1");
+        Article mockArticle2 = new Article(2L, "title2", "descritpion2", "keywords2");
+        Article mockArticle3 = new Article(3L, "title3", "descritpion3", "keywords3");
+        Article mockArticle4 = new Article(4L, "title4", "descritpion4", "keywords4");
 
-        articleList = new ArrayList<>();
-        articleList.add(mockArticle);
+        articleList = Arrays.asList(
+                mockArticle0,
+                mockArticle1,
+                mockArticle2,
+                mockArticle3,
+                mockArticle4);
     }
 
 
@@ -55,7 +60,7 @@ public class ArticleRestEndpointTest {
     public void articleListTest() throws Exception {
 
         int pageNumber = 1;
-        int pageSize = 10;
+        int pageSize = 3;
 
         Page<Article> mockPage = new PageImpl<>(articleList);
         Mockito.when(mockArticleService.articleList(pageNumber,pageSize))

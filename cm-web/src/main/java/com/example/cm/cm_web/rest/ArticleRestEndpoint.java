@@ -25,7 +25,7 @@ public class ArticleRestEndpoint {
 
     /**
      * Retrieve the list of
-     * @return
+     * @return a page of articles wrapped in {@link Page} object
      */
     @RequestMapping(value="", method= RequestMethod.GET)
     public Page<Article> articleList(
