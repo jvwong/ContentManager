@@ -5,12 +5,14 @@ import com.example.cm.cm_repository.repository.PageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-
-import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author jvwong
  */
+@Service
+@Transactional
 public class PageServiceImpl implements PageService {
 
     @Autowired

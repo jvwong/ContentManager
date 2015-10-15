@@ -61,7 +61,7 @@ public class PageRestEndpointTest {
         Mockito.when(mockPageService.pageList(articleId, pageNumber, pageSize))
                 .thenReturn(mockPage);
 
-//        mockMvc.perform(get("/rest/articles/?page=" + pageNumber + "&size=" + pageSize))
+//        mockMvc.perform(get("/rest/pages/?page=" + pageNumber + "&size=" + pageSize))
 //                .andExpect(status().isOk())
 //                .andExpect(content().contentType("application/json;charset=UTF-8"))
 //                .andExpect(jsonPath("$.content", isA(Collection.class)))
