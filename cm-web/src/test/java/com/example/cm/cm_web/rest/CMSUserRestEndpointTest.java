@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -140,6 +141,29 @@ public class CMSUserRestEndpointTest {
                 ;
 
         Mockito.verify(mockRepository, Mockito.atLeastOnce()).save(mockUser);
+    }
+
+    /*
+     * Attempt to save a duplicate user
+     **/
+    @Test
+    public void saveDuplicateUserTest() throws Exception {
+
+        Mockito.when(mockPasswordEncoder.encode(mockUser.getPassword()))
+                .thenReturn(mockUser.getPassword());
+        Mockito.when(mockRepository.save(mockUser)).thenThrow( new DataIntegrityViolationException(CMSUser.class.toString()));
+
+        Gson gson = new Gson();
+        String jsonOut = gson.toJson(mockUser);
+
+        mockMvc.perform(post("/rest/users/")
+                .contentType("application/json;charset=UTF-8")
+                .content(jsonOut))
+                .andExpect(status().isConflict())
+        ;
+
+        Mockito.verify(mockRepository, Mockito.atLeastOnce())
+                .save(mockUser);
     }
 
 }

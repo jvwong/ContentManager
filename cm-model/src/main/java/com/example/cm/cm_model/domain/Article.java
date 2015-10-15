@@ -3,10 +3,7 @@ package com.example.cm.cm_model.domain;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,7 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "article")
 @Entity
-@Table(name = "Article", uniqueConstraints = {})
+@Table(name = "Article", uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"title", "createdBy"})
+})
 @AttributeOverride(name = "id", column = @Column(name = "ArticleId"))
 public class Article extends DateByAuditedEntity {
 
@@ -23,7 +22,7 @@ public class Article extends DateByAuditedEntity {
 	private String keywords;
 
 	public Article(){
-		this(null, null, null, null);
+		this(null, null, null);
 	}
 
 	public Article(String title,

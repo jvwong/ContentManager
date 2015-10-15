@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 public interface ArticleService {
     Page<Article> articleList(Integer pageNumber, Integer pageSize);
     Article article(Long id);
+    Article save(Article article);
 }
 
 

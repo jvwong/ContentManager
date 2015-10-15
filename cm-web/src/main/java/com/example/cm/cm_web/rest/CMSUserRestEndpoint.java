@@ -4,6 +4,7 @@ import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
+import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,10 @@ public class CMSUserRestEndpoint {
 	 * @param ucb The uri component builder to return
 	 * @return ResponseEntity<CMSUser>
 	 */
-	@RequestMapping(value="/", method=RequestMethod.POST)
+	@RequestMapping(
+			value="/",
+			method=RequestMethod.POST
+	)
 	public ResponseEntity<CMSUser> saveCMSUser(
 			@RequestBody CMSUser cmsUser,
 			UriComponentsBuilder ucb){
@@ -98,7 +102,7 @@ public class CMSUserRestEndpoint {
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 
 		} catch (DataIntegrityViolationException dee) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
+			throw new ResourceConflictException(CMSUser.class.toString());
 		}
 	}
 }

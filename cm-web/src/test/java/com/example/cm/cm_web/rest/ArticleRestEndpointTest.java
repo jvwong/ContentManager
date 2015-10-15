@@ -2,11 +2,13 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.Article;
 import com.example.cm.cm_repository.service.ArticleService;
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,16 +17,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class ArticleRestEndpointTest {
     private static final Logger logger = LogManager.getLogger();
-
-    private static final int PAGE_SIZE = 50;
 
     private MockMvc mockMvc;
     private ArticleService mockArticleService;
@@ -76,7 +75,7 @@ public class ArticleRestEndpointTest {
     }
 
     /*
-     * Return a given article's details
+     * Return article details
      **/
     @Test
     public void articleDetailTest() throws Exception {
@@ -95,7 +94,7 @@ public class ArticleRestEndpointTest {
     }
 
     /*
-     * Return a non-existent article's details
+     * Retrieve a non-existent article
      **/
     @Test
     public void articleDetailFailTest() throws Exception {
@@ -110,5 +109,57 @@ public class ArticleRestEndpointTest {
 
         Mockito.verify(mockArticleService, Mockito.atLeastOnce())
                 .article(badId);
+    }
+
+    /*
+     * Create a CMSUser instance
+     **/
+    @Test
+    public void saveArticleTest() throws Exception {
+
+        Article unsaved = new Article("title30", "descritpion30", "keywords30");
+        Article saved = new Article(30L, "title30", "descritpion30", "keywords30");
+        Mockito.when(mockArticleService.save(unsaved)).thenReturn(saved);
+
+
+        Gson gson = new Gson();
+        String jsonOut = gson.toJson(unsaved);
+
+        mockMvc.perform(post("/rest/articles/")
+                .accept("application/json;charset=UTF-8")
+                .contentType("application/json;charset=UTF-8")
+                .content(jsonOut))
+
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(header().string(
+                        "location",
+                        containsString("/services/rest/articles/" + saved.getId()))
+                )
+        ;
+
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).save(unsaved);
+    }
+
+    /*
+     * Attempt to save a duplicate user
+     **/
+    @Test
+    public void saveDuplicateArticleTest() throws Exception {
+        Article unsaved = new Article("title30", "descritpion30", "keywords30");
+        Mockito.when(mockArticleService.save(unsaved))
+                .thenThrow(new DataIntegrityViolationException(Article.class.toString()));
+
+        Gson gson = new Gson();
+        String jsonOut = gson.toJson(unsaved);
+
+        mockMvc.perform(post("/rest/articles/")
+                .contentType("application/json;charset=UTF-8")
+                .content(jsonOut))
+                .andExpect(status().isConflict())
+        ;
+
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce())
+                .save(unsaved);
     }
 }

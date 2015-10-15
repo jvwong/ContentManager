@@ -1,20 +1,20 @@
 package com.example.cm.cm_web.exceptions;
 
 public class Error {
-	private long id;
+	private String code;
 	private String message;
 
-	public Error(long id, String message){
-		this.id = id;
+	public Error(String code, String message){
+		this.code = code;
 		this.message = message;
 	}
 
-	public long getId() {
-		return id;
+	public String getCode() {
+		return this.code;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getMessage() {

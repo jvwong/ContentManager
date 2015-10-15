@@ -29,4 +29,8 @@ public class ArticleServiceImpl implements ArticleService {
     public Article article(Long id){
         return articleRepository.findOne(id);
     }
+
+    public Article save(Article article){
+        return articleRepository.save(article);
+    }
 }

@@ -22,3 +22,23 @@ INSERT INTO  Article VALUES (2, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
 'asdasdasd', 'asdasdasd',
 'title2', 'description2', 'keywords2');
 
+INSERT INTO  Page VALUES (0, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
+'asdasdasd', 'asdasdasd',
+0, 'Some content for article 0 here but nothing really important');
+INSERT INTO  Page VALUES (1, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
+'asdasdasd', 'asdasdasd',
+0, 'More content for article 0 here but nothing really important');
+INSERT INTO  Page VALUES (2, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
+'asdasdasd', 'asdasdasd',
+0, 'Even more content for article 0 here but nothing really important');
+
+INSERT INTO  Page VALUES (0, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
+'asdasdasd', 'asdasdasd',
+1, 'Some content for article 1 here but nothing really important');
+INSERT INTO  Page VALUES (1, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
+'asdasdasd', 'asdasdasd',
+1, 'More content for article 1 here but nothing really important');
+
+INSERT INTO  Page VALUES (0, 0, '2015-01-11T21:32:29', '2015-01-11T21:32:29',
+'asdasdasd', 'asdasdasd',
+2, 'Some content for article 2 here but nothing really important');
