@@ -1,15 +1,15 @@
 package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_web.config.annotation.RestEndpointAdvice;
-import com.example.cm.cm_web.exceptions.*;
 import com.example.cm.cm_web.exceptions.Error;
+import com.example.cm.cm_web.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.access.AccessDeniedException;
 
 @RestEndpointAdvice
 public class RestExceptionHandler {
@@ -49,6 +49,12 @@ public class RestExceptionHandler {
     public ResponseEntity<Error> missingCrendentials(MissingCredentialsException e) {
 		Error error = new Error(e.getMessage(), e.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<Error> accessDenied(AccessDeniedException e) {
+		Error error = new Error(e.getMessage(), e.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
 //	@ExceptionHandler(MethodArgumentNotValidException.class)

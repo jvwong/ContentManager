@@ -25,9 +25,14 @@ public class CMSUserServiceImpl implements CMSUserService {
         return cmsUserRepository.findAll(pageRequest);
     }
 
-    public CMSUser findUser(String username){
+    public CMSUser cmsUser(String username){
 
         CMSUser cmsUser = cmsUserRepository.findByUsername(username);
         return cmsUser;
+    }
+
+    public CMSUser save(CMSUser cmsUser){
+        CMSUser saved = cmsUserRepository.save(cmsUser);
+        return saved;
     }
 }

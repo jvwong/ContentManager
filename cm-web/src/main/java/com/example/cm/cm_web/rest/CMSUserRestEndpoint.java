@@ -1,7 +1,6 @@
 package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
-import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,16 +26,13 @@ import java.net.URI;
 public class CMSUserRestEndpoint {
 	private static final Logger logger = LoggerFactory.getLogger(CMSUserRestEndpoint.class);
 
-	private CMSUserRepository cmsUserRepository;
 	private CMSUserService cmsUserService;
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	public CMSUserRestEndpoint(
-			CMSUserRepository CMSUserRepository,
 			CMSUserService cmsUserService,
 			PasswordEncoder passwordEncoder){
-		this.cmsUserRepository = CMSUserRepository;
 		this.cmsUserService = cmsUserService;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -54,15 +51,15 @@ public class CMSUserRestEndpoint {
 
 	/**
 	 * Retrieve a particular User instance
-	 * @param id
+	 * @param username the unique username
 	 * @return
 	 */
-	@RequestMapping(value="/{id}/", method=RequestMethod.GET)
+	@RequestMapping(value="/{username}/", method=RequestMethod.GET)
 	public CMSUser cmsUserDetail(
-	      @PathVariable("id") Long id) {
+	      @PathVariable("username") String username) {
 
-		CMSUser cmsUser = cmsUserRepository.findOne(id);
-		if(cmsUser == null) throw new ResourceNotFoundException(id, CMSUser.class.getSimpleName());
+		CMSUser cmsUser = cmsUserService.cmsUser(username);
+		if(cmsUser == null) throw new ResourceNotFoundException(CMSUser.class.getSimpleName());
 		return cmsUser;
 	}
 
@@ -88,7 +85,7 @@ public class CMSUserRestEndpoint {
 			cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
 
 			// DataIntegrityViolationException
-			CMSUser CMSUserSaved = cmsUserRepository.save(cmsUser);
+			CMSUser CMSUserSaved = cmsUserService.save(cmsUser);
 
 			URI locationUri =
 					ucb.path("/services/rest/user/")

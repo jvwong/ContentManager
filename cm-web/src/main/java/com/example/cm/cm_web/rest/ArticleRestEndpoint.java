@@ -54,7 +54,7 @@ public class ArticleRestEndpoint {
             @PathVariable("id") Long id){
         Article found = articleService.article(id);
         if(found == null){
-            throw new ResourceNotFoundException(id, Article.class.getName());
+            throw new ResourceNotFoundException(Article.class.getName());
         }
         return found;
     }

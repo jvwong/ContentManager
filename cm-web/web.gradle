@@ -49,9 +49,7 @@ dependencies {
     compile 'org.springframework:spring-tx:4.2.1.RELEASE'
 
     // Spring Security
-    compile 'org.springframework.security:spring-security-core:4.0.2.RELEASE'
     compile 'org.springframework.security:spring-security-web:4.0.2.RELEASE'
-    compile 'org.springframework.security:spring-security-config:4.0.2.RELEASE'
 
     // Thymeleaf
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'

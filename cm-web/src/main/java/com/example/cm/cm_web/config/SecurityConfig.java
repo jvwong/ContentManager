@@ -13,6 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,6 +26,9 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+		securedEnabled = true
+)
 public class SecurityConfig {
 
 	@Autowired
@@ -92,17 +96,17 @@ public class SecurityConfig {
 					.antMatchers(HttpMethod.POST, "/services/rest/auth/")
 						.permitAll()
 
-					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/(\\d+/)?")
-						.hasAuthority("ROLE_ADMIN")
-					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/me/")
-						.hasAuthority("ROLE_CMSUser")
-					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/.*")
-						.hasAuthority("ROLE_ADMIN")
-					.regexMatchers(HttpMethod.POST, "\\A/services/rest/users/\\z")
-						.permitAll()
+//					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/(\\d+/)?")
+//						.hasAuthority("ROLE_ADMIN")
+//					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/me/")
+//						.hasAuthority("ROLE_CMSUser")
+//					.regexMatchers(HttpMethod.GET, "\\A/services/rest/users/.*")
+//						.hasAuthority("ROLE_ADMIN")
+//					.regexMatchers(HttpMethod.POST, "\\A/services/rest/users/\\z")
+//						.permitAll()
 
 					.antMatchers("/services/rest/**")
-						.hasAuthority("ROLE_CMSUSER")			
+					.hasAnyRole("CMSUSER", "ADMIN")
 					.anyRequest()
 						.authenticated() 
 					.and()

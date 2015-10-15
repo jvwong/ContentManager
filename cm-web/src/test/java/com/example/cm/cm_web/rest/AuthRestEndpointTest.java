@@ -52,7 +52,7 @@ public class AuthRestEndpointTest {
                 = new UsernamePasswordAuthenticationToken(
                 mockUser.getUsername(), mockUser.getPassword());
 
-        Mockito.when(mockService.findUser(mockUser.getUsername())).thenReturn(mockUser);
+        Mockito.when(mockService.cmsUser(mockUser.getUsername())).thenReturn(mockUser);
         Mockito.when(mockAuthManager.authenticate(authRequest)).thenReturn(null);
     }
 
@@ -72,7 +72,7 @@ public class AuthRestEndpointTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
-        Mockito.verify(mockService, Mockito.atLeastOnce()).findUser(mockUser.getUsername());
+        Mockito.verify(mockService, Mockito.atLeastOnce()).cmsUser(mockUser.getUsername());
         Mockito.verify(mockAuthManager, Mockito.atLeastOnce()).authenticate(authRequest);
     }
 

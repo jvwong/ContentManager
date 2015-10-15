@@ -74,7 +74,11 @@ subprojects {
 		compile 'org.springframework:spring-context:4.2.1.RELEASE'
 		compile 'org.springframework:spring-aspects:4.2.1.RELEASE'
 
-		//Testing
+        // Spring Security
+        compile 'org.springframework.security:spring-security-core:4.0.2.RELEASE'
+        compile 'org.springframework.security:spring-security-config:4.0.2.RELEASE'
+
+        //Testing
 		testCompile 'junit:junit:4.11'
         testCompile "junit:junit-dep:4.11"
 		testCompile 'org.springframework:spring-test:4.2.1.RELEASE'

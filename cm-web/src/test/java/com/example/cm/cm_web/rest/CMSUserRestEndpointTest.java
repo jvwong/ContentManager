@@ -1,7 +1,6 @@
 package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
-import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +34,6 @@ public class CMSUserRestEndpointTest {
 
     private MockMvc mockMvc;
     private CMSUser mockUser;
-    private CMSUserRepository mockRepository;
     private CMSUserService mockCmsUserService;
     private PasswordEncoder mockPasswordEncoder;
     private List<CMSUser> cmsUserList;
@@ -44,10 +42,9 @@ public class CMSUserRestEndpointTest {
     public void setUp() {
         mockPasswordEncoder = Mockito.mock(PasswordEncoder.class);
         mockCmsUserService = Mockito.mock(CMSUserService.class);
-        mockRepository = Mockito.mock(CMSUserRepository.class);
 
         CMSUserRestEndpoint endpoint = new CMSUserRestEndpoint(
-                mockRepository, mockCmsUserService, mockPasswordEncoder);
+                mockCmsUserService, mockPasswordEncoder);
         mockMvc = standaloneSetup(endpoint).build();
 
         mockUser = new CMSUser(24L, "fullname24", "username24", "password24",
@@ -99,10 +96,10 @@ public class CMSUserRestEndpointTest {
     @Test
     public void cmsUserDetailTest() throws Exception {
 
-        Mockito.when(mockRepository.findOne(mockUser.getId()))
+        Mockito.when(mockCmsUserService.cmsUser(mockUser.getUsername()))
                 .thenReturn(mockUser);
 
-        mockMvc.perform(get("/rest/users/" + mockUser.getId() + "/"))
+        mockMvc.perform(get("/rest/users/" + mockUser.getUsername() + "/"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.id", is(mockUser.getId().intValue())))
@@ -113,7 +110,7 @@ public class CMSUserRestEndpointTest {
                 .andExpect(jsonPath("$.role", is(mockUser.getRole())))
         ;
 
-        Mockito.verify(mockRepository, Mockito.atLeastOnce()).findOne(mockUser.getId());
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).cmsUser(mockUser.getUsername());
     }
 
     /*
@@ -126,7 +123,7 @@ public class CMSUserRestEndpointTest {
                 "email1@email.com", "CMSUser");
         Mockito.when(mockPasswordEncoder.encode(mockUser.getPassword()))
                 .thenReturn(mockUser.getPassword());
-        Mockito.when(mockRepository.save(mockUser)).thenReturn(savedUser);
+        Mockito.when(mockCmsUserService.save(mockUser)).thenReturn(savedUser);
 
         Gson gson = new Gson();
         String jsonOut = gson.toJson(mockUser);
@@ -140,7 +137,7 @@ public class CMSUserRestEndpointTest {
                 .andExpect(header().string("location", containsString("/services/rest/user/" + savedUser.getId())))
                 ;
 
-        Mockito.verify(mockRepository, Mockito.atLeastOnce()).save(mockUser);
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).save(mockUser);
     }
 
     /*
@@ -151,7 +148,7 @@ public class CMSUserRestEndpointTest {
 
         Mockito.when(mockPasswordEncoder.encode(mockUser.getPassword()))
                 .thenReturn(mockUser.getPassword());
-        Mockito.when(mockRepository.save(mockUser)).thenThrow( new DataIntegrityViolationException(CMSUser.class.toString()));
+        Mockito.when(mockCmsUserService.save(mockUser)).thenThrow( new DataIntegrityViolationException(CMSUser.class.toString()));
 
         Gson gson = new Gson();
         String jsonOut = gson.toJson(mockUser);
@@ -162,7 +159,7 @@ public class CMSUserRestEndpointTest {
                 .andExpect(status().isConflict())
         ;
 
-        Mockito.verify(mockRepository, Mockito.atLeastOnce())
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce())
                 .save(mockUser);
     }
 

@@ -61,7 +61,7 @@ public class AuthRestEndpoint {
 		authenticationManager.authenticate(authRequest);
 
 		// If it succeeds only then will the addAuthentication proceed.
-		CMSUser saved = cmsUserService.findUser(cmsUser.getUsername());
+		CMSUser saved = cmsUserService.cmsUser(cmsUser.getUsername());
 		tokenAuthenticationService.addAuthentication(httpResponse, saved);
 
 		if(saved == null) throw new MissingEntityException(CMSUser.class.getName());
