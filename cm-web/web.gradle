@@ -44,43 +44,37 @@ repositories {
 dependencies {
 
     // Spring
-    compile 'org.springframework:spring-webmvc:4.2.1.RELEASE'
-    compile 'org.springframework:spring-web:4.2.1.RELEASE'
-    compile 'org.springframework:spring-tx:4.2.1.RELEASE'
+    compile "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-web:$springVersion"
+    compile "org.springframework:spring-tx:$springVersion"
 
     // Spring Security
-    compile 'org.springframework.security:spring-security-web:4.0.2.RELEASE'
+    compile "org.springframework.security:spring-security-web:$springSecurityVersion"
 
     // Thymeleaf
-    compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
-	compile 'org.thymeleaf:thymeleaf-spring4:2.1.4.RELEASE'
+    compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:$thymeleafSpringExtrasVersion"
+	compile "org.thymeleaf:thymeleaf-spring4:$thymeleafSpring4Version"
 
 	// Hibernate
-	compile 'org.hibernate:hibernate-validator:5.2.1.Final'
-	compile 'javax.validation:validation-api:1.1.0.Final'
+	compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
+	compile "javax.validation:validation-api:$javaxValidationApi"
 
-    // Message Conversion
-    runtime 'com.fasterxml.jackson.core:jackson-databind:2.6.2'
-    runtime 'com.fasterxml.jackson.core:jackson-core:2.6.2'
-    runtime 'com.fasterxml.jackson.core:jackson-annotations:2.6.2'
-    runtime 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
-    testCompile 'com.google.code.gson:gson:2.4'
+    testCompile "com.google.code.gson:gson:$gsonVersion"
 
 	//Logging
-	compile 'org.apache.logging.log4j:log4j-api:2.4'
-    runtime 'org.apache.logging.log4j:log4j-core:2.4'
-    runtime 'org.apache.logging.log4j:log4j-jcl:2.4'
-    runtime 'org.apache.logging.log4j:log4j-slf4j-impl:2.4'
-    //runtime 'org.apache.logging.log4j:log4j-taglib:2.4'
+	compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    runtime "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    runtime "org.apache.logging.log4j:log4j-jcl:$log4jVersion"
+    runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
 
     // Mockito
-    testCompile "org.mockito:mockito-core:1.10.19"
-    testCompile "org.hamcrest:hamcrest-library:1.3"
+    testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
+    testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
 
     // jayway - to test JSON paths
-    testCompile 'com.jayway.jsonpath:json-path-assert:2.0.0'
+    testCompile "com.jayway.jsonpath:json-path-assert:$jsonPathAssertVersion"
 
-    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile "javax.servlet:javax.servlet-api:$javaxServletApiVersion"
 
 	// Cargo
 	// Declare dependency info using map containing group, name, and version

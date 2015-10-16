@@ -52,7 +52,7 @@ public class AuthRestEndpointTest {
                 = new UsernamePasswordAuthenticationToken(
                 mockUser.getUsername(), mockUser.getPassword());
 
-        Mockito.when(mockService.cmsUser(mockUser.getUsername())).thenReturn(mockUser);
+        Mockito.when(mockService.getUser(mockUser.getUsername())).thenReturn(mockUser);
         Mockito.when(mockAuthManager.authenticate(authRequest)).thenReturn(null);
     }
 
@@ -65,14 +65,14 @@ public class AuthRestEndpointTest {
         Gson gson = new Gson();
         String jsonOut = gson.toJson(mockUser);
 
-        mockMvc.perform(post("/rest/auth")
+        mockMvc.perform(post("/rest/auth/")
                 .contentType("application/json;charset=UTF-8")
                 .content(jsonOut))
 
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
-        Mockito.verify(mockService, Mockito.atLeastOnce()).cmsUser(mockUser.getUsername());
+        Mockito.verify(mockService, Mockito.atLeastOnce()).getUser(mockUser.getUsername());
         Mockito.verify(mockAuthManager, Mockito.atLeastOnce()).authenticate(authRequest);
     }
 

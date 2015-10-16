@@ -26,7 +26,11 @@ public class CMSUserServiceImpl implements CMSUserService {
     }
 
     public CMSUser cmsUser(String username){
+        CMSUser cmsUser = cmsUserRepository.findByUsername(username);
+        return cmsUser;
+    }
 
+    public CMSUser getUser(String username){
         CMSUser cmsUser = cmsUserRepository.findByUsername(username);
         return cmsUser;
     }

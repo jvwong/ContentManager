@@ -11,11 +11,11 @@ repositories {
 
 dependencies {
 
-    //Spring
-    compile "org.springframework.data:spring-data-commons:$springDataCommonsVersion"
-    compile "org.springframework.data:spring-data-jpa:$springDataJpaVersion"
+    //H2
+	compile project(':cm-model')
 
-    // Java
-    compile "org.eclipse.persistence:javax.persistence:$javaxPersistenceVersion"
+    // JCR
+    compile 'javax.jcr:jcr:2.0'
+
 }
 // -------------------------- END Gradle -------------------------------------//

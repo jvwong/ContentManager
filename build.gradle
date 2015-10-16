@@ -66,23 +66,29 @@ subprojects {
     apply plugin: 'java'
 
     dependencies {
-        compile 'javax.inject:javax.inject:1'
+        compile "javax.inject:javax.inject:$javaxInjectVersion"
 
-        compile 'org.apache.commons:commons-lang3:3.4'
+        compile "org.apache.commons:commons-lang3:$apacheCommonsLangVersion"
+
+        // Message Conversion
+        compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+        compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonJsr310Version"
 
         //Spring
-		compile 'org.springframework:spring-context:4.2.1.RELEASE'
-		compile 'org.springframework:spring-aspects:4.2.1.RELEASE'
+		compile "org.springframework:spring-context:$springVersion"
+		compile "org.springframework:spring-aspects:$springVersion"
 
         // Spring Security
-        compile 'org.springframework.security:spring-security-core:4.0.2.RELEASE'
-        compile 'org.springframework.security:spring-security-config:4.0.2.RELEASE'
+        compile "org.springframework.security:spring-security-core:$springSecurityVersion"
+        compile "org.springframework.security:spring-security-config:$springSecurityVersion"
 
         //Testing
-		testCompile 'junit:junit:4.11'
-        testCompile "junit:junit-dep:4.11"
-		testCompile 'org.springframework:spring-test:4.2.1.RELEASE'
-        testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
+		testCompile "junit:junit:$junitVersion"
+        testCompile "junit:junit-dep:$junitVersion"
+		testCompile "org.springframework:spring-test:$springVersion"
+        testCompile "org.hamcrest:hamcrest-junit:$hamcrestJunitVersion"
     }
     sourceCompatibility = 1.8
 

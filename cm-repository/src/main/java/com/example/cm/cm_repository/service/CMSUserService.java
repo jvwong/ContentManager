@@ -9,12 +9,13 @@ import org.springframework.security.access.annotation.Secured;
  */
 public interface CMSUserService {
 
-    //TODO wtf denies everyone
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     Page<CMSUser> cmsUserList(Integer pageNumber, Integer pageSize);
 
-    //@Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     CMSUser cmsUser(String username);
+
+    CMSUser getUser(String username);
 
     CMSUser save(CMSUser cmsUser);
 }

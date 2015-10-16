@@ -38,7 +38,7 @@ public class AuthRestEndpoint {
 	}
 
 	@RequestMapping(
-			value="",
+			value="/",
 			method=RequestMethod.POST,
 			consumes="application/json;charset=UTF-8")
 	public CMSUser authenticate(@RequestBody CMSUser cmsUser,
@@ -61,7 +61,7 @@ public class AuthRestEndpoint {
 		authenticationManager.authenticate(authRequest);
 
 		// If it succeeds only then will the addAuthentication proceed.
-		CMSUser saved = cmsUserService.cmsUser(cmsUser.getUsername());
+		CMSUser saved = cmsUserService.getUser(cmsUser.getUsername());
 		tokenAuthenticationService.addAuthentication(httpResponse, saved);
 
 		if(saved == null) throw new MissingEntityException(CMSUser.class.getName());

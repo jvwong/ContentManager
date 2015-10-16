@@ -1,4 +1,4 @@
-include 'cm-web', 'cm-repository', 'cm-model'
+include 'cm-web', 'cm-repository', 'cm-model', 'cm-jcrrepository'//, 'spring-modules-jcr'
 
 rootProject.name = 'ContentManager'
 
