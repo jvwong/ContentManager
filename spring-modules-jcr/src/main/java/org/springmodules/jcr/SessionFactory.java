@@ -1,4 +1,4 @@
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;

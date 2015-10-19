@@ -1,4 +1,4 @@
-package org.cms.jcr.support;
+package org.springmodules.jcr.support;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -9,9 +9,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.support.DaoSupport;
 import org.springframework.util.Assert;
-import org.cms.jcr.JcrTemplate;
-import org.cms.jcr.SessionFactory;
-import org.cms.jcr.SessionFactoryUtils;
+import org.springmodules.jcr.JcrTemplate;
+import org.springmodules.jcr.SessionFactory;
+import org.springmodules.jcr.SessionFactoryUtils;
 
 /**
  * Convenient class for accessing JCR objects.
@@ -69,7 +69,7 @@ public abstract class JcrDaoSupport extends DaoSupport {
 	 * @return the JCR Session
 	 * @throws DataAccessResourceFailureException if the Session couldn't be created
 	 * @throws IllegalStateException if no thread-bound Session found and allowCreate false
-	 * @see org.cms.jcr.SessionFactoryUtils#getSession
+	 * @see org.springmodules.jcr.SessionFactoryUtils#getSession
 	 */
 	protected final Session getSession() {
 		return getSession(this.template.isAllowCreate());
@@ -87,7 +87,7 @@ public abstract class JcrDaoSupport extends DaoSupport {
 	 *             if the Session couldn't be created
 	 * @throws IllegalStateException
 	 *             if no thread-bound Session found and allowCreate false
-	 * @see org.cms.jcr.SessionFactoryUtils#getSession
+	 * @see org.springmodules.jcr.SessionFactoryUtils#getSession
 	 */
 	protected final Session getSession(boolean allowCreate)
 			throws DataAccessResourceFailureException, IllegalStateException {
@@ -104,7 +104,7 @@ public abstract class JcrDaoSupport extends DaoSupport {
 	 * @param ex JCRException that occured
 	 * @return the corresponding DataAccessException instance
 	 * @see #setJCRTemplate
-	 * @see org.cms.jcr.JcrTemplate#convertJCRAccessException
+	 * @see org.springmodules.jcr.JcrTemplate#convertJCRAccessException
 	 */
 	protected final DataAccessException convertJcrAccessException(RepositoryException ex) {
 		return this.template.convertJcrAccessException(ex);

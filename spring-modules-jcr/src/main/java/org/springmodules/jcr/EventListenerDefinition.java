@@ -4,7 +4,7 @@
  * $Id: EventListenerDefinition.java,v 1.2 2006-05-03 12:11:06 costin Exp $
  * $Revision: 1.2 $
  */
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import javax.jcr.observation.Event;
 import javax.jcr.observation.EventListener;

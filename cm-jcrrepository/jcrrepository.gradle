@@ -11,11 +11,13 @@ repositories {
 
 dependencies {
 
-    //H2
-	compile project(':cm-model')
+    // The JCR API
+    compile "javax.jcr:jcr:$jcrVersion"
 
-    // JCR
-    compile 'javax.jcr:jcr:2.0'
+    // Jackrabbit content repository
+    compile "org.apache.jackrabbit:jackrabbit-core:$jackrabbitVersion"
 
+    compile project(':spring-modules-jcr')
+    compile project(':cm-model')
 }
 // -------------------------- END Gradle -------------------------------------//

@@ -4,7 +4,7 @@
  * $Id: JcrInterceptor.java,v 1.2 2006-03-07 13:09:29 costin Exp $
  * $Revision: 1.2 $
  */
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import javax.jcr.Session;
 

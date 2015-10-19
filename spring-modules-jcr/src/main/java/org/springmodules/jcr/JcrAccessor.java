@@ -4,7 +4,7 @@
  * $Id: JcrAccessor.java,v 1.4 2006-03-07 14:40:50 costin Exp $
  * $Revision: 1.4 $
  */
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import java.io.IOException;
 

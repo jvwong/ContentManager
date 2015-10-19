@@ -1,4 +1,4 @@
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
-import org.cms.jcr.support.GenericSessionHolderProvider;
+import org.springmodules.jcr.support.GenericSessionHolderProvider;
 
 /**
  * Jcr Session Factory. This class is just a simple wrapper around the
@@ -281,14 +281,14 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 	}
 
 	/**
-	 * @see org.cms.jcr.SessionFactory#getSession()
+	 * @see org.springmodules.jcr.SessionFactory#getSession()
 	 */
 	public Session getSession() throws RepositoryException {
 		return addListeners(repository.login(credentials, workspaceName));
 	}
 
 	/**
-	 * @see org.cms.jcr.SessionFactory#getSessionHolder(javax.jcr.Session)
+	 * @see org.springmodules.jcr.SessionFactory#getSessionHolder(javax.jcr.Session)
 	 */
 	public SessionHolder getSessionHolder(Session session) {
 		return sessionHolderProvider.createSessionHolder(session);

@@ -4,19 +4,19 @@
  * $Id: UserTxSessionHolder.java,v 1.3 2008-01-29 12:28:22 coliny Exp $
  * $Revision: 1.3 $
  */
-package org.cms.jcr.jackrabbit.support;
+package org.springmodules.jcr.jackrabbit.support;
 
 import javax.jcr.Session;
 import javax.transaction.UserTransaction;
 import javax.transaction.xa.XAResource;
 
-import org.cms.jcr.SessionHolder;
+import org.springmodules.jcr.SessionHolder;
 
 /**
  * Extension of Session Holder which includes a UserTransaction which handles
  * the XASession returned by the JackRabbit repository implementation.
  * 
- * @see org.cms.jcr.jackrabbit.support.JackRabbitUserTransaction
+ * @see org.springmodules.jcr.jackrabbit.support.JackRabbitUserTransaction
  * @author Costin Leau
  * 
  */
@@ -39,7 +39,7 @@ public class UserTxSessionHolder extends SessionHolder {
 	}
 
 	/**
-	 * @see org.cms.jcr.SessionHolder#setSession(javax.jcr.Session)
+	 * @see org.springmodules.jcr.SessionHolder#setSession(javax.jcr.Session)
 	 */
 	public void setSession(Session session) {
 		/*

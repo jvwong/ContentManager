@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cms.jcr.jackrabbit.config;
+package org.springmodules.jcr.jackrabbit.config;
 
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import org.springframework.beans.factory.xml.ParserContext;
-import org.cms.jcr.jackrabbit.LocalTransactionManager;
-import org.cms.jcr.jackrabbit.RepositoryFactoryBean;
+import org.springmodules.jcr.jackrabbit.LocalTransactionManager;
+import org.springmodules.jcr.jackrabbit.RepositoryFactoryBean;
 import org.w3c.dom.Element;
 
 /**

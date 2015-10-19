@@ -4,7 +4,7 @@
  * $Id: RepositoryFactoryBean.java,v 1.2 2006-07-03 22:07:31 costin Exp $
  * $Revision: 1.2 $
  */
-package org.cms.jcr.jackrabbit;
+package org.springmodules.jcr.jackrabbit;
 
 import javax.jcr.Repository;
 
@@ -24,7 +24,7 @@ import org.xml.sax.InputSource;
  * @see org.springframework.jndi.JndiObjectFactoryBean
  * @author Costin Leau
  */
-public class RepositoryFactoryBean extends org.cms.jcr.RepositoryFactoryBean {
+public class RepositoryFactoryBean extends org.springmodules.jcr.RepositoryFactoryBean {
 
 	/**
 	 * Default repository configuration file.
@@ -75,7 +75,7 @@ public class RepositoryFactoryBean extends org.cms.jcr.RepositoryFactoryBean {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.cms.jcr.RepositoryFactoryBean#createRepository()
+	 * @see org.springmodules.jcr.RepositoryFactoryBean#createRepository()
 	 */
 	@Override
 	protected Repository createRepository() throws Exception {
@@ -84,7 +84,7 @@ public class RepositoryFactoryBean extends org.cms.jcr.RepositoryFactoryBean {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.cms.jcr.RepositoryFactoryBean#resolveConfigurationResource()
+	 * @see org.springmodules.jcr.RepositoryFactoryBean#resolveConfigurationResource()
 	 */
 	@Override
 	protected void resolveConfigurationResource() throws Exception {
@@ -118,7 +118,7 @@ public class RepositoryFactoryBean extends org.cms.jcr.RepositoryFactoryBean {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.cms.jcr.RepositoryFactoryBean#destroy()
+	 * @see org.springmodules.jcr.RepositoryFactoryBean#destroy()
 	 */
 	@Override
 	public void destroy() throws Exception {

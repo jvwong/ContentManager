@@ -4,7 +4,7 @@
  * $Id: OpenSessionInViewInterceptor.java,v 1.2 2006-03-07 13:09:30 costin Exp $
  * $Revision: 1.2 $
  */
-package org.cms.jcr.support;
+package org.springmodules.jcr.support;
 
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +16,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.cms.jcr.SessionFactory;
-import org.cms.jcr.SessionFactoryUtils;
-import org.cms.jcr.SessionHolder;
+
+import org.springmodules.jcr.SessionFactory;
+import org.springmodules.jcr.SessionFactoryUtils;
+import org.springmodules.jcr.SessionHolder;
 
 /**
  * Spring web HandlerInterceptor that binds a JCR Session to the

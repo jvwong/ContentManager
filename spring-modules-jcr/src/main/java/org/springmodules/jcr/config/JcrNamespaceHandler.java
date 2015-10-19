@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cms.jcr.config;
+package org.springmodules.jcr.config;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,8 +26,8 @@ import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import org.springframework.core.Constants;
 import org.springframework.util.xml.DomUtils;
-import org.cms.jcr.EventListenerDefinition;
-import org.cms.jcr.JcrSessionFactory;
+import org.springmodules.jcr.EventListenerDefinition;
+import org.springmodules.jcr.JcrSessionFactory;
 import org.w3c.dom.Element;
 
 /**

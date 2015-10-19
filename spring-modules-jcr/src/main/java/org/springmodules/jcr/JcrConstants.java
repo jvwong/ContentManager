@@ -4,7 +4,7 @@
  * $Id: JcrConstants.java,v 1.1 2005-12-20 17:38:08 costin Exp $
  * $Revision: 1.1 $
  */
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import java.util.HashMap;
 import java.util.Map;

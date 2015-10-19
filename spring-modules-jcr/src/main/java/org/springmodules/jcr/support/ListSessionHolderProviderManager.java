@@ -4,7 +4,7 @@
  * $Id: ListSessionHolderProviderManager.java,v 1.1 2005-12-20 17:38:16 costin Exp $
  * $Revision: 1.1 $
  */
-package org.cms.jcr.support;
+package org.springmodules.jcr.support;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ListSessionHolderProviderManager extends CacheableSessionHolderProv
 	private List providers = Collections.EMPTY_LIST;
 	
 	/**
-	 * @see org.cms.jcr.support.AbstractSessionHolderProviderManager#getProviders()
+	 * @see org.springmodules.jcr.support.AbstractSessionHolderProviderManager#getProviders()
 	 */
 	public List getProviders() {
 		return providers;

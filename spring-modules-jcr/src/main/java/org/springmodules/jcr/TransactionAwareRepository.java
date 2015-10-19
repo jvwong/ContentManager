@@ -4,7 +4,7 @@
  * $Id: TransactionAwareRepository.java,v 1.4 2008-01-29 12:28:24 coliny Exp $
  * $Revision: 1.4 $
  */
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

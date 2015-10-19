@@ -4,7 +4,7 @@
  * $Id: RepositoryFactoryBean.java,v 1.1 2005-12-20 17:38:11 costin Exp $
  * $Revision: 1.1 $
  */
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import javax.jcr.Repository;
 

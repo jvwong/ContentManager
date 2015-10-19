@@ -4,6 +4,8 @@
 //
 //import java.io.IOException;
 //import java.io.Serializable;
+//import java.util.ArrayList;
+//import java.util.List;
 //
 //import javax.inject.Inject;
 //import javax.jcr.Node;
@@ -16,13 +18,12 @@
 //import org.springframework.dao.DataRetrievalFailureException;
 //import org.springframework.stereotype.Repository;
 //import org.springframework.transaction.annotation.Transactional;
-////import org.springmodules.jcr.JcrCallback;
-////import org.springmodules.jcr.SessionFactory;
-////import org.springmodules.jcr.support.JcrDaoSupport;
-////
-////import com.springinpractice.ch12.dao.ArticleDao;
-////import com.springinpractice.ch12.model.Article;
-////import com.springinpractice.ch12.model.Page;
+//
+//import org.springmodules.jcr.JcrCallback;
+//import org.springmodules.jcr.SessionFactory;
+//import org.springmodules.jcr.support.JcrDaoSupport;
+//
+//import com.example.cm.cm_model.domain.*;
 //
 ///**
 // * JCR-backed article data access object.

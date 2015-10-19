@@ -1,4 +1,4 @@
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 
 

@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author jvwong
@@ -17,9 +19,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @AttributeOverride(name = "id", column = @Column(name = "ArticleId"))
 public class Article extends DateByAuditedEntity {
 
+//	private String nodeId;
 	private String title;
 	private String description;
 	private String keywords;
+//	private List<Page> pages = new ArrayList<>();
 
 	public Article(){
 		this(null, null, null);
@@ -40,6 +44,14 @@ public class Article extends DateByAuditedEntity {
 		this.description = description;
 		this.keywords = keywords;
 	}
+
+//	public String getNodeId() {
+//		return nodeId;
+//	}
+//
+//	public void setNodeId(String nodeId) {
+//		this.nodeId = nodeId;
+//	}
 
 	public String getTitle() {
 		return title;
@@ -64,6 +76,14 @@ public class Article extends DateByAuditedEntity {
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}
+
+//	public List<Page> getPages() {
+//		return pages;
+//	}
+//
+//	public void setPages(List<Page> pages) {
+//		this.pages = pages;
+//	}
 
 	@Override
 	public boolean equals(Object that) {

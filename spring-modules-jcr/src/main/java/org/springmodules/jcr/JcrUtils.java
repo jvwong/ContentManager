@@ -4,7 +4,7 @@
  * $Id: JcrUtils.java,v 1.2 2006-01-09 15:45:56 costin Exp $
  * $Revision: 1.2 $
  */
-package org.cms.jcr;
+package org.springmodules.jcr;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

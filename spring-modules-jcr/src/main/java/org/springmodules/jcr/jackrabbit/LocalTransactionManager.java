@@ -1,4 +1,4 @@
-package org.cms.jcr.jackrabbit;
+package org.springmodules.jcr.jackrabbit;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -14,10 +14,10 @@ import org.springframework.transaction.support.AbstractPlatformTransactionManage
 import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.SmartTransactionObject;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.cms.jcr.SessionFactory;
-import org.cms.jcr.SessionFactoryUtils;
-import org.cms.jcr.SessionHolder;
-import org.cms.jcr.jackrabbit.support.UserTxSessionHolder;
+import org.springmodules.jcr.SessionFactory;
+import org.springmodules.jcr.SessionFactoryUtils;
+import org.springmodules.jcr.SessionHolder;
+import org.springmodules.jcr.jackrabbit.support.UserTxSessionHolder;
 
 /**
  * PlatformTransactionManager implementation for a single JCR SessionFactory.

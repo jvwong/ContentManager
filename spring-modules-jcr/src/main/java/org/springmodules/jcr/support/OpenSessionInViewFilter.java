@@ -4,7 +4,7 @@
  * $Id: OpenSessionInViewFilter.java,v 1.2 2006-03-07 13:09:30 costin Exp $
  * $Revision: 1.2 $
  */
-package org.cms.jcr.support;
+package org.springmodules.jcr.support;
 
 import java.io.IOException;
 
@@ -20,8 +20,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.cms.jcr.SessionFactory;
-import org.cms.jcr.SessionFactoryUtils;
+import org.springmodules.jcr.SessionFactory;
+import org.springmodules.jcr.SessionFactoryUtils;
 
 /**
  * Servlet 2.3 Filter that binds a JCR Session to the thread for the

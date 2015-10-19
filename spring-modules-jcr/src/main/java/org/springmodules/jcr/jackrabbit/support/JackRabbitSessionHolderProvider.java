@@ -4,12 +4,12 @@
  * $Id: JackRabbitSessionHolderProvider.java,v 1.1 2005-12-20 17:38:19 costin Exp $
  * $Revision: 1.1 $
  */
-package org.cms.jcr.jackrabbit.support;
+package org.springmodules.jcr.jackrabbit.support;
 
 import javax.jcr.Session;
 
-import org.cms.jcr.SessionHolder;
-import org.cms.jcr.SessionHolderProvider;
+import org.springmodules.jcr.SessionHolder;
+import org.springmodules.jcr.SessionHolderProvider;
 
 /**
  * JackRabbit specific session holder. This holder should be used with OpenSessionInViewFilter/Interceptor
@@ -22,14 +22,14 @@ import org.cms.jcr.SessionHolderProvider;
 public class JackRabbitSessionHolderProvider implements SessionHolderProvider {
 
     /**
-	 * @see org.cms.jcr.SessionHolderProvider#acceptsRepository(java.lang.String)
+	 * @see org.springmodules.jcr.SessionHolderProvider#acceptsRepository(java.lang.String)
 	 */
 	public boolean acceptsRepository(String repositoryName) {
 		return "Jackrabbit".equals(repositoryName);
 	}
 
 	/**
-     * @see org.cms.jcr.SessionHolderProvider#createSessionHolder(javax.jcr.Session)
+     * @see org.springmodules.jcr.SessionHolderProvider#createSessionHolder(javax.jcr.Session)
      */
     public SessionHolder createSessionHolder(Session session) {
         return new UserTxSessionHolder(session);

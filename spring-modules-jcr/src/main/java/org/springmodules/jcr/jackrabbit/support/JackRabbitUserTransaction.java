@@ -4,7 +4,7 @@
  * $Id: JackRabbitUserTransaction.java,v 1.3 2008-01-29 12:28:22 coliny Exp $
  * $Revision: 1.3 $
  */
-package org.cms.jcr.jackrabbit.support;
+package org.springmodules.jcr.jackrabbit.support;
 
 import javax.jcr.Session;
 import javax.transaction.NotSupportedException;

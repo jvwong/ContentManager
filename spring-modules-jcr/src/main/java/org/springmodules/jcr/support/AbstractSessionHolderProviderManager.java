@@ -4,7 +4,7 @@
  * $Id: AbstractSessionHolderProviderManager.java,v 1.3 2006-03-07 13:41:07 costin Exp $
  * $Revision: 1.3 $
  */
-package org.cms.jcr.support;
+package org.springmodules.jcr.support;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import javax.jcr.Repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.cms.jcr.SessionHolderProvider;
-import org.cms.jcr.SessionHolderProviderManager;
+import org.springmodules.jcr.SessionHolderProvider;
+import org.springmodules.jcr.SessionHolderProviderManager;
 
 /**
  * Base implementation for SessionHolderProviderManager that adds most of the functionality 
@@ -35,7 +35,7 @@ public abstract class AbstractSessionHolderProviderManager implements SessionHol
 	public abstract List getProviders();
 
 	/**
-	 * @see org.cms.jcr.SessionHolderProviderManager#getSessionProvider(Repository)
+	 * @see org.springmodules.jcr.SessionHolderProviderManager#getSessionProvider(Repository)
 	 */
 	public SessionHolderProvider getSessionProvider(Repository repository) {
 		// graceful fallback

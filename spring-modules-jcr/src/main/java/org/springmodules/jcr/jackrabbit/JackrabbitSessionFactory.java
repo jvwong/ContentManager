@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cms.jcr.jackrabbit;
+package org.springmodules.jcr.jackrabbit;
 
 import javax.jcr.Workspace;
 
@@ -23,7 +23,7 @@ import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
-import org.cms.jcr.JcrSessionFactory;
+import org.springmodules.jcr.JcrSessionFactory;
 
 /**
  * Jackrabbit specific {@link JcrSessionFactory} which allows registration of
@@ -46,7 +46,7 @@ public class JackrabbitSessionFactory extends JcrSessionFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.cms.jcr.JcrSessionFactory#registerNodeTypes()
+	 * @see org.springmodules.jcr.JcrSessionFactory#registerNodeTypes()
 	 */
 	protected void registerNodeTypes() throws Exception {
 		if (!ObjectUtils.isEmpty(nodeDefinitions)) {

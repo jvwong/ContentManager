@@ -10,5 +10,25 @@ repositories {
 }
 
 dependencies {
+
+    //java
+    compile "javax.transaction:jta:1.1"
+    compile "javax.servlet:javax.servlet-api:$javaxServletApiVersion"
+
+    // Spring
+    compile "org.springframework:spring-webmvc:$springVersion"
+
+    // jackrabbit
+    compile "org.apache.jackrabbit:jackrabbit-core:$jackrabbitVersion"
+    compile "org.apache.jackrabbit:jackrabbit-api:$jackrabbitVersion"
+    compile "org.apache.jackrabbit:jackrabbit-jcr-rmi:$jackrabbitVersion"
+
+    // JCR
+    compile "javax.jcr:jcr:$jcrVersion"
+    compile "org.springframework:spring-dao:$springDaoVersion"
+
+    // Other
+    compile "xerces:xercesImpl:$xercesVersion"
+
 }
 // -------------------------- END Gradle -------------------------------------//
