@@ -41,20 +41,20 @@ public class Bootstrap implements WebApplicationInitializer {
 		 				0));
         dispatcher.addMapping("/");
 
-        /*
-        * RESTful web service application context configuration
-        */
-        AnnotationConfigWebApplicationContext restContext
-                = new AnnotationConfigWebApplicationContext();
-        restContext.register(RestServletContextConfiguration.class);
-        DispatcherServlet servlet = new DispatcherServlet(restContext);
-        // Recognize OPTIONS requests
-        servlet.setDispatchOptionsRequest(true);
-        dispatcher = servletContext.addServlet(
-             "cmRestDispatcher", servlet
-        );
-        dispatcher.setLoadOnStartup(2);
-        dispatcher.addMapping("/services/*");
+//        /*
+//        * RESTful web service application context configuration
+//        */
+//        AnnotationConfigWebApplicationContext restContext
+//                = new AnnotationConfigWebApplicationContext();
+//        restContext.register(RestServletContextConfiguration.class);
+//        DispatcherServlet servlet = new DispatcherServlet(restContext);
+//        // Recognize OPTIONS requests
+//        servlet.setDispatchOptionsRequest(true);
+//        dispatcher = servletContext.addServlet(
+//             "cmRestDispatcher", servlet
+//        );
+//        dispatcher.setLoadOnStartup(2);
+//        dispatcher.addMapping("/services/*");
 		
         // Activate the profile
         servletContext.setInitParameter("spring.profiles.active", "dev");

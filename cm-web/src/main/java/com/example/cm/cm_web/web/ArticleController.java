@@ -31,45 +31,45 @@ public class ArticleController {
 	    this.articleRepository = articleRepository;
 	}
 	
-	/**
-	 * Create Article
-	 */
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createArticle(
-			@Valid Article article,
-			RedirectAttributes model,
-			Errors errors) {
-
-		if (errors.hasErrors()) {
-			logger.info("Article errors encountered");
-			model.addFlashAttribute("errors", errors);
-			return getFullViewName("/create");
-		}
-
-		Article saved = articleRepository.save(article);
-
-		if(saved != null){
-			logger.info("Saving: {}", saved.toString());
-			model.addAttribute("id", saved.getId());
-			model.addFlashAttribute("article", saved);
-			return "redirect:/articles/{id}";
-		}
-
-		return getFullViewName("articleForm");
-	}
-
-	/**
-	 * Create Article
-	 * @return logical view name
-	 */
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createArticleForm(Model model) {
-
-		Article article = new Article();
-		model.addAttribute("article", article);
-		return getFullViewName("articleForm");
-	}
-
+//	/**
+//	 * Create Article
+//	 */
+//	@RequestMapping(value = "/create", method = RequestMethod.POST)
+//	public String createArticle(
+//			@Valid Article article,
+//			RedirectAttributes model,
+//			Errors errors) {
+//
+//		if (errors.hasErrors()) {
+//			logger.info("Article errors encountered");
+//			model.addFlashAttribute("errors", errors);
+//			return getFullViewName("/create");
+//		}
+//
+//		Article saved = articleRepository.save(article);
+//
+//		if(saved != null){
+//			logger.info("Saving: {}", saved.toString());
+//			model.addAttribute("id", saved.getId());
+//			model.addFlashAttribute("article", saved);
+//			return "redirect:/articles/{id}";
+//		}
+//
+//		return getFullViewName("articleForm");
+//	}
+//
+//	/**
+//	 * Create Article
+//	 * @return logical view name
+//	 */
+//	@RequestMapping(value = "/create", method = RequestMethod.GET)
+//	public String createArticleForm(Model model) {
+//
+//		Article article = new Article();
+//		model.addAttribute("article", article);
+//		return getFullViewName("articleForm");
+//	}
+//
 	/**
 	 * @param model model
 	 * @return article list
@@ -77,23 +77,23 @@ public class ArticleController {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String articleList(Model model) {
 		model.addAttribute("articleList", articleRepository.findAll());
-		return getFullViewName("articleList");		
+		return getFullViewName("articleList");
 	}
-	
-	/**
-	 * @param id article ID
-	 * @return logical view name
-	 * @throws IOException if there's an I/O exception
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String getArticle(
-			@PathVariable String id,
-			Model model) {
-
-		Article article = articleRepository.findOne(Long.parseLong(id));
-		model.addAttribute("article", article);
-		return getFullViewName("articlePage");
-	}
+//
+//	/**
+//	 * @param id article ID
+//	 * @return logical view name
+//	 * @throws IOException if there's an I/O exception
+//	 */
+//	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+//	public String getArticle(
+//			@PathVariable String id,
+//			Model model) {
+//
+//		Article article = articleRepository.findOne(Long.parseLong(id));
+//		model.addAttribute("article", article);
+//		return getFullViewName("articlePage");
+//	}
 	
 	private String getFullViewName(String path){
 		return "/articles/" + path;
