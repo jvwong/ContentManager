@@ -95,7 +95,7 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<Article> getAll() {
+    public List<Article> findAll() {
         return (List<Article>) getTemplate().execute(new JcrCallback() {
 
             /* (non-Javadoc)
@@ -104,7 +104,7 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
             @Override
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 NodeIterator it = getArticlesNode(session).getNodes();
-                List<Article> articles = new ArrayList<Article>();
+                List<Article> articles = new ArrayList<>();
                 while (it.hasNext()) { articles.add(articleMapper.toArticle(it.nextNode())); }
                 return articles;
             }

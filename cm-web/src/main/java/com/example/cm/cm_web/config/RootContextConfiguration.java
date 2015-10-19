@@ -36,6 +36,7 @@ public class RootContextConfiguration {
         return messageSource;
     }
 
+    // application.properties bean
     @Bean
     public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
         return new PropertySourcesPlaceholderConfigurer();

@@ -26,7 +26,6 @@ public class TokenAuthenticationService {
 	private final TokenHandler tokenHandler;
 
 	@Autowired
-//	public TokenAuthenticationService(@Value("${token.secret}") String secret) {
 	public TokenAuthenticationService(@Value("${token.secret}") String secret) {
 			tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
 	}

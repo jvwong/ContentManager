@@ -41,7 +41,7 @@ public interface Dao<T extends Object> {
      */
     T load(Serializable id);
 
-    List<T> getAll();
+    List<T> findAll();
 
     void update(T t);
 

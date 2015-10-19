@@ -33,7 +33,7 @@ public class ArticleMapper {
         article.setAuthor(node.getProperty("author").getString());
 
         if (node.hasProperty("publishedDate")) {
-            article.setPublishedDate(node.getProperty("publishDate").getDate().getTime());
+            article.setPublishedDate(node.getProperty("publishedDate").getDate().getTime());
         }
 
         if (node.hasProperty("description")) {
@@ -65,7 +65,7 @@ public class ArticleMapper {
         if (publishDate != null) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(publishDate);
-            node.setProperty("publishDate", cal);
+            node.setProperty("publishedDate", cal);
         }
 
         String description = article.getDescription();

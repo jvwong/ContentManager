@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -38,49 +40,51 @@ public class ArticleController {
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String articleList(Model model) {
-		model.addAttribute("articleList", articleRepository.getAll());
+		model.addAttribute("articleList", articleRepository.findAll());
 		return getFullViewName("articleList");
 	}
 
-//	/**
-//	 * Create Article
-//	 */
-//	@RequestMapping(value = "/create", method = RequestMethod.POST)
-//	public String createArticle(
-//			@Valid Article article,
-//			RedirectAttributes model,
-//			Errors errors) {
-//
-//		if (errors.hasErrors()) {
-//			logger.info("Article errors encountered");
-//			model.addFlashAttribute("errors", errors);
-//			return getFullViewName("/create");
-//		}
-//
-//		Article saved = articleRepository.save(article);
-//
-//		if(saved != null){
-//			logger.info("Saving: {}", saved.toString());
-//			model.addAttribute("id", saved.getId());
-//			model.addFlashAttribute("article", saved);
-//			return "redirect:/articles/{id}";
-//		}
-//
-//		return getFullViewName("articleForm");
-//	}
-//
-//	/**
-//	 * Create Article
-//	 * @return logical view name
-//	 */
-//	@RequestMapping(value = "/create", method = RequestMethod.GET)
-//	public String createArticleForm(Model model) {
-//
-//		Article article = new Article();
-//		model.addAttribute("article", article);
-//		return getFullViewName("articleForm");
-//	}
-//
+	/**
+	 * Create Article
+	 * @return logical view name
+	 */
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public String createArticleForm(Model model) {
+
+		Article article = new Article();
+		model.addAttribute("article", article);
+		return getFullViewName("articleForm");
+	}
+
+	/**
+	 * Create Article
+	 */
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String createArticle(
+			@Valid Article article,
+			RedirectAttributes model,
+			Errors errors) {
+
+		if (errors.hasErrors()) {
+			model.addFlashAttribute("errors", errors);
+			return getFullViewName("/create");
+		}
+
+		article.setId(UUID.randomUUID().toString());
+		article.setAuthor("asdasdasd");
+		article.setPublishedDate(new Date());
+
+		articleRepository.create(article);
+
+		if(articleRepository.exists(article.getId())){
+			model.addAttribute("id", article.getId());
+			model.addFlashAttribute("article", article);
+			return "redirect:/articles/";
+		}
+
+		return getFullViewName("articleForm");
+	}
+
 //	/**
 //	 * @param id article ID
 //	 * @return logical view name
