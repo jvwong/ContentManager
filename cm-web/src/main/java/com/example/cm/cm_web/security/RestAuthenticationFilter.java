@@ -27,8 +27,8 @@ import com.example.cm.cm_model.domain.CMSUser;
 *
 * <p>
 * In summary, this filter is responsible for processing any request that has a HTTP
-* request header of <code>X-Auth-Token</code> with a token authentication scheme and 
-* a Base64-encoded <code>username:password</code> token. 
+* request header of <code>X-Auth-Token</code> with a token authentication scheme and
+* a Base64-encoded <code>username:password</code> token.
 * <pre>
 *
 * X-Auth-Token: user.hash(user)
@@ -38,20 +38,20 @@ import com.example.cm.cm_model.domain.CMSUser;
 * @author jvwong
 */
 public class RestAuthenticationFilter extends GenericFilterBean {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(RestAuthenticationFilter.class);
 
 	// ~ Instance fields
 	// ================================================================================================
-	
+
 	private TokenAuthenticationService tokenAuthenticationService;
-	
+
 	/**
-	 * Creates an instance which will authenticate puely based on 
+	 * Creates an instance which will authenticate puely based on
 	 * the validity of the hash
 	 *
 	 * @param tokenAuthenticationService The Token parsing authentication service
-	 */	
+	 */
 	public RestAuthenticationFilter(TokenAuthenticationService tokenAuthenticationService) {
 		Assert.notNull(tokenAuthenticationService, "authenticationManager cannot be null");
 		this.tokenAuthenticationService = tokenAuthenticationService;
@@ -64,7 +64,7 @@ public class RestAuthenticationFilter extends GenericFilterBean {
 	public void afterPropertiesSet() {
 		Assert.notNull(this.tokenAuthenticationService, "An TokenAuthenticationService is required");
 	}
-	
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -74,9 +74,9 @@ public class RestAuthenticationFilter extends GenericFilterBean {
 		String password = "";
 		String role = "";
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		
+
 		CMSUser cmsUser = tokenAuthenticationService.getUser((HttpServletRequest) request);
-	
+
 		// If not null, then the token is valid so put the Authentication object
 		// inside the ContextHolder
 		// Otherwise just let them through as anonymous
@@ -86,17 +86,17 @@ public class RestAuthenticationFilter extends GenericFilterBean {
 			password = cmsUser.getPassword();
 			role = cmsUser.getRole();
 			authorities.add(new SimpleGrantedAuthority(role));
-						
+
 			// This suffices for authentication
 			// Properly setting the username and password is optional
-			UsernamePasswordAuthenticationToken authResult = 
+			UsernamePasswordAuthenticationToken authResult =
 					new UsernamePasswordAuthenticationToken(username, password, authorities);
-	
+
 			// Allow subclasses to set the "details" property
 			SecurityContextHolder.getContext().setAuthentication(authResult);
 		} else {
 			logger.info("spitter returned null");
 		}
 		chain.doFilter(request, response);
-	}	
+	}
 }

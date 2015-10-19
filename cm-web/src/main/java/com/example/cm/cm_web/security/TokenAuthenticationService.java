@@ -26,8 +26,9 @@ public class TokenAuthenticationService {
 	private final TokenHandler tokenHandler;
 
 	@Autowired
+//	public TokenAuthenticationService(@Value("${token.secret}") String secret) {
 	public TokenAuthenticationService(@Value("${token.secret}") String secret) {
-		tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
+			tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
 	}
 
 	public void addAuthentication(HttpServletResponse response, CMSUser cmsUser) {
@@ -40,8 +41,8 @@ public class TokenAuthenticationService {
 		if (token == null || token.isEmpty()){
 			logger.info("token: {}", token);
 			return null;
-		}  
-		
-		return tokenHandler.parseUserFromToken(token);		
+		}
+
+		return tokenHandler.parseUserFromToken(token);
 	}
 }

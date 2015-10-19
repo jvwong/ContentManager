@@ -6,7 +6,7 @@ import com.example.cm.cm_model.domain.Article;
  * Article data access object.
  * @author jvwong
  */
-public interface ArticleDao extends Dao<Article> {
+public interface ArticleRepository extends Dao<Article> {
 
 	/**
 	 * @param article article to create or update

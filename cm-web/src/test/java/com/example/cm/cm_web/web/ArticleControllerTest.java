@@ -1,7 +1,7 @@
 package com.example.cm.cm_web.web;
 
+import com.example.cm.cm_jcrrepository.repository.ArticleRepository;
 import com.example.cm.cm_model.domain.Article;
-import com.example.cm.cm_repository.repository.ArticleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;

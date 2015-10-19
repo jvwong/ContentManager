@@ -74,24 +74,24 @@ public class SecurityConfig {
 	@Configuration
 	@Order(1)
 	public static class RestSecurityConfig extends WebSecurityConfigurerAdapter {
-		
-		@Autowired 
+
+		@Autowired
 		TokenAuthenticationService tokenAuthenticationService;
-		
+
 		@Bean(name="authenticationManager")
 	    @Override
 	    public AuthenticationManager authenticationManagerBean() throws Exception {
 			return super.authenticationManagerBean();
 	    }
-		
+
 		/**
 		 * Secure rest page requests via interceptors
 		 */
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http	
+			http
 				.antMatcher("/services/rest/**")
-				
+
 				.authorizeRequests()
 					.regexMatchers(HttpMethod.POST, "\\A/services/rest/auth/\\z")
 						.permitAll()
@@ -102,16 +102,16 @@ public class SecurityConfig {
 					.antMatchers("/services/rest/**")
 						.hasAnyAuthority("ROLE_CMSUSER", "ROLE_ADMIN")
 					.anyRequest()
-						.authenticated() 
+						.authenticated()
 					.and()
-					
+
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 
 					.csrf()
 					.disable()
-				
+
 				.addFilterBefore(new RestAuthenticationFilter(tokenAuthenticationService),
 						UsernamePasswordAuthenticationFilter.class)
 				;

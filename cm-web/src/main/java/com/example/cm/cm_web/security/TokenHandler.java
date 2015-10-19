@@ -26,9 +26,9 @@ public final class TokenHandler {
 	private static final String SEPARATOR = ".";
 	private static final String SEPARATOR_SPLITTER = "\\.";
 
-	private final Mac hmac;	
+	private final Mac hmac;
 	private ObjectMapper mapper;
-	
+
 	public TokenHandler(byte[] secretKey) {
 		try {
 			this.mapper = new ObjectMapper();
@@ -36,7 +36,7 @@ public final class TokenHandler {
 			hmac.init(new SecretKeySpec(secretKey, HMAC_ALGO));
 		} catch (InvalidKeyException e) {
 			throw new IllegalStateException("failed to initialize HMAC: " + e.getMessage(), e);
-		
+
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalStateException("failed to initialize HMAC: " + e.getMessage(), e);
 		}
@@ -48,7 +48,7 @@ public final class TokenHandler {
 			try {
 				final byte[] userBytes = fromBase64(parts[0]);
 				final byte[] hash = fromBase64(parts[1]);
-				
+
 				logger.info("userBytes: {}", new String(userBytes));
 
 				boolean validHash = Arrays.equals(createHmac(userBytes), hash);
@@ -72,9 +72,9 @@ public final class TokenHandler {
 		sb.append(toBase64(userBytes));
 		sb.append(SEPARATOR);
 		sb.append(toBase64(hash));
-		
+
 		logger.info(sb.toString());
-		
+
 		return sb.toString();
 	}
 
@@ -85,11 +85,11 @@ public final class TokenHandler {
 	 * @return
 	 */
 	private CMSUser fromJSON(final byte[] bytes) {
-		CMSUser cmsUser = null; 
+		CMSUser cmsUser = null;
 		try{
 			cmsUser = mapper.readValue(new ByteArrayInputStream(bytes), CMSUser.class);
 			return cmsUser;
-			
+
 		} catch (JsonMappingException jme) {
 			logger.error("from JSON JsonMappingException", jme);
 			return null;
@@ -99,7 +99,7 @@ public final class TokenHandler {
 		} catch (IOException ioe) {
 			logger.error("from JSON IOException", ioe);
 			return null;
-		}				
+		}
 	}
 
 	/**

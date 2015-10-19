@@ -3,10 +3,8 @@ package com.example.cm.cm_web.config;
 import java.nio.charset.StandardCharsets;
 
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
         @ComponentScan.Filter({Controller.class, ControllerAdvice.class})
 )
 @Import({ SecurityConfig.class })
+@PropertySource("classpath:application.properties")
 public class RootContextConfiguration {
 
     @Bean
@@ -35,6 +34,11 @@ public class RootContextConfiguration {
                 "/WEB-INF/i18n/messages"
         );
         return messageSource;
+    }
+
+    @Bean
+    public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
      // Explicitly declare the validation method

@@ -1,7 +1,7 @@
 package com.example.cm.cm_web.web;
 
+import com.example.cm.cm_jcrrepository.repository.ArticleRepository;
 import com.example.cm.cm_model.domain.Article;
-import com.example.cm.cm_repository.repository.ArticleRepository;
 import com.example.cm.cm_web.config.annotation.WebController;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,18 @@ public class ArticleController {
 	public ArticleController(ArticleRepository articleRepository) {
 	    this.articleRepository = articleRepository;
 	}
-	
+
+	/**
+	 * List of Article instances
+	 * @param model model
+	 * @return article list
+	 */
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String articleList(Model model) {
+		model.addAttribute("articleList", articleRepository.getAll());
+		return getFullViewName("articleList");
+	}
+
 //	/**
 //	 * Create Article
 //	 */
@@ -70,16 +81,6 @@ public class ArticleController {
 //		return getFullViewName("articleForm");
 //	}
 //
-	/**
-	 * @param model model
-	 * @return article list
-	 */
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String articleList(Model model) {
-		model.addAttribute("articleList", articleRepository.findAll());
-		return getFullViewName("articleList");
-	}
-//
 //	/**
 //	 * @param id article ID
 //	 * @return logical view name
@@ -94,7 +95,7 @@ public class ArticleController {
 //		model.addAttribute("article", article);
 //		return getFullViewName("articlePage");
 //	}
-	
+//
 	private String getFullViewName(String path){
 		return "/articles/" + path;
 	}

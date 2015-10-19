@@ -19,7 +19,7 @@ import java.util.Date;
 public class Article {
 
 	private String id;
-	private Date publishDate;
+	private Date publishedDate;
 	private String author;
 	private String title;
 	private String description;
@@ -31,13 +31,13 @@ public class Article {
 
 	public Article(
 			String id,
-			Date publishDate,
+			Date publishedDate,
 			String author,
 			String title,
 			String description,
 			String keywords){
 		this.id = id;
-		this.publishDate = publishDate;
+		this.publishedDate = publishedDate;
 		this.author = author;
 		this.title = title;
 		this.description = description;
@@ -69,12 +69,12 @@ public class Article {
 		this.author = author;
 	}
 
-	public Date getPublishDate() {
-		return this.publishDate;
+	public Date getPublishedDate() {
+		return this.publishedDate;
 	}
 
-	public void setPublishDate(Date publishDate) {
-		this.publishDate = publishDate;
+	public void setPublishedDate(Date publishedDate) {
+		this.publishedDate = publishedDate;
 	}
 
 	public String getDescription() {
@@ -107,7 +107,7 @@ public class Article {
 		return "[Article: id=" + id
 				+ ", title=" + title
 				+ ", author=" + author
-				+ ", publishDate=" + publishDate
+				+ ", publishedDate=" + publishedDate
 				+ ", description=" + description
 				+ ", keywords=" + keywords
 //				+ ", numPages=" + (pages == null ? 0 : pages.size())
