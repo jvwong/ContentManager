@@ -1,5 +1,7 @@
 package com.example.cm.cm_jcrrepository.repository;
 
+import org.springframework.data.domain.PageRequest;
+
 import java.io.Serializable;
 import java.util.List;
 

@@ -32,7 +32,6 @@ import com.example.cm.cm_model.domain.*;
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  */
 @Repository
-@Transactional(readOnly = true)
 public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
     @Inject private ArticleMapper articleMapper;
 
@@ -49,7 +48,6 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      * @see com.springinpractice.ch12.dao.ArticleDao#createOrUpdate(com.springinpractice.ch12.model.Article)
      */
     @Override
-    @Transactional(readOnly = false)
     public void createOrUpdate(final Article article) {
         notNull(article);
         getTemplate().execute(new JcrCallback() {
@@ -70,7 +68,6 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      * @see com.springinpractice.ch12.dao.ArticleDao#create(com.springinpractice.ch12.model.Article)
      */
     @Override
-    @Transactional(readOnly = false)
     public void create(final Article article) {
         notNull(article);
         getTemplate().execute(new JcrCallback() {
@@ -185,7 +182,6 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      * @see com.springinpractice.ch12.dao.ArticleDao#update(com.springinpractice.ch12.model.Article)
      */
     @Override
-    @Transactional(readOnly = false)
     public void update(Article article) {
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -194,14 +190,12 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      * @see com.springinpractice.dao.Dao#delete(java.lang.Object)
      */
     @Override
-    @Transactional(readOnly = false)
     public void delete(Article article) { deleteById(article.getId()); }
 
     /* (non-Javadoc)
      * @see com.springinpractice.dao.Dao#deleteById(java.io.Serializable)
      */
     @Override
-    @Transactional(readOnly = false)
     public void deleteById(final Serializable id) {
         notNull(id);
         getTemplate().execute(new JcrCallback() {
@@ -222,7 +216,6 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      * @see com.springinpractice.dao.Dao#deleteAll()
      */
     @Override
-    @Transactional(readOnly = false)
     public void deleteAll() {
         throw new UnsupportedOperationException("Not implemented");
     }

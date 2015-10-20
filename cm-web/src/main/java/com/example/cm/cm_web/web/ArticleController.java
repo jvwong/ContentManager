@@ -1,12 +1,10 @@
 package com.example.cm.cm_web.web;
 
-import com.example.cm.cm_jcrrepository.repository.ArticleRepository;
+import com.example.cm.cm_jcrrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
 import com.example.cm.cm_web.config.annotation.WebController;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.time.Instant;
-import java.util.UUID;
+import java.security.Principal;
 
 
 /**
@@ -26,11 +23,11 @@ import java.util.UUID;
 public class ArticleController {
 	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger();
 	
-	private ArticleRepository articleRepository;
+	private ArticleService articleService;
 
 	@Autowired
-	public ArticleController(ArticleRepository articleRepository) {
-	    this.articleRepository = articleRepository;
+	public ArticleController(ArticleService articleService) {
+	    this.articleService = articleService;
 	}
 
 	/**
@@ -39,8 +36,8 @@ public class ArticleController {
 	 * @return article list
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String articleList(Model model) {
-		model.addAttribute("articleList", articleRepository.findAll());
+	public String getList(Model model) {
+		model.addAttribute("articleList", articleService.getList());
 		return getFullViewName("articleList");
 	}
 
@@ -61,6 +58,7 @@ public class ArticleController {
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String createArticle(
+			Principal principal,
 			@Valid Article article,
 			RedirectAttributes model,
 			Errors errors) {
@@ -70,19 +68,15 @@ public class ArticleController {
 			return getFullViewName("/create");
 		}
 
-		// Audting is JPA only
-
 		//get logged in username
-		article.setId(UUID.randomUUID().toString());
-		article.setCreatedBy("ertertert");
-		article.setCreatedDate(Instant.now());
+		article.setCreatedBy(principal.getName());
+		articleService.save(article);
 
-		articleRepository.create(article);
-
-		if(articleRepository.exists(article.getId())){
-			model.addAttribute("id", article.getId());
+		if(articleService.exists(article.getId())){
+			Article saved = articleService.findOne(article.getId());
+			model.addAttribute("id", saved.getId());
 			model.addFlashAttribute("article", article);
-			return "redirect:/articles/";
+			return "redirect:/articles/{id}";
 		}
 
 		return getFullViewName("articleForm");
@@ -98,7 +92,7 @@ public class ArticleController {
 //			@PathVariable String id,
 //			Model model) {
 //
-//		Article article = articleRepository.findOne(Long.parseLong(id));
+//		Article article = articleService.findOne(Long.parseLong(id));
 //		model.addAttribute("article", article);
 //		return getFullViewName("articlePage");
 //	}

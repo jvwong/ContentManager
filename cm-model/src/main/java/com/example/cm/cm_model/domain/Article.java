@@ -1,10 +1,6 @@
 package com.example.cm.cm_model.domain;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author jvwong
@@ -75,5 +71,7 @@ public class Article extends DateByAuditedEntity{
 //				+ ", numPages=" + (pages == null ? 0 : pages.size())
 				+ "]";
 	}
+
+
 }
 
