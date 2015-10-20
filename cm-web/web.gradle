@@ -48,6 +48,9 @@ dependencies {
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-tx:$springVersion"
 
+    // Spring XML marshalling
+    compile "org.springframework:spring-oxm:$springOxmVersion"
+
     // Spring Security
     compile "org.springframework.security:spring-security-web:$springSecurityVersion"
 
@@ -58,6 +61,8 @@ dependencies {
 	// Hibernate
 	compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
 	compile "javax.validation:validation-api:$javaxValidationApi"
+
+
 
     testCompile "com.google.code.gson:gson:$gsonVersion"
 

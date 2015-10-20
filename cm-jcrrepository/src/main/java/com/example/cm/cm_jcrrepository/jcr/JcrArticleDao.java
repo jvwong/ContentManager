@@ -121,7 +121,7 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
              */
             @Override
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node node = getArticlesNode(session);
+                Node node = getArticlesNode(session).getNode((String) id);
                 Article article = articleMapper.toArticle(node);
                 return article;
             }

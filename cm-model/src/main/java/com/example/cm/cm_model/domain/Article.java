@@ -1,16 +1,18 @@
 package com.example.cm.cm_model.domain;
 
-import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * @author jvwong
  */
-@Entity
+@XmlRootElement(name = "article")
 public class Article extends DateByAuditedEntity{
 
 	private String title;
 	private String description;
 	private String keywords;
+	private List<Page> pages;
 
 	public Article(){
 		this(null, null, null);
@@ -49,14 +51,13 @@ public class Article extends DateByAuditedEntity{
 		this.keywords = keywords;
 	}
 
-//	@JsonIgnore
-//	public List<Page> getPages() {
-//		return pages;
-//	}
-//
-//	public void setPages(List<Page> pages) {
-//		this.pages = pages;
-//	}
+	public List<Page> getPages() {
+		return pages;
+	}
+
+	public void setPages(List<Page> pages) {
+		this.pages = pages;
+	}
 
 	@Override
 	public String toString() {
@@ -66,7 +67,7 @@ public class Article extends DateByAuditedEntity{
 				+ ", title=" + this.title
 				+ ", description=" + this.description
 				+ ", keywords=" + this.keywords
-//				+ ", numPages=" + (pages == null ? 0 : pages.size())
+				+ ", numPages=" + (pages == null ? 0 : pages.size())
 				+ "]";
 	}
 

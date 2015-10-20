@@ -12,7 +12,7 @@
 
 		<div id="articlePage">
 			<div class="article">
-				<div class="articleCreatedBy">
+				<div class="articleTitle">
 					Title: <span th:text="${article.title}">Title</span>
 				</div>
 				<div class="articleCreatedBy">
@@ -23,6 +23,9 @@
 				</div>
 				<div class="articleDescription">
 					Description: <span th:text="${article.description}">Description</span>
+				</div>
+				<div class="articleKeywords">
+					Keywords: <span th:text="${article.keywords}">Keywords</span>
 				</div>
 			</div>
 		</div>
