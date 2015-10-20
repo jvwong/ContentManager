@@ -8,20 +8,10 @@
 	<body>
 		<div th:replace="fragments/header :: header">&nbsp;</div>
 		<h1>Articles</h1>		
-		<div>
-			<div><span class="add icon"><a id="uploadLink" href="#">Upload article</a></span></div>
-			<div id="uploadFormDiv" class="panel" style="display:none;padding:10px 20px">
-				<form method="POST" 
-					  th:object="${articleForm}"
-					  th:action="@{/article}"
-					  enctype="multipart/form-data">
-				    
-				    <label>File Input</label>: 
-					<input type="file" name="fileInput" accept="application/zip" /><br/>					
-					<span><input type="submit" value="Upload"></input></span>					
-				</form>
-			</div>
+		<div id="articleCreate">
+			<a th:href="@{/articles/create}">Create</a>
 		</div>
+		<hr />
 
 		<div id="articleList">
 			<div th:each="article: ${articleList}">				
@@ -30,18 +20,22 @@
 						ID: <span th:text="${article.id}">ID</span>
 					</div>
 					<div class="articleTitle">
-						<a th:href="@{/articles/} + ${article.id}" th:text="${article.title}">Title</a>
+						<a th:href="@{/articles/} + ${article.id}" th:text="${article.title}">Create</a>
 					</div>
 					<div class="articleCreatedBy">
 						Author: <span th:text="${article.createdBy}">Created By</span>
 					</div>
 					<div class="articleCreatedDate">
-						Created: <span th:text="${article.createdDate}">Created Date</span>
+						Created: <span th:text="${article.createdDate}">Published Date</span>
 					</div>
 					<div class="articleDescription"> 
 						Description: <span th:text="${article.description}">Description</span>
-					</div>		
+					</div>
+					<div class="articleKeywords">
+						Keywords: <span th:text="${article.keywords}">Keywords</span>
+					</div>
 				</div>
+				<hr />
 			</div>
 		</div>
 

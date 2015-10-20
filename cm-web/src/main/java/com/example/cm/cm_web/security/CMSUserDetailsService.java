@@ -40,13 +40,12 @@ public class CMSUserDetailsService implements UserDetailsService{
 		
 		if(cmsUser != null){
 			List<GrantedAuthority> authorities = 
-					new ArrayList<GrantedAuthority>();
+					new ArrayList<>();
 			
 			// Stub, should access the list of roles
 			authorities.add(new SimpleGrantedAuthority(cmsUser.getRole()));
 		
 			// Spring will check against this user
-			// Better to implement UserDetails and merge with Spitter
 			return new User(
 					cmsUser.getUsername(),
 					cmsUser.getPassword(),

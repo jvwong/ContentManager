@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -45,7 +47,7 @@ public class AuthRestEndpointTest {
         );
 
         mockMvc = standaloneSetup(endpoint).build();
-        mockUser = new CMSUser(24L, "fullname1", "username1", "password1",
+        mockUser = new CMSUser(UUID.randomUUID().toString(), "fullname1", "username1", "password1",
                 "email1@email.com", "CMSUser");
 
         authRequest

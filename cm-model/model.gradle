@@ -11,6 +11,9 @@ repositories {
 
 dependencies {
 
+    //Hibernate
+    compile "org.hibernate:hibernate-annotations:$hibernateAnnotationsVersion"
+
     //Spring
     compile "org.springframework.data:spring-data-commons:$springDataCommonsVersion"
     compile "org.springframework.data:spring-data-jpa:$springDataJpaVersion"

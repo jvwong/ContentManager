@@ -1,60 +1,32 @@
 package com.example.cm.cm_model.domain;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
 
 /**
  * @author jvwong
  */
-@XmlRootElement(name = "article")
 @Entity
-@Table(name = "Article", uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"title", "createdBy"})
-})
-@AttributeOverride(name = "id", column = @Column(name = "ArticleId"))
-public class Article extends DateByAuditedEntity {
+public class Article extends DateByAuditedEntity{
 
-//	private String nodeId;
 	private String title;
 	private String description;
 	private String keywords;
-//	private List<Page> pages = new ArrayList<>();
 
 	public Article(){
 		this(null, null, null);
 	}
 
-	public Article(String title,
-				   String description,
-				   String keywords){
-		this(null, title, description, keywords);
-	}
-
-	public Article(Long id,
-				   String title,
-				   String description,
-				   String keywords){
-		this.setId(id);
+	public Article(
+			String title,
+			String description,
+			String keywords){
 		this.title = title;
 		this.description = description;
 		this.keywords = keywords;
 	}
 
-//	public String getNodeId() {
-//		return nodeId;
-//	}
-//
-//	public void setNodeId(String nodeId) {
-//		this.nodeId = nodeId;
-//	}
-
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 
 	public void setTitle(String title) {
@@ -62,7 +34,7 @@ public class Article extends DateByAuditedEntity {
 	}
 
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	public void setDescription(String description) {
@@ -70,13 +42,14 @@ public class Article extends DateByAuditedEntity {
 	}
 
 	public String getKeywords() {
-		return keywords;
+		return this.keywords;
 	}
 
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}
 
+//	@JsonIgnore
 //	public List<Page> getPages() {
 //		return pages;
 //	}
@@ -86,16 +59,6 @@ public class Article extends DateByAuditedEntity {
 //	}
 
 	@Override
-	public boolean equals(Object that) {
-		return EqualsBuilder.reflectionEquals(this, that, "title", "description", "keywords");
-	}
-
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, "title", "description", "keywords");
-	}
-
-	@Override
 	public String toString() {
 		return "[Article: id=" + this.getId()
 				+ ", createdBy=" + this.getCreatedBy()
@@ -103,6 +66,10 @@ public class Article extends DateByAuditedEntity {
 				+ ", title=" + this.title
 				+ ", description=" + this.description
 				+ ", keywords=" + this.keywords
+//				+ ", numPages=" + (pages == null ? 0 : pages.size())
 				+ "]";
 	}
+
+
 }
+

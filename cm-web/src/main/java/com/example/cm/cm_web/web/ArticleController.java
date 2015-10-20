@@ -1,7 +1,7 @@
 package com.example.cm.cm_web.web;
 
+import com.example.cm.cm_jcrrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
-import com.example.cm.cm_repository.repository.ArticleRepository;
 import com.example.cm.cm_web.config.annotation.WebController;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
+import java.security.Principal;
 
 
 /**
@@ -24,38 +24,22 @@ import java.io.IOException;
 public class ArticleController {
 	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger();
 	
-	private ArticleRepository articleRepository;
+	private ArticleService articleService;
 
 	@Autowired
-	public ArticleController(ArticleRepository articleRepository) {
-	    this.articleRepository = articleRepository;
+	public ArticleController(ArticleService articleService) {
+	    this.articleService = articleService;
 	}
-	
+
 	/**
-	 * Create Article
+	 * List of Article instances
+	 * @param model model
+	 * @return article list
 	 */
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createArticle(
-			@Valid Article article,
-			RedirectAttributes model,
-			Errors errors) {
-
-		if (errors.hasErrors()) {
-			logger.info("Article errors encountered");
-			model.addFlashAttribute("errors", errors);
-			return getFullViewName("/create");
-		}
-
-		Article saved = articleRepository.save(article);
-
-		if(saved != null){
-			logger.info("Saving: {}", saved.toString());
-			model.addAttribute("id", saved.getId());
-			model.addFlashAttribute("article", saved);
-			return "redirect:/articles/{id}";
-		}
-
-		return getFullViewName("articleForm");
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String getList(Model model) {
+		model.addAttribute("articleList", articleService.getList());
+		return getFullViewName("articleList");
 	}
 
 	/**
@@ -71,30 +55,48 @@ public class ArticleController {
 	}
 
 	/**
-	 * @param model model
-	 * @return article list
+	 * Create Article
 	 */
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String articleList(Model model) {
-		model.addAttribute("articleList", articleRepository.findAll());
-		return getFullViewName("articleList");		
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String createArticle(
+			Principal principal,
+			@Valid Article article,
+			RedirectAttributes model,
+			Errors errors) {
+
+		if (errors.hasErrors()) {
+			model.addFlashAttribute("errors", errors);
+			return getFullViewName("/create");
+		}
+
+		//get logged in username
+		article.setCreatedBy(principal.getName());
+		articleService.save(article);
+
+		if(articleService.exists(article.getId())){
+			Article saved = articleService.findOne(article.getId());
+			model.addAttribute("id", saved.getId());
+			model.addFlashAttribute("article", article);
+			return "redirect:/articles/{id}";
+		}
+
+		return getFullViewName("articleForm");
 	}
-	
+
 	/**
-	 * @param id article ID
+	 * @param uuid article UUID
 	 * @return logical view name
-	 * @throws IOException if there's an I/O exception
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
 	public String getArticle(
-			@PathVariable String id,
+			@PathVariable String uuid,
 			Model model) {
 
-		Article article = articleRepository.findOne(Long.parseLong(id));
+		Article article = articleService.findOne(uuid);
 		model.addAttribute("article", article);
 		return getFullViewName("articlePage");
 	}
-	
+
 	private String getFullViewName(String path){
 		return "/articles/" + path;
 	}

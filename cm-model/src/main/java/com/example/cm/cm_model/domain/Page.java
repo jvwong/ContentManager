@@ -1,42 +1,30 @@
 package com.example.cm.cm_model.domain;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author jvwong
  */
+@XmlRootElement(name = "page")
 @Entity
-@Table(name = "Page", uniqueConstraints = {})
-@AttributeOverride(name = "id", column = @Column(name = "PageId"))
-public class Page extends DateByAuditedEntity {
+@Table(
+		name = "Page",
+		uniqueConstraints = {}
+)
+@AttributeOverride(name = "id", column = @Column(name = "Id"))
+public class Page {
+	private Long id;
 	private String content;
-	private Long articleId;
 
-	public Page(){
-		this(null, null);
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Long getId() {
+		return id;
 	}
 
-	public Page(Long articleId,
-				String content){
-		this(null, articleId, content);
-	}
-	public Page(Long id,
-				Long articleId,
-				String content){
-		this.setId(id);
-		this.articleId = articleId;
-		this.content = content;
-	}
-
-	public Long getArticleId() {
-		return articleId;
-	}
-
-	public void setArticleId(Long articleId) {
-		this.articleId = articleId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getContent() {

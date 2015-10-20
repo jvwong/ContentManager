@@ -1,5 +1,7 @@
 package com.example.cm.cm_jcrrepository.repository;
 
+import org.springframework.data.domain.PageRequest;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public interface Dao<T extends Object> {
      */
     T load(Serializable id);
 
-    List<T> getAll();
+    List<T> findAll();
 
     void update(T t);
 
