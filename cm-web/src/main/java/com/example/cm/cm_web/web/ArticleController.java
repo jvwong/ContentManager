@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -82,21 +83,20 @@ public class ArticleController {
 		return getFullViewName("articleForm");
 	}
 
-//	/**
-//	 * @param id article ID
-//	 * @return logical view name
-//	 * @throws IOException if there's an I/O exception
-//	 */
-//	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//	public String getArticle(
-//			@PathVariable String id,
-//			Model model) {
-//
-//		Article article = articleService.findOne(Long.parseLong(id));
-//		model.addAttribute("article", article);
-//		return getFullViewName("articlePage");
-//	}
-//
+	/**
+	 * @param uuid article UUID
+	 * @return logical view name
+	 */
+	@RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
+	public String getArticle(
+			@PathVariable String uuid,
+			Model model) {
+
+		Article article = articleService.findOne(uuid);
+		model.addAttribute("article", article);
+		return getFullViewName("articlePage");
+	}
+
 	private String getFullViewName(String path){
 		return "/articles/" + path;
 	}

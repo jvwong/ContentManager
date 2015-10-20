@@ -13,15 +13,13 @@ public class Article extends DateByAuditedEntity{
 	private String keywords;
 
 	public Article(){
-		this(null, null, null, null);
+		this(null, null, null);
 	}
 
 	public Article(
-			String id,
 			String title,
 			String description,
 			String keywords){
-		this.setId(id);
 		this.title = title;
 		this.description = description;
 		this.keywords = keywords;

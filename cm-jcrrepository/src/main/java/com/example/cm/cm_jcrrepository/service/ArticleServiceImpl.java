@@ -29,6 +29,10 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.get(id);
     }
 
+    /**
+     * Should do a bunch of checking to see which method to call.
+     * @param article The article to save
+     */
     public void save(Article article){
         article.setId(UUID.randomUUID().toString());
         article.setCreatedDate(Instant.now());

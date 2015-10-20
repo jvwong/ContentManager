@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,6 +30,7 @@ public class ArticleControllerTest {
     private ArticleService mockArticleService;
     private List<Article> articleList;
     Article mockArticle;
+    String uuid;
 
     @Before
     public void setUp() {
@@ -39,12 +39,13 @@ public class ArticleControllerTest {
         ArticleController controller = new ArticleController(mockArticleService);
         mockMvc = standaloneSetup(controller).build();
         mockArticle = Mockito.mock(Article.class);
+        uuid = UUID.randomUUID().toString();
 
-        Article mockArticle0 = new Article("0", "title0", "descritpion0", "keywords0");
-        Article mockArticle1 = new Article("1", "title1", "descritpion1", "keywords1");
-        Article mockArticle2 = new Article("2", "title2", "descritpion2", "keywords2");
-        Article mockArticle3 = new Article("3", "title3", "descritpion3", "keywords3");
-        Article mockArticle4 = new Article("4", "title4", "descritpion4", "keywords4");
+        Article mockArticle0 = new Article("title0", "descritpion0", "keywords0");
+        Article mockArticle1 = new Article("title1", "descritpion1", "keywords1");
+        Article mockArticle2 = new Article("title2", "descritpion2", "keywords2");
+        Article mockArticle3 = new Article("title3", "descritpion3", "keywords3");
+        Article mockArticle4 = new Article("title4", "descritpion4", "keywords4");
 
         articleList = Arrays.asList(
                 mockArticle0,
@@ -55,7 +56,7 @@ public class ArticleControllerTest {
     }
 
     @Test
-    public void testArticleList() throws Exception {
+    public void testGetList() throws Exception {
 
         Mockito.when(mockArticleService.getList()).thenReturn(articleList);
         mockMvc.perform(get("/articles/"))
@@ -64,14 +65,22 @@ public class ArticleControllerTest {
                 .andExpect(view().name("/articles/articleList"));
     }
 
-//    @Test
-//    public void testCreateArticleForm() throws Exception {
-//        ArticleRepository mockRepository = Mockito.mock(ArticleRepository.class);
-//        ArticleController controller = new ArticleController(mockRepository);
-//        MockMvc mockMvc = standaloneSetup(controller).build();
-//        mockMvc.perform(get("/articles/create"))
-//                .andExpect(view().name("/articles/articleForm"));
-//    }
+    @Test
+    public void testCreateArticleForm() throws Exception {
+        mockMvc.perform(get("/articles/create"))
+                .andExpect(view().name("/articles/articleForm"));
+    }
+
+    @Test
+    public void testGetArticle() throws Exception {
+
+        Mockito.when(mockArticleService.findOne(uuid)).thenReturn(mockArticle);
+        mockMvc.perform(get("/articles/" + uuid))
+                .andExpect(model().attributeExists("article"))
+                .andExpect(model().attribute("article", instanceOf(Article.class)))
+                .andExpect(view().name("/articles/articlePage"));
+    }
+
 
     /*
      * Note that the .equals should be updated in target class
@@ -79,7 +88,6 @@ public class ArticleControllerTest {
     @Test
     public void testCreateArticle() throws Exception {
 
-        String uuid = UUID.randomUUID().toString();
         Mockito.doNothing()
                 .when(mockArticleService)
                 .save(Matchers.any(Article.class));
