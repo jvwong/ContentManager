@@ -22,14 +22,17 @@
 						<a th:href="@{/articles/} + ${article.id}" th:text="${article.title}">Create</a>
 					</div>
 					<div class="articleCreatedBy">
-						Author: <span th:text="${article.author}">Created By</span>
+						Author: <span th:text="${article.createdBy}">Created By</span>
 					</div>
 					<div class="articleCreatedDate">
-						Created: <span th:text="${article.publishedDate}">Published Date</span>
+						Created: <span th:text="${article.createdDate}">Published Date</span>
 					</div>
 					<div class="articleDescription"> 
 						Description: <span th:text="${article.description}">Description</span>
-					</div>		
+					</div>
+					<div class="articleKeywords">
+						Keywords: <span th:text="${article.keywords}">Keywords</span>
+					</div>
 				</div>
 			</div>
 		</div>

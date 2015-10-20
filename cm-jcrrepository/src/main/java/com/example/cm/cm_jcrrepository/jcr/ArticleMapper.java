@@ -30,11 +30,8 @@ public class ArticleMapper {
         Article article = new Article();
         article.setId(node.getName());
         article.setTitle(node.getProperty("title").getString());
-        article.setAuthor(node.getProperty("author").getString());
-
-        if (node.hasProperty("publishedDate")) {
-            article.setPublishedDate(node.getProperty("publishedDate").getDate().getTime());
-        }
+        article.setCreatedBy(node.getProperty("createdBy").getString());
+        article.setCreatedDate(node.getProperty("createdDate").getDate().toInstant());
 
         if (node.hasProperty("description")) {
             article.setDescription(node.getProperty("description").getString());
@@ -58,14 +55,14 @@ public class ArticleMapper {
     public Node addArticleNode(Article article, Node parent) throws RepositoryException {
         Node node = parent.addNode(article.getId());
         node.setProperty("title", article.getTitle());
-        node.setProperty("author", article.getAuthor());
+        node.setProperty("createdBy", article.getCreatedBy());
 
         // JCR requires a Calendar object here for some reason.
-        Date publishDate = article.getPublishedDate();
+        Instant publishDate = article.getCreatedDate();
         if (publishDate != null) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(publishDate);
-            node.setProperty("publishedDate", cal);
+            cal.setTimeInMillis(publishDate.toEpochMilli());
+            node.setProperty("createdDate", cal);
         }
 
         String description = article.getDescription();

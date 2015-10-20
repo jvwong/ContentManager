@@ -116,7 +116,19 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      */
     @Override
     public Article get(Serializable id) {
-        throw new UnsupportedOperationException("Not implemented");
+        notNull(id);
+        return (Article) getTemplate().execute(new JcrCallback() {
+
+            /* (non-Javadoc)
+             * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
+             */
+            @Override
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = getArticlesNode(session);
+                Article article = articleMapper.toArticle(node);
+                return article;
+            }
+        }, true);
     }
 
     /* (non-Javadoc)

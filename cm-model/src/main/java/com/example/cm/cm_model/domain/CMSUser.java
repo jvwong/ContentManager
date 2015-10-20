@@ -16,7 +16,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  	 	@UniqueConstraint(name = "username", columnNames = {"username"}),
  		@UniqueConstraint(name = "email", columnNames = {"email"})
 })
-@AttributeOverride(name = "id", column = @Column(name = "UserId"))
+@AttributeOverride(name = "id", column = @Column(name = "Id"))
 public class CMSUser extends DateAuditedEntity{
 
 	private String fullName;
@@ -37,7 +37,7 @@ public class CMSUser extends DateAuditedEntity{
 		this(null, fullName, username, password, email, role);
 	}
 
-	public CMSUser(Long id,
+	public CMSUser(String id,
 				   String fullName,
 				   String username,
 				   String password,

@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,17 +48,17 @@ public class CMSUserRestEndpointTest {
                 mockCmsUserService, mockPasswordEncoder);
         mockMvc = standaloneSetup(endpoint).build();
 
-        mockUser = new CMSUser(24L, "fullname24", "username24", "password24",
+        mockUser = new CMSUser(UUID.randomUUID().toString(), "fullname24", "username24", "password24",
                 "email24@email.com", "CMSUser");
-        CMSUser cmsUser0 = new CMSUser(0L, "fullname0", "username0", "password0",
+        CMSUser cmsUser0 = new CMSUser(UUID.randomUUID().toString(), "fullname0", "username0", "password0",
                 "email0@email.com", "CMSUser");
-        CMSUser cmsUser1 = new CMSUser(1L, "fullname1", "username1", "password1",
+        CMSUser cmsUser1 = new CMSUser(UUID.randomUUID().toString(), "fullname1", "username1", "password1",
                 "email1@email.com", "CMSUser");
-        CMSUser cmsUser2 = new CMSUser(2L, "fullname2", "username2", "password2",
+        CMSUser cmsUser2 = new CMSUser(UUID.randomUUID().toString(), "fullname2", "username2", "password2",
                 "email2@email.com", "CMSUser");
-        CMSUser cmsUser3 = new CMSUser(3L, "fullname3", "username3", "password3",
+        CMSUser cmsUser3 = new CMSUser(UUID.randomUUID().toString(), "fullname3", "username3", "password3",
                 "email3@email.com", "CMSUser");
-        CMSUser cmsUser4 = new CMSUser(4L, "fullname4", "username4", "password4",
+        CMSUser cmsUser4 = new CMSUser(UUID.randomUUID().toString(), "fullname4", "username4", "password4",
                 "email4@email.com", "CMSUser");
 
         cmsUserList = Arrays.asList(
@@ -102,7 +103,7 @@ public class CMSUserRestEndpointTest {
         mockMvc.perform(get("/rest/users/" + mockUser.getUsername() + "/"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.id", is(mockUser.getId().intValue())))
+                .andExpect(jsonPath("$.id", is(mockUser.getId())))
                 .andExpect(jsonPath("$.username", is(mockUser.getUsername())))
                 .andExpect(jsonPath("$.version", is(mockUser.getVersion())))
                 .andExpect(jsonPath("$.lastModifiedDate", is(mockUser.getLastModifiedDate())))
@@ -119,7 +120,7 @@ public class CMSUserRestEndpointTest {
     @Test
     public void saveCMSUserTest() throws Exception {
 
-        CMSUser savedUser = new CMSUser(24L, "fullname1", "username1", "password1",
+        CMSUser savedUser = new CMSUser(UUID.randomUUID().toString(), "fullname1", "username1", "password1",
                 "email1@email.com", "CMSUser");
         Mockito.when(mockPasswordEncoder.encode(mockUser.getPassword()))
                 .thenReturn(mockUser.getPassword());

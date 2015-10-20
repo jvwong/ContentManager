@@ -36,14 +36,7 @@ Code: https://github.com/springinpractice
 
     <jackrabbit:repository id="repository" homeDir="${repository.dir}" configuration="${repository.conf}" />
 
-    <bean id="credentials" class="javax.jcr.SimpleCredentials">
-        <constructor-arg value="${username}" />
-        <constructor-arg value="${password}" />
-    </bean>
-
     <jcr:sessionFactory id="sessionFactory" repository="repository" credentials="credentials" />
-
-    <context:component-scan base-package="com.example.cm.cm_jcrrepository.jcr" />
 
     <!-- Default ID is "transactionManager" -->
     <jackrabbit:transaction-manager sessionFactory="sessionFactory" />
