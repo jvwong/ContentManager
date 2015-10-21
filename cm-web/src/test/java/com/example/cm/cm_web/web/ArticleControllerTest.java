@@ -2,8 +2,6 @@ package com.example.cm.cm_web.web;
 
 import com.example.cm.cm_jcrrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -16,14 +14,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-
 import static org.hamcrest.Matchers.instanceOf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class ArticleControllerTest {
-    private static final Logger logger = LogManager.getLogger();
 
     private MockMvc mockMvc;
     private Principal mockPrincipal;

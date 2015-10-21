@@ -1,5 +1,4 @@
 apply plugin: 'war'
-apply plugin: 'jetty'
 // -------------------------- START Web --------------------------------------//
 
 // -------------------------- END Web ----------------------------------------//
@@ -22,8 +21,9 @@ task deployToLocalTomcat << {
 
     // User Cargo Ant task to download Tomcat 7, deploy a WAR file,
     // and run it in container
-    ant.cargo(containerId: 'tomcat7x', action: 'run', output: "$buildDir/output.log") {
-        configuration {
+//    ant.cargo(containerId: 'tomcat7x', action: 'run', output: "$buildDir/output.log") {
+    ant.cargo(containerId: 'tomcat7x', action: 'run') {
+            configuration {
             property(name: 'cargo.servlet.port', value: '8080')
             property(name: 'cargo.logging', value: 'low')
             property(name: 'cargo.tomcat.context.reloadable', value: 'true')
@@ -62,15 +62,11 @@ dependencies {
 	compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
 	compile "javax.validation:validation-api:$javaxValidationApi"
 
-
-
     testCompile "com.google.code.gson:gson:$gsonVersion"
 
 	//Logging
-	compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
-    runtime "org.apache.logging.log4j:log4j-core:$log4jVersion"
-    runtime "org.apache.logging.log4j:log4j-jcl:$log4jVersion"
-    runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
+    compile "org.slf4j:jcl-over-slf4j:$jclOverSlf4jVersion"
+    compile "ch.qos.logback:logback-classic:$logbackClassicVersion"
 
     // Mockito
     testCompile "org.mockito:mockito-core:$mockitoCoreVersion"

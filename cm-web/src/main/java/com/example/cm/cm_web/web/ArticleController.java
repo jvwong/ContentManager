@@ -3,7 +3,6 @@ package com.example.cm.cm_web.web;
 import com.example.cm.cm_jcrrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
 import com.example.cm.cm_web.config.annotation.WebController;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -22,8 +21,7 @@ import java.security.Principal;
 @WebController
 @RequestMapping(value = "/articles")
 public class ArticleController {
-	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger();
-	
+
 	private ArticleService articleService;
 
 	@Autowired

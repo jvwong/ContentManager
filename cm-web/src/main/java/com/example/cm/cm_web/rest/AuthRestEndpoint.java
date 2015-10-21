@@ -6,8 +6,6 @@ import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.MissingCredentialsException;
 import com.example.cm.cm_web.exceptions.MissingEntityException;
 import com.example.cm.cm_web.security.TokenAuthenticationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 @RestEndpoint
 @RequestMapping(value="/rest/auth")
 public class AuthRestEndpoint {
-	private static final Logger logger = LoggerFactory.getLogger(AuthRestEndpoint.class);
 
 	private TokenAuthenticationService tokenAuthenticationService;
 	private AuthenticationManager authenticationManager;

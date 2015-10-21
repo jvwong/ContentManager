@@ -3,22 +3,20 @@ package com.example.cm.cm_web.rest;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.security.TokenAuthenticationService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.Before;
 import com.google.gson.Gson;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -26,8 +24,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  * @since 10/10/15.
  */
 public class AuthRestEndpointTest {
-
-    private static final Logger logger = LogManager.getLogger();
 
     private MockMvc mockMvc;
     private CMSUser mockUser;

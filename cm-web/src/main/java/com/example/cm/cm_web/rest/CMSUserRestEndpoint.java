@@ -5,8 +5,6 @@ import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -23,8 +21,6 @@ import java.net.URI;
 @RestEndpoint
 @RequestMapping(value="/rest/users")
 public class CMSUserRestEndpoint {
-	private static final Logger logger = LoggerFactory.getLogger(CMSUserRestEndpoint.class);
-
 	private CMSUserService cmsUserService;
 	private PasswordEncoder passwordEncoder;
 

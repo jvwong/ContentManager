@@ -3,8 +3,6 @@ package com.example.cm.cm_web.rest;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.google.gson.Gson;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -30,8 +28,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  * @since 10/10/15.
  */
 public class CMSUserRestEndpointTest {
-
-    private static final Logger logger = LogManager.getLogger();
 
     private MockMvc mockMvc;
     private CMSUser mockUser;
