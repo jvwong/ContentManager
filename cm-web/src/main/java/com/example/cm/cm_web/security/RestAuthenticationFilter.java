@@ -73,7 +73,7 @@ public class RestAuthenticationFilter extends GenericFilterBean {
 		String username = "";
 		String password = "";
 		String role = "";
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		List<GrantedAuthority> authorities = new ArrayList<>();
 
 		CMSUser cmsUser = tokenAuthenticationService.getUser((HttpServletRequest) request);
 
@@ -95,7 +95,7 @@ public class RestAuthenticationFilter extends GenericFilterBean {
 			// Allow subclasses to set the "details" property
 			SecurityContextHolder.getContext().setAuthentication(authResult);
 		} else {
-			logger.info("spitter returned null");
+			logger.info("cmsUser is null");
 		}
 		chain.doFilter(request, response);
 	}

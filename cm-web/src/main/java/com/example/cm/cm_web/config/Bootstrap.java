@@ -35,26 +35,26 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.setMultipartConfig(
 		 		new MultipartConfigElement(
-		 				"/home/jeffrey/Projects/CMS/src/main/webapp/tmp/auth/user/uploads",
+		 				"/home/jeffrey/Projects/ContentManager/src/main/webapp/tmp/auth/user/uploads",
 		 				2097152, // max size (bytes) file
 		 				4194304, // max size (bytes) total request
 		 				0));
         dispatcher.addMapping("/");
 
-//        /*
-//        * RESTful web service application context configuration
-//        */
-//        AnnotationConfigWebApplicationContext restContext
-//                = new AnnotationConfigWebApplicationContext();
-//        restContext.register(RestServletContextConfiguration.class);
-//        DispatcherServlet servlet = new DispatcherServlet(restContext);
-//        // Recognize OPTIONS requests
-//        servlet.setDispatchOptionsRequest(true);
-//        dispatcher = servletContext.addServlet(
-//             "cmRestDispatcher", servlet
-//        );
-//        dispatcher.setLoadOnStartup(2);
-//        dispatcher.addMapping("/services/*");
+        /*
+        * RESTful web service application context configuration
+        */
+        AnnotationConfigWebApplicationContext restContext
+                = new AnnotationConfigWebApplicationContext();
+        restContext.register(RestServletContextConfiguration.class);
+        DispatcherServlet servlet = new DispatcherServlet(restContext);
+        // Recognize OPTIONS requests
+        servlet.setDispatchOptionsRequest(true);
+        dispatcher = servletContext.addServlet(
+             "cmRestDispatcher", servlet
+        );
+        dispatcher.setLoadOnStartup(2);
+        dispatcher.addMapping("/services/*");
 		
         // Activate the profile
         servletContext.setInitParameter("spring.profiles.active", "dev");

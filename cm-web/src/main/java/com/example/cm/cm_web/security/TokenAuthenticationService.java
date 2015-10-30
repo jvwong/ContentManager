@@ -38,7 +38,6 @@ public class TokenAuthenticationService {
 	public CMSUser getUser(HttpServletRequest request) {
 		final String token = request.getHeader(AUTH_HEADER_NAME);
 		if (token == null || token.isEmpty()){
-			logger.info("token: {}", token);
 			return null;
 		}
 

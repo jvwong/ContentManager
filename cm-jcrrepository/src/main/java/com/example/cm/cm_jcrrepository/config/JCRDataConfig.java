@@ -16,7 +16,6 @@ import org.springmodules.jcr.jackrabbit.RepositoryFactoryBean;
 import javax.jcr.Repository;
 import javax.jcr.SimpleCredentials;
 
-
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(

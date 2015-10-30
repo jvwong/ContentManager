@@ -33,11 +33,11 @@ public class ArticleServiceImpl implements ArticleService {
      * Should do a bunch of checking to see which method to call.
      * @param article The article to save
      */
-    public void save(Article article){
+    public Article save(Article article){
         article.setId(UUID.randomUUID().toString());
         article.setCreatedDate(Instant.now());
 
-        articleRepository.create(article);
+        return articleRepository.create(article);
     }
 
     public boolean exists(String id){

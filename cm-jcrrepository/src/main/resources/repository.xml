@@ -28,7 +28,12 @@
 	</FileSystem>
 
 	<!-- data store configuration -->
-	<DataStore class="org.apache.jackrabbit.core.data.FileDataStore" />
+	<DataStore class="org.apache.jackrabbit.core.data.FileDataStore" >
+		<!--The name of the directory where this data store keeps the files. -->
+		<param name="path" value="${rep.home}/repository/datastore"/>
+		<!--The minimum object length. The default is 100 bytes;-->
+		<param name="minRecordLength" value="100"/>
+	</DataStore>
 
 	<!-- security configuration -->
 	<Security appName="Jackrabbit">
@@ -66,6 +71,14 @@
 			<param name="url" value="jdbc:derby:${wsp.home}/db;create=true" />
 			<param name="schemaObjectPrefix" value="${wsp.name}_" />
 		</PersistenceManager>
+		<!--<PersistenceManager class="org.apache.jackrabbit.core.persistence.pool.MySqlPersistenceManager">-->
+			<!--<param name="driver" value="com.mysql.jdbc.Driver" />-->
+			<!--<param name="url" value="jdbc:mysql://localhost:3306/jackrabbit"/>-->
+			<!--<param name="user" value="jackrabbit" />-->
+			<!--<param name="password" value="jackrabbit" />-->
+			<!--<param name="schema" value="mysql"/>-->
+			<!--<param name="schemaObjectPrefix" value="${wsp.name}_"/>-->
+		<!--</PersistenceManager>-->
 		<!-- Search index and the file system it uses. class: FQN of class implementing the QueryHandler interface -->
 		<SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
 			<param name="path" value="${wsp.home}/index" />
@@ -86,6 +99,14 @@
 			<param name="url" value="jdbc:derby:${rep.home}/version/db;create=true" />
 			<param name="schemaObjectPrefix" value="version_" />
 		</PersistenceManager>
+		<!--<PersistenceManager class="org.apache.jackrabbit.core.persistence.pool.MySqlPersistenceManager">-->
+			<!--<param name="driver" value="com.mysql.jdbc.Driver" />-->
+			<!--<param name="url" value="jdbc:mysql://localhost:3306/jackrabbit"/>-->
+			<!--<param name="user" value="jackrabbit" />-->
+			<!--<param name="password" value="jackrabbit" />-->
+			<!--<param name="schema" value="mysql"/>-->
+			<!--<param name="schemaObjectPrefix" value="${wsp.name}_"/>-->
+		<!--</PersistenceManager>-->
 	</Versioning>
 
 	<!-- Search index for content that is shared repository wide (/jcr:system tree, contains mainly versions) -->

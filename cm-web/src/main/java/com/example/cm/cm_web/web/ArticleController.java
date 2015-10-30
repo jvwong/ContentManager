@@ -69,10 +69,9 @@ public class ArticleController {
 
 		//get logged in username
 		article.setCreatedBy(principal.getName());
-		articleService.save(article);
+		Article saved = articleService.save(article);
 
-		if(articleService.exists(article.getId())){
-			Article saved = articleService.findOne(article.getId());
+		if(saved != null && articleService.exists(saved.getId())){
 			model.addAttribute("id", saved.getId());
 			model.addFlashAttribute("article", article);
 			return "redirect:/articles/{id}";

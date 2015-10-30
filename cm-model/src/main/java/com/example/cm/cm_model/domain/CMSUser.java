@@ -8,6 +8,7 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -20,7 +21,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class CMSUser extends DateAuditedEntity{
 
 	private String fullName;
-    private String username;
+	private String username;
     private String password;
 	private String email;
 	private String role;

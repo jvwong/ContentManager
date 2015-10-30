@@ -11,7 +11,7 @@ public interface ArticleRepository extends Dao<Article> {
 	/**
 	 * @param article article to create or update
 	 */
-	void createOrUpdate(Article article);
+	Article createOrUpdate(Article article);
 
 	/**
 	 * Returns the article with the given page loaded.

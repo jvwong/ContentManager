@@ -85,9 +85,8 @@ public class ArticleControllerTest {
     @Test
     public void testCreateArticle() throws Exception {
 
-        Mockito.doNothing()
-                .when(mockArticleService)
-                .save(Matchers.any(Article.class));
+        Mockito.when(mockArticleService.save(Matchers.any(Article.class)))
+                .thenReturn(mockArticle);
 
         Mockito.when(mockArticleService.exists(Matchers.any(String.class)))
                 .thenReturn(true);

@@ -14,6 +14,9 @@ dependencies {
     // The JCR API
     compile "javax.jcr:jcr:$jcrVersion"
 
+    //mysql
+    // compile "mysql:mysql-connector-java:5.1.37"
+
     // Jackrabbit content repository
     compile "org.apache.jackrabbit:jackrabbit-core:$jackrabbitVersion"
 

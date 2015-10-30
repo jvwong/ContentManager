@@ -18,7 +18,7 @@ public interface ArticleService {
     boolean exists(String id);
 
     @Transactional(readOnly = false)
-    void save(Article article);
+    Article save(Article article);
 }
 
 

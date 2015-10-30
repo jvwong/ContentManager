@@ -48,18 +48,19 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      * @see com.springinpractice.ch12.dao.ArticleDao#createOrUpdate(com.springinpractice.ch12.model.Article)
      */
     @Override
-    public void createOrUpdate(final Article article) {
+    public Article createOrUpdate(final Article article) {
         notNull(article);
-        getTemplate().execute(new JcrCallback() {
+        return (Article) getTemplate().execute(new JcrCallback() {
 
             /* (non-Javadoc)
              * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
              */
             @Override
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                if (exists(article.getId())) { delete(article); }
-                create(article);
-                return null;
+                if (exists(article.getId())) {
+                    delete(article);
+                }
+                return create(article);
             }
         }, true);
     }
@@ -68,9 +69,9 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
      * @see com.springinpractice.ch12.dao.ArticleDao#create(com.springinpractice.ch12.model.Article)
      */
     @Override
-    public void create(final Article article) {
+    public Article create(final Article article) {
         notNull(article);
-        getTemplate().execute(new JcrCallback() {
+        return (Article) getTemplate().execute(new JcrCallback() {
 
             /* (non-Javadoc)
              * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
@@ -82,7 +83,7 @@ public class JcrArticleDao extends JcrDaoSupport implements ArticleRepository {
                 }
                 articleMapper.addArticleNode(article, getArticlesNode(session));
                 session.save();
-                return null;
+                return article;
             }
         }, true);
     }

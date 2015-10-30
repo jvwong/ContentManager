@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 
@@ -69,7 +70,7 @@ public class CMSUserRestEndpoint {
 			method=RequestMethod.POST
 	)
 	public ResponseEntity<CMSUser> saveCMSUser(
-			@RequestBody CMSUser cmsUser,
+			@Valid CMSUser cmsUser,
 			UriComponentsBuilder ucb){
 
 		try{
@@ -83,7 +84,7 @@ public class CMSUserRestEndpoint {
 			CMSUser CMSUserSaved = cmsUserService.save(cmsUser);
 
 			URI locationUri =
-					ucb.path("/services/rest/user/")
+					ucb.path("/services/rest/users/")
 					   .path(String.valueOf(CMSUserSaved.getId()))
 					   .build()
 					   .toUri();

@@ -13,6 +13,8 @@ dependencies {
 
     //Hibernate
     compile "org.hibernate:hibernate-annotations:$hibernateAnnotationsVersion"
+    compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
+    compile "javax.validation:validation-api:$validationApiVersion"
 
     //Spring
     compile "org.springframework.data:spring-data-commons:$springDataCommonsVersion"

@@ -48,11 +48,11 @@ dependencies {
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-tx:$springVersion"
 
-    // Spring XML marshalling
-    compile "org.springframework:spring-oxm:$springOxmVersion"
-
     // Spring Security
     compile "org.springframework.security:spring-security-web:$springSecurityVersion"
+
+    // OXM Marshaller
+    compile "org.springframework:spring-oxm:$springOxmVersion"
 
     // Thymeleaf
     compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:$thymeleafSpringExtrasVersion"

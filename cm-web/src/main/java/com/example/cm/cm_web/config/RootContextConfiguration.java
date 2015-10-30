@@ -1,5 +1,6 @@
 package com.example.cm.cm_web.config;
 
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -36,13 +37,6 @@ public class RootContextConfiguration {
         return messageSource;
     }
 
-//    // OXM marshalling
-//    @Bean
-//    Jaxb2Marshaller unmarshaller(){
-//        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-//        marshaller.setClassesToBeBound(Article.class);
-//        return marshaller;
-//    }
 
     // application.properties bean
     @Bean
@@ -55,7 +49,8 @@ public class RootContextConfiguration {
     @Bean
     public LocalValidatorFactoryBean localValidatorFactoryBean(){
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-        validator.setValidationMessageSource(this.messageSource());
+        validator.setProviderClass(HibernateValidator.class);
+        validator.setValidationMessageSource(messageSource());
         return validator;
     }
 

@@ -18,7 +18,7 @@ public interface Dao<T extends Object> {
      *
      * @param t
      */
-    void create(T t);
+    T create(T t);
 
     /**
      * Finds the requested object in the repository and returns it, or null if there is no such persistent instance.
