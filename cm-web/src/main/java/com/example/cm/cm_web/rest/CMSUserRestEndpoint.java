@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -70,8 +71,13 @@ public class CMSUserRestEndpoint {
 			method=RequestMethod.POST
 	)
 	public ResponseEntity<CMSUser> saveCMSUser(
-			@Valid CMSUser cmsUser,
+			@Valid @RequestBody CMSUser cmsUser,
+			Errors errors,
 			UriComponentsBuilder ucb){
+
+		if(errors.hasErrors()){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 
 		try{
 
@@ -89,7 +95,7 @@ public class CMSUserRestEndpoint {
 					   .build()
 					   .toUri();
 			headers.setLocation(locationUri);
-			return  new ResponseEntity<>(CMSUserSaved, headers, HttpStatus.CREATED);
+			return new ResponseEntity<>(CMSUserSaved, headers, HttpStatus.CREATED);
 
 		} catch (NullPointerException npe) {
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);

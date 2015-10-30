@@ -81,6 +81,10 @@ subprojects {
         }
 		compile "org.springframework:spring-aspects:$springVersion"
 
+        // Hibernate
+        compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
+        compile "javax.validation:validation-api:$javaxValidationApi"
+
         // Spring Security
         compile "org.springframework.security:spring-security-core:$springSecurityVersion"
         compile "org.springframework.security:spring-security-config:$springSecurityVersion"

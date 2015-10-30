@@ -1,16 +1,17 @@
 package com.example.cm.cm_model.domain;
 
-import javax.persistence.AttributeOverride;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.AttributeOverride;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
 @Table(name = "CMSUser", uniqueConstraints = {
@@ -21,9 +22,17 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class CMSUser extends DateAuditedEntity{
 
 	private String fullName;
+
+	@NotNull
 	private String username;
-    private String password;
+
+	@NotNull
+	private String password;
+
+	@NotNull
 	private String email;
+
+	@NotNull
 	private String role;
 
 	public CMSUser(){

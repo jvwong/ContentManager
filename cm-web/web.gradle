@@ -58,10 +58,6 @@ dependencies {
     compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:$thymeleafSpringExtrasVersion"
 	compile "org.thymeleaf:thymeleaf-spring4:$thymeleafSpring4Version"
 
-	// Hibernate
-	compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
-	compile "javax.validation:validation-api:$javaxValidationApi"
-
     testCompile "com.google.code.gson:gson:$gsonVersion"
 
 	//Logging
