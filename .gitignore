@@ -5,7 +5,6 @@ bin/
 .project
 .settings
 .tmp/
-gradle*
 .gradle/
 *iml
 *.ipr
