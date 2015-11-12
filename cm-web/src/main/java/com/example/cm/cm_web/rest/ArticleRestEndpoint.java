@@ -91,11 +91,13 @@ public class ArticleRestEndpoint {
             // DataIntegrityViolationException
             article.setCreatedBy(principal.getName());
             Article saved = articleService.save(article);
+
             URI locationUri =
                     ucb.path("/services/rest/articles/")
                             .path(String.valueOf(saved.getId()))
                             .build()
-                            .toUri();
+                            .toUri()
+                    ;
             headers.setLocation(locationUri);
             return  new ResponseEntity<>(saved, headers, HttpStatus.CREATED);
 

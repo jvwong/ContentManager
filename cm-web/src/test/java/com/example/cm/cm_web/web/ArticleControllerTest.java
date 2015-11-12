@@ -38,11 +38,11 @@ public class ArticleControllerTest {
         mockArticle = Mockito.mock(Article.class);
         uuid = UUID.randomUUID().toString();
 
-        Article mockArticle0 = new Article("title0", "descritpion0", "keywords0");
-        Article mockArticle1 = new Article("title1", "descritpion1", "keywords1");
-        Article mockArticle2 = new Article("title2", "descritpion2", "keywords2");
-        Article mockArticle3 = new Article("title3", "descritpion3", "keywords3");
-        Article mockArticle4 = new Article("title4", "descritpion4", "keywords4");
+        Article mockArticle0 = new Article("title0", "descritpion0", "keywords0", null);
+        Article mockArticle1 = new Article("title1", "descritpion1", "keywords1", null);
+        Article mockArticle2 = new Article("title2", "descritpion2", "keywords2", null);
+        Article mockArticle3 = new Article("title3", "descritpion3", "keywords3", null);
+        Article mockArticle4 = new Article("title4", "descritpion4", "keywords4", null);
 
         articleList = Arrays.asList(
                 mockArticle0,

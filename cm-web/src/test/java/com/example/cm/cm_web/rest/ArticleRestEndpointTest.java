@@ -3,6 +3,7 @@ package com.example.cm.cm_web.rest;
 import com.example.cm.cm_docrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
 import com.google.gson.Gson;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.web.servlet.MockMvc;
-import org.hamcrest.Matchers;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -18,9 +18,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class ArticleRestEndpointTest {
 
@@ -42,11 +43,11 @@ public class ArticleRestEndpointTest {
         ArticleRestEndpoint endpoint = new ArticleRestEndpoint(mockArticleService);
         mockMvc = standaloneSetup(endpoint).build();
 
-        Article mockArticle0 = new Article("title0", "descritpion0", "keywords0");
-        Article mockArticle1 = new Article("title1", "descritpion1", "keywords1");
-        Article mockArticle2 = new Article("title2", "descritpion2", "keywords2");
-        Article mockArticle3 = new Article("title3", "descritpion3", "keywords3");
-        Article mockArticle4 = new Article("title4", "descritpion4", "keywords4");
+        Article mockArticle0 = new Article("title0", "descritpion0", "keywords0", null);
+        Article mockArticle1 = new Article("title1", "descritpion1", "keywords1", null);
+        Article mockArticle2 = new Article("title2", "descritpion2", "keywords2", null);
+        Article mockArticle3 = new Article("title3", "descritpion3", "keywords3", null);
+        Article mockArticle4 = new Article("title4", "descritpion4", "keywords4", null);
 
         articleList = Arrays.asList(
                 mockArticle0,
@@ -127,8 +128,8 @@ public class ArticleRestEndpointTest {
     public void saveArticleTest() throws Exception {
 
 
-        Article unsaved = new Article("title30", "descritpion30", "keywords30");
-        Article saved = new Article("title30", "descritpion30", "keywords30");
+        Article unsaved = new Article("title30", "descritpion30", "keywords30", null);
+        Article saved = new Article("title30", "descritpion30", "keywords30", null);
         String uuid = UUID.randomUUID().toString();
         saved.setId(uuid);
 
@@ -161,7 +162,7 @@ public class ArticleRestEndpointTest {
      **/
     @Test
     public void saveDuplicateArticleTest() throws Exception {
-        Article unsaved = new Article("title30", "descritpion30", "keywords30");
+        Article unsaved = new Article("title30", "descritpion30", "keywords30", null);
         Mockito.when(mockArticleService.save(unsaved))
                 .thenThrow(new DataIntegrityViolationException(Article.class.toString()));
 

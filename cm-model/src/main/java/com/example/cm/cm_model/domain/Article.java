@@ -2,8 +2,8 @@ package com.example.cm.cm_model.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.xml.bind.annotation.XmlElement;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 /**
  * @author jvwong
@@ -15,19 +15,21 @@ public class Article extends DateByAuditedEntity{
     private String title;
     private String description;
     private String keywords;
-    private List<Page> pages;
+    private Collection<Page> pages = new LinkedHashSet<>();
 
     public Article(){
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
     public Article(
             String title,
             String description,
-            String keywords){
+            String keywords,
+            Collection<Page> pages){
         this.title = title;
         this.description = description;
         this.keywords = keywords;
+        this.pages = pages;
     }
 
     public String getTitle() {
@@ -54,12 +56,11 @@ public class Article extends DateByAuditedEntity{
         this.keywords = keywords;
     }
 
-    @XmlElement
-    public List<Page> getPages() {
-        return pages;
+    public Collection<Page> getPages() {
+        return this.pages;
     }
 
-    public void setPages(List<Page> pages) {
+    public void setPages(Collection<Page> pages) {
         this.pages = pages;
     }
 
