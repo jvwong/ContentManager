@@ -1,6 +1,6 @@
 package com.example.cm.cm_web.rest;
 
-import com.example.cm.cm_jcrrepository.service.ArticleService;
+import com.example.cm.cm_docrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
 import com.google.gson.Gson;
 import org.junit.Before;

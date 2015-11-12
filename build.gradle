@@ -75,6 +75,9 @@ subprojects {
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonJsr310Version"
 
+        //Mongo
+        compile "org.springframework.data:spring-data-mongodb:$springDataMongodbVersion"
+
         //Spring
 		compile ("org.springframework:spring-context:$springVersion"){
             exclude group: 'commons-logging', module: 'commons-logging'

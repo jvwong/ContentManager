@@ -1,11 +1,15 @@
 package com.example.cm.cm_model.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
 
 /**
  * @author jvwong
  */
+
+@Document
 public class Article extends DateByAuditedEntity{
 
     private String title;

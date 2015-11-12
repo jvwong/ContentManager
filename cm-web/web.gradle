@@ -80,7 +80,7 @@ dependencies {
     cargo "$cargoGroup:cargo-ant:$cargoVersion"
 
 	compile project(':cm-repository')
-    compile project(':cm-jcrrepository')
+    compile project(':cm-docrepository')
 	compile project(':cm-model')
 }
 // -------------------------- END Gradle -------------------------------------//

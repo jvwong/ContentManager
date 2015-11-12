@@ -1,6 +1,6 @@
 package com.example.cm.cm_web.web;
 
-import com.example.cm.cm_jcrrepository.service.ArticleService;
+import com.example.cm.cm_docrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
 import org.junit.Before;
 import org.junit.Test;
