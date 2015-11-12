@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
-@EnableTransactionManagement
 @ComponentScan(
         basePackages = "com.example.cm",
         excludeFilters =

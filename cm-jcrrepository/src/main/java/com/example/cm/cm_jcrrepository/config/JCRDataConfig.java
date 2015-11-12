@@ -70,7 +70,7 @@ public class JCRDataConfig {
 		sessionFactory.setCredentials(credentials());
 		try{
 			Repository rep = (Repository) repository().getObject();
-			sessionFactory.setRepository((rep));
+			sessionFactory.setRepository(rep);
 		} catch (Exception e){}
 		return sessionFactory;
 	}
