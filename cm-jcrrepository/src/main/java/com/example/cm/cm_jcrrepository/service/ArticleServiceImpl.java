@@ -26,7 +26,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     public Article findOne(String id){
-        return articleRepository.get(id);
+        return articleRepository.findOne(id);
     }
 
     /**
@@ -37,7 +37,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setId(UUID.randomUUID().toString());
         article.setCreatedDate(Instant.now());
 
-        return articleRepository.create(article);
+        return articleRepository.save(article);
     }
 
     public boolean exists(String id){
