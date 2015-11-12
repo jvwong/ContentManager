@@ -86,19 +86,19 @@ public class ArticleRestEndpointTest {
     @Test
     public void articleDetailTest() throws Exception {
 
-        String uuid = UUID.randomUUID().toString();
+        Long id = 24L;
 
-        Mockito.when(mockArticleService.findOne(uuid))
+        Mockito.when(mockArticleService.findOne(id))
                 .thenReturn(articleList.get(0));
 
-        mockMvc.perform(get("/rest/articles/" + uuid + "/")
+        mockMvc.perform(get("/rest/articles/" + id + "/")
                     .accept(MIME_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MIME_JSON))
         ;
 
         Mockito.verify(mockArticleService, Mockito.atLeastOnce())
-                .findOne(uuid);
+                .findOne(id);
     }
 
     /*
@@ -107,18 +107,18 @@ public class ArticleRestEndpointTest {
     @Test
     public void articleDetailFailTest() throws Exception {
 
-        String uuid = UUID.randomUUID().toString();
+        Long id = 24L;
 
-        Mockito.when(mockArticleService.findOne(uuid))
+        Mockito.when(mockArticleService.findOne(id))
                 .thenReturn(null);
 
-        mockMvc.perform(get("/rest/articles/" + uuid + "/")
+        mockMvc.perform(get("/rest/articles/" + id + "/")
                 .accept(MIME_JSON))
                 .andExpect(status().isNotFound())
         ;
 
         Mockito.verify(mockArticleService, Mockito.atLeastOnce())
-                .findOne(uuid);
+                .findOne(id);
     }
 
     /*
@@ -130,8 +130,8 @@ public class ArticleRestEndpointTest {
 
         Article unsaved = new Article("title30", "descritpion30", "keywords30", null);
         Article saved = new Article("title30", "descritpion30", "keywords30", null);
-        String uuid = UUID.randomUUID().toString();
-        saved.setId(uuid);
+        Long id = 24L;
+        saved.setId(id);
 
         Mockito.when(mockArticleService.save(unsaved)).thenReturn(saved);
 

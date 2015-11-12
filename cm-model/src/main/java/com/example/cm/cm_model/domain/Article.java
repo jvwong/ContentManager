@@ -1,6 +1,8 @@
 package com.example.cm.cm_model.domain;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -9,12 +11,15 @@ import java.util.LinkedHashSet;
  * @author jvwong
  */
 
-@Document
+
+@NodeEntity
 public class Article extends DateByAuditedEntity{
 
     private String title;
     private String description;
     private String keywords;
+
+    @RelatedTo(type="HAS_PAGE")
     private Collection<Page> pages = new LinkedHashSet<>();
 
     public Article(){

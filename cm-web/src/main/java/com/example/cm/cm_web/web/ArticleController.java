@@ -81,15 +81,15 @@ public class ArticleController {
 	}
 
 	/**
-	 * @param uuid article UUID
+	 * @param id article UUID
 	 * @return logical view name
 	 */
-	@RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String getArticle(
-			@PathVariable String uuid,
+			@PathVariable Long id,
 			Model model) {
 
-		Article article = articleService.findOne(uuid);
+		Article article = articleService.findOne(id);
 		model.addAttribute("article", article);
 		return getFullViewName("articlePage");
 	}

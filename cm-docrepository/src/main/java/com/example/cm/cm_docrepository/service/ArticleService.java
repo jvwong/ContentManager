@@ -14,8 +14,8 @@ import java.util.List;
 public interface ArticleService {
 
     List<Article> getList();
-    Article findOne(String id);
-    boolean exists(String id);
+    Article findOne(Long id);
+    boolean exists(Long id);
 
     @Transactional(readOnly = false)
     Article save(Article article);

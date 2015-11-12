@@ -43,7 +43,7 @@ public class AuthRestEndpointTest {
         );
 
         mockMvc = standaloneSetup(endpoint).build();
-        mockUser = new CMSUser(UUID.randomUUID().toString(), "fullname1", "username1", "password1",
+        mockUser = new CMSUser(24L, "fullname1", "username1", "password1",
                 "email1@email.com", "CMSUser");
 
         authRequest

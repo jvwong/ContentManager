@@ -22,10 +22,10 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleRepository articleRepository;
 
     public List<Article> getList() {
-        return articleRepository.findAll();
+        return (List<Article>) articleRepository.findAll();
     }
 
-    public Article findOne(String id){
+    public Article findOne(Long id){
         return articleRepository.findOne(id);
     }
 
@@ -34,13 +34,10 @@ public class ArticleServiceImpl implements ArticleService {
      * @param article The article to save
      */
     public Article save(Article article){
-        article.setId(UUID.randomUUID().toString());
-        article.setCreatedDate(Instant.now());
-
         return articleRepository.save(article);
     }
 
-    public boolean exists(String id){
+    public boolean exists(Long id){
         return articleRepository.exists(id);
     }
 }

@@ -64,7 +64,7 @@ public class ArticleRestEndpoint {
             value="/{id}/",
             method=RequestMethod.GET
     )
-    public Article articleDetail(@PathVariable("id") String id){
+    public Article articleDetail(@PathVariable("id") Long id){
         Article found = articleService.findOne(id);
         if(found == null){
             throw new ResourceNotFoundException(Article.class.getName());

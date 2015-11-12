@@ -75,8 +75,15 @@ subprojects {
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonJsr310Version"
 
-        //Mongo
-        compile "org.springframework.data:spring-data-mongodb:$springDataMongodbVersion"
+        // Mongo
+        //compile "org.springframework.data:spring-data-mongodb:$springDataMongodbVersion"
+        // Neo4j
+        compile "org.springframework.data:spring-data-neo4j:$springDataNeo4jVersion"
+        compile "org.neo4j:neo4j-cypher-dsl:1.7"
+//        compile "org.neo4j:neo4j-kernel:2.3.1"
+//        compile "org.neo4j:server-api:2.3.1"
+//        compile "org.neo4j:neo4j-ogm:1.1.0"
+//        compile "org.neo4j.test:neo4j-harness:2.3.1"
 
         //Spring
 		compile ("org.springframework:spring-context:$springVersion"){

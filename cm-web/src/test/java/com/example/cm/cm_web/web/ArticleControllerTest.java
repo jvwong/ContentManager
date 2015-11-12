@@ -27,7 +27,7 @@ public class ArticleControllerTest {
     private ArticleService mockArticleService;
     private List<Article> articleList;
     Article mockArticle;
-    String uuid;
+    Long id;
 
     @Before
     public void setUp() {
@@ -36,7 +36,7 @@ public class ArticleControllerTest {
         ArticleController controller = new ArticleController(mockArticleService);
         mockMvc = standaloneSetup(controller).build();
         mockArticle = Mockito.mock(Article.class);
-        uuid = UUID.randomUUID().toString();
+        id = 24L;
 
         Article mockArticle0 = new Article("title0", "descritpion0", "keywords0", null);
         Article mockArticle1 = new Article("title1", "descritpion1", "keywords1", null);
@@ -71,8 +71,8 @@ public class ArticleControllerTest {
     @Test
     public void testGetArticle() throws Exception {
 
-        Mockito.when(mockArticleService.findOne(uuid)).thenReturn(mockArticle);
-        mockMvc.perform(get("/articles/" + uuid))
+        Mockito.when(mockArticleService.findOne(id)).thenReturn(mockArticle);
+        mockMvc.perform(get("/articles/" + id))
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attribute("article", instanceOf(Article.class)))
                 .andExpect(view().name("/articles/articlePage"));
@@ -88,14 +88,14 @@ public class ArticleControllerTest {
         Mockito.when(mockArticleService.save(Matchers.any(Article.class)))
                 .thenReturn(mockArticle);
 
-        Mockito.when(mockArticleService.exists(Matchers.any(String.class)))
+        Mockito.when(mockArticleService.exists(Matchers.any(Long.class)))
                 .thenReturn(true);
 
-        Mockito.when(mockArticleService.findOne(Matchers.any(String.class)))
+        Mockito.when(mockArticleService.findOne(Matchers.any(Long.class)))
                 .thenReturn(mockArticle);
 
         Mockito.when(mockArticle.getId())
-                .thenReturn(uuid);
+                .thenReturn(id);
 
         mockMvc.perform(post("/articles/create")
                 .principal(mockPrincipal)
@@ -103,7 +103,7 @@ public class ArticleControllerTest {
                 .param("description", "description1")
                 .param("keywords", "keywords1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/articles/" + uuid))
+                .andExpect(redirectedUrl("/articles/" + id))
         ;
     }
 

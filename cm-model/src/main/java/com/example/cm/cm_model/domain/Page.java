@@ -1,20 +1,19 @@
 package com.example.cm.cm_model.domain;
 
+
+import org.springframework.data.neo4j.annotation.GraphId;
+import org.springframework.data.neo4j.annotation.NodeEntity;
+
 /**
  * @author jvwong
  */
+
+@NodeEntity
 public class Page {
+
+	@GraphId
 	private Long id;
-	private Article article;
 	private String content;
-
-	public String getContent() {
-		return this.content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
 
 	public Long getId() {
 		return this.id;
@@ -24,11 +23,12 @@ public class Page {
 		this.id = id;
 	}
 
-	public Article getArticle() {
-		return this.article;
+	public String getContent() {
+		return this.content;
 	}
 
-	public void setArticle(Article article) {
-		this.article = article;
+	public void setContent(String content) {
+		this.content = content;
 	}
+
 }
