@@ -1,7 +1,10 @@
 package com.example.cm.cm_model.domain;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
