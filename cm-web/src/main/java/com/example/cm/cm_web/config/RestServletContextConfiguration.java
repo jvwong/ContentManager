@@ -33,8 +33,13 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
         public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("*")
-                        .allowedMethods("POST", "GET", "OPTIONS")
-//                        .allowCredentials(false).maxAge(3600)
+                        .allowedMethods("GET", "HEAD", "POST", "GET", "OPTIONS")
+                        .exposedHeaders(
+                                "X-AUTH-TOKEN",
+                                "Content-Type",
+                                "Date",
+                                "Expires")
+                        .allowCredentials(false).maxAge(3600)
                 ;
         }
 }
