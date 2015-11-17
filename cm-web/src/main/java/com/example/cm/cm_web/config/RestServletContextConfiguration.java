@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -26,5 +27,14 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
                 Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
                 marshaller.setClassesToBeBound(Article.class);
                 return marshaller;
+        }
+
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("POST", "GET", "OPTIONS")
+//                        .allowCredentials(false).maxAge(3600)
+                ;
         }
 }

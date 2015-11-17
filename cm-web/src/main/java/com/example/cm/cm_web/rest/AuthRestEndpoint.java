@@ -9,6 +9,8 @@ import com.example.cm.cm_web.security.TokenAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,7 +43,16 @@ public class AuthRestEndpoint {
 
 	@RequestMapping(
 			value="/",
-			method=RequestMethod.POST
+			method=RequestMethod.OPTIONS
+	)
+	public ResponseEntity<String> getOptions(HttpServletResponse httpResponse){
+		httpResponse.setHeader("Allow", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	@RequestMapping(
+		value="/",
+		method=RequestMethod.POST
 	)
 	public CMSUser authenticate(@RequestBody CMSUser cmsUser,
 			HttpServletResponse  httpResponse){

@@ -71,8 +71,6 @@ public final class TokenHandler {
 		sb.append(SEPARATOR);
 		sb.append(toBase64(hash));
 
-		logger.info(sb.toString());
-
 		return sb.toString();
 	}
 

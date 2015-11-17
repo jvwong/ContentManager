@@ -93,7 +93,7 @@ public class SecurityConfig {
 				.antMatcher("/services/rest/**")
 
 				.authorizeRequests()
-					.regexMatchers(HttpMethod.POST, "\\A/services/rest/auth/\\z")
+					.regexMatchers("\\A/services/rest/auth/\\z")
 						.permitAll()
 
 					.regexMatchers(HttpMethod.POST, "\\A/services/rest/users/\\z")
