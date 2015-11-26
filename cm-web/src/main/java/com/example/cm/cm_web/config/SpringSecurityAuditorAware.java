@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
-class SpringSecurityAuditorAware implements AuditorAware<String> {
+public class SpringSecurityAuditorAware implements AuditorAware<String> {
 	
 	public String getCurrentAuditor() {
 		String username;

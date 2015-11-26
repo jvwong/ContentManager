@@ -1,8 +1,7 @@
 package com.example.cm.cm_model.domain;
 
-import javax.persistence.Column;
+import org.springframework.data.annotation.Version;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 @MappedSuperclass
 public abstract class VersionedEntity extends BaseEntity{
@@ -14,7 +13,6 @@ public abstract class VersionedEntity extends BaseEntity{
 	 * @return Long Version
 	 */
 	@Version
-	@Column(name = "Revision")
 	public Long getVersion(){
 		return this.version;
 	}

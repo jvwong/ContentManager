@@ -1,6 +1,7 @@
 package com.example.cm.cm_docrepository.service;
 
 import com.example.cm.cm_model.domain.Article;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,8 @@ import java.util.List;
 public interface ArticleService {
 
     List<Article> getList();
+    Page<Article> getPagedList(Integer pageNumber, Integer pageSize);
+
     Article findOne(String id);
     boolean exists(String id);
 

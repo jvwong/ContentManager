@@ -3,6 +3,10 @@ package com.example.cm.cm_docrepository.service;
 import com.example.cm.cm_docrepository.repository.ArticleRepository;
 import com.example.cm.cm_model.domain.Article;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     public List<Article> getList() {
         return articleRepository.findAll();
+    }
+
+    public Page<Article> getPagedList(Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest =
+                new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
+        return articleRepository.findAll(pageRequest);
     }
 
     public Article findOne(String id){

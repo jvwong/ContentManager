@@ -16,6 +16,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -32,6 +33,15 @@ public class CMSUserRestEndpoint {
 			PasswordEncoder passwordEncoder){
 		this.cmsUserService = cmsUserService;
 		this.passwordEncoder = passwordEncoder;
+	}
+
+	@RequestMapping(
+			value="/",
+			method=RequestMethod.OPTIONS
+	)
+	public ResponseEntity<String> getOptions(HttpServletResponse httpResponse){
+		httpResponse.setHeader("Allow", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/**

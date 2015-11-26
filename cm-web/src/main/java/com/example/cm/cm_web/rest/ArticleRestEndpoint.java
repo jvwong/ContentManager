@@ -10,20 +10,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.Marshaller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.security.Principal;
-import java.util.List;
+
 
 /**
  * @author jvwong
@@ -33,6 +33,9 @@ import java.util.List;
 public class ArticleRestEndpoint {
     private static final Logger logger
             = LoggerFactory.getLogger(ArticleRestEndpoint.class);
+
+    private final String DEFAULT_PAGE_AS_STRING = "0";
+    private final String DEFAULT_SIZE_AS_STRING = "10";
 
 
     @Inject
@@ -44,16 +47,25 @@ public class ArticleRestEndpoint {
         this.articleService = articleService;
     }
 
-    /**
-     * Retrieve the list of
-     * @return a page of articles wrapped in {@link Page} object
-     */
     @RequestMapping(
             value="/",
-            method= RequestMethod.GET
+            method=RequestMethod.OPTIONS
     )
-    public List<Article> articleList(){
-        return articleService.getList();
+    public ResponseEntity<String> getOptions(HttpServletResponse httpResponse){
+        httpResponse.setHeader("Allow", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    /**
+     * Retrieve the paged list of
+     * @return a page of articles wrapped in {@link Page} object
+     */
+    @RequestMapping(value="/", method=RequestMethod.GET)
+    public Page<Article> articleList(
+            @RequestParam(value="page", defaultValue="1") Integer pageNumber,
+            @RequestParam(value="size", defaultValue="10") Integer pageSize
+    ){
+        return articleService.getPagedList(pageNumber, pageSize);
     }
 
     /**

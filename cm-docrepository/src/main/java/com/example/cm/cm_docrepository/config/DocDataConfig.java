@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
 @EnableMongoRepositories(basePackages = "com.example.cm.cm_docrepository.repository")
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @PropertySource("classpath:environment.properties")
 public class DocDataConfig extends AbstractMongoConfiguration {
 
@@ -30,4 +32,9 @@ public class DocDataConfig extends AbstractMongoConfiguration {
 	public Mongo mongo() throws Exception {
 		return new MongoClient();
 	}
+
+//	@Bean
+//	public AuditorAware<String> myAuditorProvider() {
+//		return new SpringSecurityAuditorAware();
+//	}
 }

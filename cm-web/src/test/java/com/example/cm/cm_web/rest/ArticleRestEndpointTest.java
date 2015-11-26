@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.security.Principal;
@@ -20,8 +22,12 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.hamcrest.Matchers.*;
 
 public class ArticleRestEndpointTest {
 
@@ -59,25 +65,23 @@ public class ArticleRestEndpointTest {
 
 
     /*
-     * Return a paged list of articles
+     * Return the paged list of Articles
      **/
     @Test
     public void articleListTest() throws Exception {
+        int pageNumber = 1;
+        int pageSize = 3;
+        Page<Article> mockPage = new PageImpl<>(articleList);
+        Mockito.when(mockArticleService.getPagedList(pageNumber, pageSize)).thenReturn(mockPage);
 
-        Mockito.when(mockArticleService.getList())
-                .thenReturn(articleList);
-
-
-        mockMvc.perform(
-                get("/rest/articles/").accept(MIME_JSON))
+        mockMvc.perform(get("/rest/articles/?page=" + pageNumber + "&size=" + pageSize))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MIME_JSON))
-                .andExpect(jsonPath("$", Matchers.isA(Collection.class)))
-                .andExpect(jsonPath("$", Matchers.hasSize(articleList.size())))
-                ;
+                .andExpect(jsonPath("$.content", isA(Collection.class)))
+                .andExpect(jsonPath("$.content", hasSize(articleList.size())))
+        ;
 
-        Mockito.verify(mockArticleService, Mockito.atLeastOnce())
-                .getList();
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).getPagedList(pageNumber, pageSize);
     }
 
     /*
