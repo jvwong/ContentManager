@@ -30,6 +30,7 @@ public class AuthRestEndpointTest {
     private CMSUserService mockService;
     private AuthenticationManager mockAuthManager;
     private Authentication authRequest;
+    private Long id;
 
     @Before
     public void setUp() {
@@ -37,13 +38,14 @@ public class AuthRestEndpointTest {
                 = Mockito.mock(TokenAuthenticationService.class);
         mockService = Mockito.mock(CMSUserService.class);
         mockAuthManager = Mockito.mock(AuthenticationManager.class);
+        id = 24L;
 
         AuthRestEndpoint endpoint = new AuthRestEndpoint(
                 mockTokenAuthenticationService, mockService, mockAuthManager
         );
 
         mockMvc = standaloneSetup(endpoint).build();
-        mockUser = new CMSUser(UUID.randomUUID().toString(), "fullname1", "username1", "password1",
+        mockUser = new CMSUser(id, "fullname1", "username1", "password1",
                 "email1@email.com", "CMSUser");
 
         authRequest

@@ -57,6 +57,9 @@ public class AuthRestEndpoint {
 	public CMSUser authenticate(@RequestBody CMSUser cmsUser,
 			HttpServletResponse  httpResponse){
 
+		logger.debug("cmsUser");
+		logger.debug(cmsUser.toString());
+
 		// Throws NullPointerException
 		if(cmsUser.getUsername() == null){
 			throw new MissingCredentialsException("username",  CMSUser.class.getSimpleName());

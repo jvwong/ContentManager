@@ -47,7 +47,7 @@ public class CMSUser extends DateAuditedEntity{
 		this(null, fullName, username, password, email, role);
 	}
 
-	public CMSUser(String id,
+	public CMSUser(Long id,
 				   String fullName,
 				   String username,
 				   String password,

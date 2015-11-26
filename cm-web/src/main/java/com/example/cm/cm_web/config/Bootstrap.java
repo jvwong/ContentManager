@@ -35,7 +35,7 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.setMultipartConfig(
 		 		new MultipartConfigElement(
-		 				"/home/jeffrey/Projects/ContentManager/src/main/webapp/tmp/auth/user/uploads",
+		 				"/home/jeffrey/Projects/ContentManager/uploads",
 		 				2097152, // max size (bytes) file
 		 				4194304, // max size (bytes) total request
 		 				0));
