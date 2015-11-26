@@ -8,4 +8,5 @@ import com.example.cm.cm_model.domain.Article;
  * @author jvwong
  */
 
-public interface ArticleRepository extends MongoRepository<Article, String> { }
+public interface ArticleRepository
+        extends MongoRepository<Article, String>, ArticleRepositoryCustomization{ }

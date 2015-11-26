@@ -1,6 +1,5 @@
 package com.example.cm.cm_model.domain;
 
-import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 

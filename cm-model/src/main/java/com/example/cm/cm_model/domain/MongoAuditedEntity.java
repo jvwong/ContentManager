@@ -32,10 +32,10 @@ public class MongoAuditedEntity {
     private Instant lastModifiedDate;
 
     @CreatedBy
-    private String createdBy;
+    private String author;
 
     @LastModifiedBy
-    private String updatedBy;
+    private String updater;
 
 
     @Id
@@ -90,20 +90,20 @@ public class MongoAuditedEntity {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getAuthor() {
+        return this.author;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
 }

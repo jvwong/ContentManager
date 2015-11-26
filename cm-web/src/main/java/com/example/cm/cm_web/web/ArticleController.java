@@ -68,7 +68,7 @@ public class ArticleController {
 		}
 
 		//get logged in username
-		article.setCreatedBy(principal.getName());
+		article.setAuthor(principal.getName());
 		Article saved = articleService.save(article);
 
 		if(saved != null && articleService.exists(saved.getId())){

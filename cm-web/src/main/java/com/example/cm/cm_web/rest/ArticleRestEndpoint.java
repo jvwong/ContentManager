@@ -62,10 +62,13 @@ public class ArticleRestEndpoint {
      */
     @RequestMapping(value="/", method=RequestMethod.GET)
     public Page<Article> articleList(
+            Principal principal,
             @RequestParam(value="page", defaultValue="1") Integer pageNumber,
             @RequestParam(value="size", defaultValue="10") Integer pageSize
     ){
-        return articleService.getPagedList(pageNumber, pageSize);
+
+        //logger.info(principal.getName());
+        return articleService.getPagedListByAuthor(pageNumber, pageSize, principal.getName());
     }
 
     /**
@@ -101,7 +104,7 @@ public class ArticleRestEndpoint {
             HttpHeaders headers = new HttpHeaders();
 
             // DataIntegrityViolationException
-            article.setCreatedBy(principal.getName());
+            article.setAuthor(principal.getName());
             Article saved = articleService.save(article);
 
             URI locationUri =
@@ -119,4 +122,5 @@ public class ArticleRestEndpoint {
         }
 
     }
+
 }

@@ -16,6 +16,7 @@ public interface ArticleService {
 
     List<Article> getList();
     Page<Article> getPagedList(Integer pageNumber, Integer pageSize);
+    Page<Article> getPagedListByAuthor(Integer pageNumber, Integer pageSize, String author);
 
     Article findOne(String id);
     boolean exists(String id);

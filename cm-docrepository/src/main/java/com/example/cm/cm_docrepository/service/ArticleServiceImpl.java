@@ -5,7 +5,6 @@ import com.example.cm.cm_model.domain.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +33,17 @@ public class ArticleServiceImpl implements ArticleService {
                 new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
         return articleRepository.findAll(pageRequest);
     }
+
+    public Page<Article> getPagedListByAuthor(
+            Integer pageNumber,
+            Integer pageSize,
+            String author) {
+        PageRequest pageRequest =
+                new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
+        return articleRepository.findByAuthor(author, pageRequest);
+    }
+
+
 
     public Article findOne(String id){
         return articleRepository.findOne(id);

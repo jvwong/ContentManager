@@ -67,7 +67,7 @@ public class Article extends MongoAuditedEntity{
     @Override
     public String toString() {
         return "[Article: id=" + this.getId()
-                + ", createdBy=" + this.getCreatedBy()
+                + ", author=" + this.getAuthor()
                 + ", createdDate=" + this.getCreatedDate()
                 + ", title=" + this.title
                 + ", description=" + this.description

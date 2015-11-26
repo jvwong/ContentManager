@@ -38,6 +38,7 @@ public class ArticleRestEndpointTest {
     private Principal mockPrincipal;
     private ArticleService mockArticleService;
     private List<Article> articleList;
+    private String mockUsername;
 
     private final String MIME_JSON = "application/json;charset=UTF-8";
     private final String MIME_XML = "application/xml;";
@@ -45,6 +46,7 @@ public class ArticleRestEndpointTest {
     @Before
     public void setUp() {
         mockPrincipal = Mockito.mock(Principal.class);
+        mockUsername = "mockUser";
         mockArticleService = Mockito.mock(ArticleService.class);
         ArticleRestEndpoint endpoint = new ArticleRestEndpoint(mockArticleService);
         mockMvc = standaloneSetup(endpoint).build();
@@ -72,16 +74,22 @@ public class ArticleRestEndpointTest {
         int pageNumber = 1;
         int pageSize = 3;
         Page<Article> mockPage = new PageImpl<>(articleList);
-        Mockito.when(mockArticleService.getPagedList(pageNumber, pageSize)).thenReturn(mockPage);
 
-        mockMvc.perform(get("/rest/articles/?page=" + pageNumber + "&size=" + pageSize))
+        Mockito.when(mockPrincipal.getName()).thenReturn(mockUsername);
+        Mockito.when(mockArticleService
+                        .getPagedListByAuthor(pageNumber, pageSize, mockUsername))
+                        .thenReturn(mockPage);
+
+        mockMvc.perform(get("/rest/articles/?page=" + pageNumber + "&size=" + pageSize)
+                .principal(mockPrincipal))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MIME_JSON))
                 .andExpect(jsonPath("$.content", isA(Collection.class)))
                 .andExpect(jsonPath("$.content", hasSize(articleList.size())))
         ;
 
-        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).getPagedList(pageNumber, pageSize);
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce())
+                .getPagedListByAuthor(pageNumber, pageSize, mockUsername);
     }
 
     /*
@@ -183,4 +191,14 @@ public class ArticleRestEndpointTest {
         Mockito.verify(mockArticleService, Mockito.atLeastOnce())
                 .save(unsaved);
     }
+
+
+    /**
+     * Delete an existing Article
+     */
+
+
+    /**
+     * Modify an existing Article
+     */
 }
