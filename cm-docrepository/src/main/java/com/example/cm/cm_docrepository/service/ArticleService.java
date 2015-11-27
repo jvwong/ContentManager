@@ -23,6 +23,9 @@ public interface ArticleService {
 
     @Transactional(readOnly = false)
     Article save(Article article);
+
+    @Transactional(readOnly = false)
+    void delete(String id);
 }
 
 

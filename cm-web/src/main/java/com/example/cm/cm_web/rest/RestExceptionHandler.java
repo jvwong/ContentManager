@@ -57,24 +57,4 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ResponseEntity<Error> processValidationError(MethodArgumentNotValidException e) {
-//		BindingResult result = e.getBindingResult();
-//        List<FieldError> fieldErrors = result.getFieldErrors();
-//        List<String> errors = new ArrayList<String>();
-//
-//        for (FieldError fieldError: fieldErrors) {
-//            String localizedErrorMessage = resolveLocalizedErrorMessage(fieldError);
-//            errors.add(localizedErrorMessage);
-//        }
-//		return new Error(400, errors.toString());
-//	}
-//
-//	private String resolveLocalizedErrorMessage(FieldError fieldError) {
-//		Locale currentLocale =  LocaleContextHolder.getLocale();
-//        String localizedErrorMessage = messageSource.getMessage(fieldError, currentLocale);
-//        return localizedErrorMessage;
-//    }
-
 }

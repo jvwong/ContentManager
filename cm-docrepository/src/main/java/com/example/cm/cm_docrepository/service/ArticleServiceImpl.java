@@ -54,13 +54,18 @@ public class ArticleServiceImpl implements ArticleService {
      * @param article The article to save
      */
     public Article save(Article article){
-        article.setId(UUID.randomUUID().toString());
-        article.setCreatedDate(Instant.now());
-
         return articleRepository.save(article);
     }
 
     public boolean exists(String id){
         return articleRepository.exists(id);
+    }
+
+    /**
+     * Delete the record with the given id if it exists
+     * @param id the id for the article
+     */
+    public void delete(String id){
+        articleRepository.delete(id);
     }
 }

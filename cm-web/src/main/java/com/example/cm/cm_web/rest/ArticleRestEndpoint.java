@@ -10,12 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.Marshaller;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -43,31 +42,32 @@ public class ArticleRestEndpoint {
     private ArticleService articleService;
 
     @Autowired
-    public ArticleRestEndpoint(ArticleService articleService){
+    public ArticleRestEndpoint(ArticleService articleService)
+    {
         this.articleService = articleService;
     }
 
     @RequestMapping(
             value="/",
-            method=RequestMethod.OPTIONS
-    )
-    public ResponseEntity<String> getOptions(HttpServletResponse httpResponse){
-        httpResponse.setHeader("Allow", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
-        return new ResponseEntity<String>(HttpStatus.OK);
+            method=RequestMethod.OPTIONS)
+    public ResponseEntity<String> getOptions(HttpServletResponse httpResponse)
+    {
+        httpResponse.setHeader("Allow", "GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
-     * Retrieve the paged list of
-     * @return a page of articles wrapped in {@link Page} object
+     * Retrieve the paged list of {@link Article} objects that
+     * who's author is the current Principal
+     * @return {@link Page} of articles
      */
-    @RequestMapping(value="/", method=RequestMethod.GET)
+    @RequestMapping(value="/",
+            method=RequestMethod.GET)
     public Page<Article> articleList(
             Principal principal,
             @RequestParam(value="page", defaultValue="1") Integer pageNumber,
-            @RequestParam(value="size", defaultValue="10") Integer pageSize
-    ){
-
-        //logger.info(principal.getName());
+            @RequestParam(value="size", defaultValue="10") Integer pageSize)
+    {
         return articleService.getPagedListByAuthor(pageNumber, pageSize, principal.getName());
     }
 
@@ -79,10 +79,20 @@ public class ArticleRestEndpoint {
             value="/{id}/",
             method=RequestMethod.GET
     )
-    public Article articleDetail(@PathVariable("id") String id){
+    public Article articleDetail(
+            @PathVariable("id") String id,
+            Principal principal)
+    {
         Article found = articleService.findOne(id);
         if(found == null){
             throw new ResourceNotFoundException(Article.class.getName());
+        }
+
+        String author = found.getAuthor();
+
+        if(author != null && !author.equals(principal.getName()))
+        {
+            throw new AccessDeniedException(Article.class.getName());
         }
         return found;
     }
@@ -93,18 +103,16 @@ public class ArticleRestEndpoint {
      */
     @RequestMapping(
             value="/",
-            method=RequestMethod.POST
-    )
+            method=RequestMethod.POST)
     public ResponseEntity<Article> saveArticle(
-            Principal principal,
             @RequestBody Article article,
-            UriComponentsBuilder ucb
-    ){
-        try {
+            UriComponentsBuilder ucb)
+    {
+        try
+        {
             HttpHeaders headers = new HttpHeaders();
 
             // DataIntegrityViolationException
-            article.setAuthor(principal.getName());
             Article saved = articleService.save(article);
 
             URI locationUri =
@@ -117,9 +125,35 @@ public class ArticleRestEndpoint {
             return  new ResponseEntity<>(saved, headers, HttpStatus.CREATED);
 
 
-        } catch (DataIntegrityViolationException dee) {
+        }
+        catch (DataIntegrityViolationException dee)
+        {
             throw new ResourceConflictException(Article.class.toString());
         }
+
+    }
+
+    /**
+     * Delete an existing {@link Article} instance
+     */
+    @RequestMapping(
+            value="/{id}/",
+            method=RequestMethod.DELETE)
+    public ResponseEntity<String> deleteArticle(
+            @PathVariable("id") String id)
+    {
+        Boolean exists = articleService.exists(id);
+
+        if(!exists) {
+            //404 Not Found
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // delete
+        articleService.delete(id);
+
+        //204 No Content
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 

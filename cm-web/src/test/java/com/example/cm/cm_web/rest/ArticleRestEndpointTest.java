@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +40,7 @@ public class ArticleRestEndpointTest {
     private Principal mockPrincipal;
     private ArticleService mockArticleService;
     private List<Article> articleList;
+    private Article mockArticle;
     private String mockUsername;
 
     private final String MIME_JSON = "application/json;charset=UTF-8";
@@ -47,6 +50,7 @@ public class ArticleRestEndpointTest {
     public void setUp() {
         mockPrincipal = Mockito.mock(Principal.class);
         mockUsername = "mockUser";
+        mockArticle = Mockito.mock(Article.class);
         mockArticleService = Mockito.mock(ArticleService.class);
         ArticleRestEndpoint endpoint = new ArticleRestEndpoint(mockArticleService);
         mockMvc = standaloneSetup(endpoint).build();
@@ -73,6 +77,8 @@ public class ArticleRestEndpointTest {
     public void articleListTest() throws Exception {
         int pageNumber = 1;
         int pageSize = 3;
+
+
         Page<Article> mockPage = new PageImpl<>(articleList);
 
         Mockito.when(mockPrincipal.getName()).thenReturn(mockUsername);
@@ -93,17 +99,28 @@ public class ArticleRestEndpointTest {
     }
 
     /*
-     * Return article details
+     * Return article details. Deny access if the principal and author
+     * are not identical
      **/
     @Test
     public void articleDetailTest() throws Exception {
 
         String uuid = UUID.randomUUID().toString();
+        Article someArticle = articleList.get(0);
+
 
         Mockito.when(mockArticleService.findOne(uuid))
-                .thenReturn(articleList.get(0));
+                .thenReturn(someArticle);
+
+        Mockito.when(mockArticle.getAuthor())
+                .thenReturn(someArticle.getAuthor());
+
+        Mockito.when(mockPrincipal.getName())
+                .thenReturn(someArticle.getAuthor());
+
 
         mockMvc.perform(get("/rest/articles/" + uuid + "/")
+                .principal(mockPrincipal)
                     .accept(MIME_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MIME_JSON))
@@ -151,7 +168,6 @@ public class ArticleRestEndpointTest {
         String jsonOut = gson.toJson(unsaved);
 
         mockMvc.perform(post("/rest/articles/")
-                .principal(mockPrincipal)
                 .accept(MIME_JSON)
                 .contentType(MIME_JSON)
                 .content(jsonOut))
@@ -196,6 +212,42 @@ public class ArticleRestEndpointTest {
     /**
      * Delete an existing Article
      */
+    @Test
+    public void deleteArticleTest() throws Exception {
+        Article saved = new Article("title30", "descritpion30", "keywords30", null);
+        String uuid = UUID.randomUUID().toString();
+        saved.setId(uuid);
+
+        Mockito.when(mockArticleService.exists(uuid))
+                .thenReturn(true);
+        Mockito.doNothing().when(mockArticleService).delete(saved.getId());
+
+        mockMvc.perform(delete("/rest/articles/" + uuid + "/")
+                .accept(MIME_JSON))
+                .andExpect(status().isNoContent())
+        ;
+
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).exists(uuid);
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).delete(uuid);
+    }
+
+    @Test
+    public void failingDeleteArticleTest() throws Exception {
+        Article saved = new Article("title30", "descritpion30", "keywords30", null);
+        String uuid = UUID.randomUUID().toString();
+        saved.setId(uuid);
+
+        Mockito.when(mockArticleService.exists(uuid))
+                .thenReturn(false);
+
+        mockMvc.perform(delete("/rest/articles/" + uuid + "/")
+                .accept(MIME_JSON))
+                .andExpect(status().isNotFound())
+        ;
+
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).exists(uuid);
+        Mockito.verify(mockArticleService, Mockito.never()).delete(uuid);
+    }
 
 
     /**

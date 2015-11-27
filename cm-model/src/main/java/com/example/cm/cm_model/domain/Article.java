@@ -1,5 +1,6 @@
 package com.example.cm.cm_model.domain;
 
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
@@ -9,7 +10,7 @@ import java.util.LinkedHashSet;
  * @author jvwong
  */
 
-@Document
+@Document(collection = "article")
 public class Article extends MongoAuditedEntity{
 
     private String title;

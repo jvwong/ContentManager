@@ -33,7 +33,7 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
         public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("*")
-                        .allowedMethods("GET", "HEAD", "POST", "GET", "OPTIONS")
+                        .allowedMethods("GET", "HEAD", "POST", "DELETE", "GET", "OPTIONS")
                         .exposedHeaders(
                                 "X-AUTH-TOKEN",
                                 "Content-Type",
