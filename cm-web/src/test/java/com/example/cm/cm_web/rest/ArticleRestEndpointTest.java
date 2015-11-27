@@ -263,6 +263,7 @@ public class ArticleRestEndpointTest {
         String uuid = UUID.randomUUID().toString();
         saved.setId(uuid);
 
+        JsonArray array = new JsonArray();
         JsonObject update = new JsonObject();
         String update_operation = "replace";
         String update_path = "/title";
@@ -270,19 +271,21 @@ public class ArticleRestEndpointTest {
         update.addProperty("op", update_operation);
         update.addProperty("path", update_path);
         update.addProperty("value", update_value);
+        array.add(update);
 
         JsonPatch patch
                 = new JsonPatch(update_operation,
                 new URI(update_path),
                 update_value);
+        List<JsonPatch> patches = Arrays.asList(patch);
 
         saved.setTitle(update_value);
         Gson gson = new Gson();
-        String jsonOut = gson.toJson(update);
+        String jsonOut = gson.toJson(array);
 
         Mockito.when(mockArticleService.exists(uuid))
                 .thenReturn(true);
-        Mockito.when(mockArticleService.update(saved.getId(), patch))
+        Mockito.when(mockArticleService.update(saved.getId(), patches))
                 .thenReturn(saved);
 
         mockMvc.perform(patch("/rest/articles/{id}/", uuid)
@@ -296,7 +299,7 @@ public class ArticleRestEndpointTest {
         ;
 
         Mockito.verify(mockArticleService, Mockito.atLeastOnce()).exists(uuid);
-        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).update(uuid, patch);
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).update(uuid, patches);
     }
 
 }

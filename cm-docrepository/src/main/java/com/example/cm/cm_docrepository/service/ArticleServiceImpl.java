@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -75,20 +76,37 @@ public class ArticleServiceImpl implements ArticleService {
     /**
      * Update the record with the given id if it exists
      * @param id the id for the article
+     * @param patches the List of JsonPatch updates
      * @return Article representation of updated {@link Article}
      */
-    public Article update(String id, JsonPatch patch){
+    public Article update(String id, List<JsonPatch> patches){
         Article article = articleRepository.findOne(id);
+        Class aClass = article.getClass();
 
-        String operation = patch.getOp();
-        switch (operation)
-        {
-            case "update":
-                logger.debug("update ", patch.toString());
-                break;
+        for(JsonPatch patch: patches){
+            String operation = patch.getOp();
+            String[] segments = patch.getPath().toString().substring(1).split("/");
+
+            switch (operation)
+            {
+                case "replace":
+                    for(String path: segments){
+                        try
+                        {
+                            Field field = aClass.getDeclaredField(path);
+                            field.setAccessible(true);
+                            field.set(article, patch.getValue());
+                        }
+                        catch (NoSuchFieldException | IllegalAccessException nfe)
+                        {
+                            // Do nothing
+                            logger.error("Error updating field " + path);
+                        }
+                    }
+                    break;
+            }
+
         }
-
-        articleRepository.save(article);
-        return article;
+        return articleRepository.save(article);
     }
 }

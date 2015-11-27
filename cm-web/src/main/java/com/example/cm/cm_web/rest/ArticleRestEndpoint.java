@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.security.Principal;
-import com.google.gson.JsonObject;
+import java.util.List;
 
 /**
  * @author jvwong
@@ -170,7 +170,7 @@ public class ArticleRestEndpoint {
             method=RequestMethod.PATCH)
     public ResponseEntity<Article> updateArticle(
             @PathVariable("id") String id,
-            @RequestBody JsonPatch patch)
+            @RequestBody List<JsonPatch> patches)
     {
 
         Boolean exists = articleService.exists(id);
@@ -181,7 +181,7 @@ public class ArticleRestEndpoint {
         }
 
         // partial update
-        Article updated = articleService.update(id, patch);
+        Article updated = articleService.update(id, patches);
 
         //204 No Content
         return new ResponseEntity<>(updated, HttpStatus.OK);

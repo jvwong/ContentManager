@@ -29,7 +29,7 @@ public interface ArticleService {
     void delete(String id);
 
     @Transactional(readOnly = false)
-    Article update(String id, JsonPatch patch);
+    Article update(String id, List<JsonPatch> patches);
 }
 
 
