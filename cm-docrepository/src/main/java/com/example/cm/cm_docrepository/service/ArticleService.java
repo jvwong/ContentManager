@@ -1,6 +1,7 @@
 package com.example.cm.cm_docrepository.service;
 
 import com.example.cm.cm_model.domain.Article;
+import com.example.cm.cm_model.domain.JsonPatch;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,9 @@ public interface ArticleService {
 
     @Transactional(readOnly = false)
     void delete(String id);
+
+    @Transactional(readOnly = false)
+    Article update(String id, JsonPatch patch);
 }
 
 

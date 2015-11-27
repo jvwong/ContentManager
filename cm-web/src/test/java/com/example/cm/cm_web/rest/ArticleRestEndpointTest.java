@@ -2,11 +2,11 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_docrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
-import com.google.gson.Gson;
+import com.example.cm.cm_model.domain.JsonPatch;
+import com.google.gson.*;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.URI;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,6 +25,7 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,6 +47,7 @@ public class ArticleRestEndpointTest {
 
     private final String MIME_JSON = "application/json;charset=UTF-8";
     private final String MIME_XML = "application/xml;";
+    private final String MIME_JSON_PATCH = "application/json-patch";
 
     @Before
     public void setUp() {
@@ -86,7 +89,7 @@ public class ArticleRestEndpointTest {
                         .getPagedListByAuthor(pageNumber, pageSize, mockUsername))
                         .thenReturn(mockPage);
 
-        mockMvc.perform(get("/rest/articles/?page=" + pageNumber + "&size=" + pageSize)
+        mockMvc.perform(get("/rest/articles/?page={pageNumber}&size={pageSize}", pageNumber, pageSize)
                 .principal(mockPrincipal))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MIME_JSON))
@@ -119,7 +122,7 @@ public class ArticleRestEndpointTest {
                 .thenReturn(someArticle.getAuthor());
 
 
-        mockMvc.perform(get("/rest/articles/" + uuid + "/")
+        mockMvc.perform(get("/rest/articles/{uuid}/", uuid)
                 .principal(mockPrincipal)
                     .accept(MIME_JSON))
                 .andExpect(status().isOk())
@@ -141,7 +144,7 @@ public class ArticleRestEndpointTest {
         Mockito.when(mockArticleService.findOne(uuid))
                 .thenReturn(null);
 
-        mockMvc.perform(get("/rest/articles/" + uuid + "/")
+        mockMvc.perform(get("/rest/articles/{uuid}/", uuid)
                 .accept(MIME_JSON))
                 .andExpect(status().isNotFound())
         ;
@@ -222,7 +225,7 @@ public class ArticleRestEndpointTest {
                 .thenReturn(true);
         Mockito.doNothing().when(mockArticleService).delete(saved.getId());
 
-        mockMvc.perform(delete("/rest/articles/" + uuid + "/")
+        mockMvc.perform(delete("/rest/articles/{uuid}/", uuid)
                 .accept(MIME_JSON))
                 .andExpect(status().isNoContent())
         ;
@@ -240,7 +243,7 @@ public class ArticleRestEndpointTest {
         Mockito.when(mockArticleService.exists(uuid))
                 .thenReturn(false);
 
-        mockMvc.perform(delete("/rest/articles/" + uuid + "/")
+        mockMvc.perform(delete("/rest/articles/{uuid}/", uuid)
                 .accept(MIME_JSON))
                 .andExpect(status().isNotFound())
         ;
@@ -251,6 +254,49 @@ public class ArticleRestEndpointTest {
 
 
     /**
-     * Modify an existing Article
+     * Modify an existing Article via PATCH. Follows JSON patch
+     * protocol specification (http://jsonpatch.com/)
      */
+    @Test
+    public void updateArticleTest() throws Exception {
+        Article saved = new Article("title30", "descritpion30", "keywords30", null);
+        String uuid = UUID.randomUUID().toString();
+        saved.setId(uuid);
+
+        JsonObject update = new JsonObject();
+        String update_operation = "replace";
+        String update_path = "/title";
+        String update_value = "updatedTitle";
+        update.addProperty("op", update_operation);
+        update.addProperty("path", update_path);
+        update.addProperty("value", update_value);
+
+        JsonPatch patch
+                = new JsonPatch(update_operation,
+                new URI(update_path),
+                update_value);
+
+        saved.setTitle(update_value);
+        Gson gson = new Gson();
+        String jsonOut = gson.toJson(update);
+
+        Mockito.when(mockArticleService.exists(uuid))
+                .thenReturn(true);
+        Mockito.when(mockArticleService.update(saved.getId(), patch))
+                .thenReturn(saved);
+
+        mockMvc.perform(patch("/rest/articles/{id}/", uuid)
+                    .accept(MIME_JSON)
+                    .contentType(MIME_JSON)
+                    .content(jsonOut))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MIME_JSON))
+                .andExpect(jsonPath("$.id", is(saved.getId())))
+                .andExpect(jsonPath("$.title", is(saved.getTitle())))
+        ;
+
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).exists(uuid);
+        Mockito.verify(mockArticleService, Mockito.atLeastOnce()).update(uuid, patch);
+    }
+
 }

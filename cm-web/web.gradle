@@ -58,7 +58,7 @@ dependencies {
     compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:$thymeleafSpringExtrasVersion"
 	compile "org.thymeleaf:thymeleaf-spring4:$thymeleafSpring4Version"
 
-    testCompile "com.google.code.gson:gson:$gsonVersion"
+
 
 	//Logging
     compile "org.slf4j:jcl-over-slf4j:$jclOverSlf4jVersion"

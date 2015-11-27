@@ -92,6 +92,9 @@ subprojects {
         compile "org.springframework.security:spring-security-core:$springSecurityVersion"
         compile "org.springframework.security:spring-security-config:$springSecurityVersion"
 
+        //compile
+        compile "com.google.code.gson:gson:$gsonVersion"
+
         //Testing
 		testCompile "junit:junit:$junitVersion"
         testCompile "junit:junit-dep:$junitVersion"

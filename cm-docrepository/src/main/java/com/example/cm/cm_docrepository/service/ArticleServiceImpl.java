@@ -2,6 +2,9 @@ package com.example.cm.cm_docrepository.service;
 
 import com.example.cm.cm_docrepository.repository.ArticleRepository;
 import com.example.cm.cm_model.domain.Article;
+import com.example.cm.cm_model.domain.JsonPatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,9 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author jvwong
@@ -20,6 +21,8 @@ import java.util.UUID;
 @Service
 @Transactional
 public class ArticleServiceImpl implements ArticleService {
+    private static final Logger logger
+            = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -67,5 +70,25 @@ public class ArticleServiceImpl implements ArticleService {
      */
     public void delete(String id){
         articleRepository.delete(id);
+    }
+
+    /**
+     * Update the record with the given id if it exists
+     * @param id the id for the article
+     * @return Article representation of updated {@link Article}
+     */
+    public Article update(String id, JsonPatch patch){
+        Article article = articleRepository.findOne(id);
+
+        String operation = patch.getOp();
+        switch (operation)
+        {
+            case "update":
+                logger.debug("update ", patch.toString());
+                break;
+        }
+
+        articleRepository.save(article);
+        return article;
     }
 }

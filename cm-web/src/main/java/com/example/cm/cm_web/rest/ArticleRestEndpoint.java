@@ -2,6 +2,7 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_docrepository.service.ArticleService;
 import com.example.cm.cm_model.domain.Article;
+import com.example.cm.cm_model.domain.JsonPatch;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.security.Principal;
-
+import com.google.gson.JsonObject;
 
 /**
  * @author jvwong
@@ -35,6 +36,9 @@ public class ArticleRestEndpoint {
 
     private final String DEFAULT_PAGE_AS_STRING = "0";
     private final String DEFAULT_SIZE_AS_STRING = "10";
+
+    private final String MIME_JSON_PATCH = "application/json-patch";
+    private final String MIME_JSON = "application/json;charset=UTF-8";
 
 
     @Inject
@@ -155,6 +159,32 @@ public class ArticleRestEndpoint {
         //204 No Content
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
+    }
+
+    /**
+     * Update an existing {@link Article} instance using the
+     * protocol laid out in (http://jsonpatch.com/)
+     */
+    @RequestMapping(
+            value="/{id}/",
+            method=RequestMethod.PATCH)
+    public ResponseEntity<Article> updateArticle(
+            @PathVariable("id") String id,
+            @RequestBody JsonPatch patch)
+    {
+
+        Boolean exists = articleService.exists(id);
+
+        if(!exists) {
+            //404 Not Found
+            throw new ResourceNotFoundException(Article.class.getName());
+        }
+
+        // partial update
+        Article updated = articleService.update(id, patch);
+
+        //204 No Content
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
 }
