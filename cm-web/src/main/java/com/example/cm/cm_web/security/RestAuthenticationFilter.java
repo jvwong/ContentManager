@@ -95,7 +95,7 @@ public class RestAuthenticationFilter extends GenericFilterBean {
 			// Allow subclasses to set the "details" property
 			SecurityContextHolder.getContext().setAuthentication(authResult);
 		} else {
-			logger.info("cmsUser is null");
+			//logger.info("cmsUser is null");
 		}
 		chain.doFilter(request, response);
 	}

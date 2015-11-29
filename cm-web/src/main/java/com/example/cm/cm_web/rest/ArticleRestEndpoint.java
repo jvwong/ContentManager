@@ -54,7 +54,11 @@ public class ArticleRestEndpoint {
     @RequestMapping(
             value="/",
             method=RequestMethod.OPTIONS)
-    public ResponseEntity<String> getOptions(HttpServletResponse httpResponse)
+    public ResponseEntity<String> getOptions(
+            HttpServletResponse httpResponse,
+            @RequestParam(
+                    name="page",
+                    required=false) String page)
     {
         httpResponse.setHeader("Allow", "GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH");
         return new ResponseEntity<>(HttpStatus.OK);
@@ -70,7 +74,7 @@ public class ArticleRestEndpoint {
     public Page<Article> articleList(
             Principal principal,
             @RequestParam(value="page", defaultValue="1") Integer pageNumber,
-            @RequestParam(value="size", defaultValue="10") Integer pageSize)
+            @RequestParam(value="size", defaultValue="5") Integer pageSize)
     {
         return articleService.getPagedListByAuthor(pageNumber, pageSize, principal.getName());
     }

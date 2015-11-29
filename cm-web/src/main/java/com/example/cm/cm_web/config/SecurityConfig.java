@@ -101,7 +101,7 @@ public class SecurityConfig {
 					.regexMatchers(HttpMethod.POST, "\\A/services/rest/users/\\z")
 						.permitAll()
 
-					.regexMatchers(HttpMethod.OPTIONS, "\\A/services/rest/articles/\\z")
+					.regexMatchers(HttpMethod.OPTIONS, "\\A/services/rest/articles/.*")
 						.permitAll()
 
 					.antMatchers("/services/rest/**")
