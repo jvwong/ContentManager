@@ -97,12 +97,10 @@ public class CMSUser extends DateAuditedEntity{
 		this.password = password;
 	}
 
-	@JsonIgnore
 	public String getEmail() {
 		return email;
 	}
 
-	@JsonProperty
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -121,6 +119,7 @@ public class CMSUser extends DateAuditedEntity{
 	public String toString() {
 		return "[CMSUser: id=" + this.getId()
 				+ ", createdDate=" + this.getCreatedDate()
+				+ ", lastModifiedDate=" + this.getLastModifiedDate()
 				+ ", password=" + this.password
 				+ ", fullName=" + this.fullName
 				+ ", role=" + this.role

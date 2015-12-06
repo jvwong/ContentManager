@@ -1,8 +1,11 @@
 package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
+import com.example.cm.cm_model.domain.JsonPatch;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -136,28 +140,72 @@ public class CMSUserRestEndpointTest {
         Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).save(org.mockito.Matchers.any(CMSUser.class));
     }
 
-//    /*
-//     * Attempt to save a duplicate user
-//     **/
-//    @Test
-//    public void saveDuplicateUserTest() throws Exception {
-//
-//        Mockito.when(mockPasswordEncoder.encode(org.mockito.Matchers.anyString()))
-//                .thenReturn(mockUser.getPassword());
-//        Mockito.when(mockCmsUserService.save(org.mockito.Matchers.any(CMSUser.class)))
-//                .thenThrow(new DataIntegrityViolationException(CMSUser.class.toString()));
-//
-//        Gson gson = new Gson();
-//        String jsonOut = gson.toJson(mockUser);
-//
-//        mockMvc.perform(post("/rest/users/")
-//                .contentType(MIME_JSON)
-//                .content(jsonOut))
-//                .andExpect(status().isConflict())
-//        ;
-//
-//        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).save(org.mockito.Matchers.any(CMSUser.class));
-//
-//    }
+
+    /**
+     * Delete an existing CMSUser
+     */
+    @Test
+    public void deleteCmsUserTest() throws Exception {
+
+        Mockito.when(mockCmsUserService.exists(mockUser.getUsername()))
+                .thenReturn(true);
+        Mockito.doNothing().when(mockCmsUserService).delete(mockUser.getUsername());
+
+        mockMvc.perform(delete("/rest/users/{username}/", mockUser.getUsername())
+                .accept(MIME_JSON))
+                .andExpect(status().isNoContent())
+        ;
+
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).exists(mockUser.getUsername());
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).delete(mockUser.getUsername());
+    }
+
+
+    /**
+     * Modify an existing CMSUser via PATCH. Follows JSON patch
+     * protocol specification (http://jsonpatch.com/)
+     */
+    @Test
+    public void updateCMSUserTest() throws Exception {
+
+        JsonArray array = new JsonArray();
+        JsonObject update = new JsonObject();
+        String update_operation = "replace";
+        String update_path = "/email";
+        String update_value = "updatedEmail@example.org";
+        update.addProperty("op", update_operation);
+        update.addProperty("path", update_path);
+        update.addProperty("value", update_value);
+        array.add(update);
+
+        JsonPatch patch
+                = new JsonPatch(update_operation,
+                new URI(update_path),
+                update_value);
+        List<JsonPatch> patches = Arrays.asList(patch);
+
+        mockUser.setEmail(update_value);
+        Gson gson = new Gson();
+        String jsonOut = gson.toJson(array);
+
+        Mockito.when(mockCmsUserService.exists(mockUser.getUsername()))
+                .thenReturn(true);
+        Mockito.when(mockCmsUserService.update(mockUser.getUsername(), patches))
+                .thenReturn(mockUser);
+
+        mockMvc.perform(patch("/rest/users/{username}/", mockUser.getUsername())
+                .accept(MIME_JSON)
+                .contentType(MIME_JSON)
+                .content(jsonOut))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MIME_JSON))
+                .andExpect(jsonPath("$.username", is(mockUser.getUsername())))
+                .andExpect(jsonPath("$.fullName", is(mockUser.getFullName())))
+        ;
+
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).exists(mockUser.getUsername());
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).update(mockUser.getUsername(), patches);
+    }
+
 
 }

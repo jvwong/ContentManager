@@ -96,7 +96,7 @@ public class SecurityConfig {
 					.regexMatchers("\\A/services/rest/auth/\\z")
 						.permitAll()
 
-					.regexMatchers(HttpMethod.OPTIONS, "\\A/services/rest/users/\\z")
+					.regexMatchers(HttpMethod.OPTIONS, "\\A/services/rest/users/.*")
 						.permitAll()
 					.regexMatchers(HttpMethod.POST, "\\A/services/rest/users/\\z")
 						.permitAll()

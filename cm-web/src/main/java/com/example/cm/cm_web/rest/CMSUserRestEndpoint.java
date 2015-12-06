@@ -1,6 +1,7 @@
 package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
+import com.example.cm.cm_model.domain.JsonPatch;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
@@ -19,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 
 @RestEndpoint
@@ -114,4 +116,58 @@ public class CMSUserRestEndpoint {
 			throw new ResourceConflictException(CMSUser.class.toString());
 		}
 	}
+
+	/**
+	 * Delete an existing {@link CMSUser} instance
+	 */
+	@RequestMapping(
+			value="/{username}/",
+			method=RequestMethod.DELETE)
+	public ResponseEntity<String> deleteCMSUser(
+			@PathVariable("username") String username)
+	{
+		Boolean exists = cmsUserService.exists(username);
+
+		if(!exists) {
+			//404 Not Found
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		// delete
+		cmsUserService.delete(username);
+
+		//204 No Content
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+	}
+
+
+	/**
+	 * Update an existing {@link CMSUser} instance using the
+	 * protocol laid out in (http://jsonpatch.com/)
+	 */
+	@RequestMapping(
+			value="/{username}/",
+			method=RequestMethod.PATCH)
+	public ResponseEntity<CMSUser> updateCMSUser(
+			@PathVariable("username") String username,
+			@RequestBody List<JsonPatch> patches)
+	{
+
+		Boolean exists = cmsUserService.exists(username);
+
+		if(!exists) {
+			//404 Not Found
+			throw new ResourceNotFoundException(CMSUser.class.getName());
+		}
+
+		// partial update
+		CMSUser updated = cmsUserService.update(username, patches);
+
+		//204 No Content
+		return new ResponseEntity<>(updated, HttpStatus.OK);
+	}
+
+
+
 }

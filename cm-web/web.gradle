@@ -29,7 +29,7 @@ task deployToLocalTomcat << {
             property(name: 'cargo.tomcat.context.reloadable', value: 'true')
             deployable(type: 'war', file: "${buildDir}/libs/${project.name}-${project.version}.war")
         }
-        zipUrlInstaller(installUrl: 'http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.9/bin/apache-tomcat-8.0.9.zip')
+        zipUrlInstaller(installUrl: 'http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.11/bin/apache-tomcat-8.0.11.zip')
     }
 }
 ext.cargoGroup = 'org.codehaus.cargo'
