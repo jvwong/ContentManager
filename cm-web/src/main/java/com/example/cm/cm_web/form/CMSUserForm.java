@@ -72,6 +72,7 @@ public class CMSUserForm {
         this.passwordConfirm = passwordConfirm;
     }
 
+    @NotNull
     @AssertTrue(message="Passwords should match")
     private boolean isValid() {
         return this.password.equals(this.passwordConfirm);

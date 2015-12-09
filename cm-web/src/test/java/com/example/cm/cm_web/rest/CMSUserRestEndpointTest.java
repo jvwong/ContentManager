@@ -142,7 +142,7 @@ public class CMSUserRestEndpointTest {
                 .param("fullName", "First Last")
                 .param("username", "someUsername")
                 .param("password", "somePassword")
-                .param("passwordConfirm", "somePasswordConfirm")
+                .param("passwordConfirm", "somePassword")
                 .param("email", "some@email.org")
                 .contentType("multipart/form-data")
                 .accept(MIME_JSON))

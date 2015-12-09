@@ -57,4 +57,11 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
+	@ExceptionHandler(UnprocessableEntityException.class)
+	public ResponseEntity<Error> unprocessableEntity(UnprocessableEntityException e) {
+		Error error = new Error(e.getMessage(), e.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+
+
 }

@@ -6,6 +6,7 @@ import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
+import com.example.cm.cm_web.exceptions.UnprocessableEntityException;
 import com.example.cm.cm_web.form.CMSUserForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +18,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -137,7 +138,7 @@ public class CMSUserRestEndpoint {
 
 	/**
 	 * Create a User instance
-	 * @param cmsUser The user instance to create
+	 * @param cmsUserForm The user instance to create
 	 * @param ucb The uri component builder to return
 	 * @return ResponseEntity<CMSUser>
 	 */
@@ -146,12 +147,17 @@ public class CMSUserRestEndpoint {
 			method=RequestMethod.POST
 	)
 	public ResponseEntity<CMSUser> saveCMSUser(
-			CMSUserForm cmsUserForm,
+			@Valid CMSUserForm cmsUserForm,
 			Errors errors,
 			UriComponentsBuilder ucb){
 
 		if(errors.hasErrors()){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			logger.error("CMSUserForm Errors");
+			logger.error(errors.toString());
+
+			throw new UnprocessableEntityException(
+					errors.getFieldErrors().toString(),
+					CMSUserForm.class.getName());
 		}
 
 		if(cmsUserForm != null){
