@@ -144,7 +144,6 @@ public class CMSUserRestEndpoint {
 						cmsUserForm.getImage().getOriginalFilename();
 				File file = new File(destination);
 				boolean exists = file.getParentFile().mkdir();
-
 				if(exists)
 				{
 					cmsUserForm
