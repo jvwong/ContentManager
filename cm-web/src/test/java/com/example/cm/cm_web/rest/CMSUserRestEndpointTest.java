@@ -134,17 +134,12 @@ public class CMSUserRestEndpointTest {
         MultipartFile mockPartfile = Mockito.mock(MultipartFile.class);
 
         File mockioFile = Mockito.mock(File.class);
-        Mockito.when(mockioFile.mkdir()).thenReturn(true);
+        Mockito.when(mockioFile.mkdir()).thenReturn(false);
         Mockito.doNothing()
                 .when(mockPartfile).transferTo(org.mockito.Matchers.any(File.class));
 
-
         FileInputStream fis
                 = new FileInputStream("/home/jeffrey/Projects/ContentManager/cm-web/src/test/resources/images/user_male.png");
-        //MockMultipartFile(String name,
-        //                  String originalFilename,
-        //                  String contentType,
-        //                  byte[] content)
         MockMultipartFile mockFile
                 = new MockMultipartFile("image", "icon.png", "image/png", fis);
 
