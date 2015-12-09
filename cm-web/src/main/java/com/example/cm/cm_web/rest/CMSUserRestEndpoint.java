@@ -6,6 +6,9 @@ import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
+import com.example.cm.cm_web.form.CMSUserForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +31,9 @@ import java.util.List;
 @RestEndpoint
 @RequestMapping(value="/rest/users")
 public class CMSUserRestEndpoint {
+	private static final Logger logger
+			= LoggerFactory.getLogger(CMSUserRestEndpoint.class);
+
 	private CMSUserService cmsUserService;
 	private PasswordEncoder passwordEncoder;
 
@@ -72,6 +80,61 @@ public class CMSUserRestEndpoint {
 		return cmsUser;
 	}
 
+//	/**
+//	 * Create a User instance
+//	 * @param cmsUser The user instance to create
+//	 * @param ucb The uri component builder to return
+//	 * @return ResponseEntity<CMSUser>
+//	 */
+//	@RequestMapping(
+//			value="/",
+//			method=RequestMethod.POST
+//	)
+//	public ResponseEntity<CMSUser> saveCMSUser(
+//			@RequestPart(name="image", required=false) MultipartFile image,
+//			CMSUser cmsUser,
+//			Errors errors,
+//			UriComponentsBuilder ucb){
+//
+//		if(errors.hasErrors()){
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//
+//		if(image != null){
+//			logger.info(image.getName());
+//			logger.info(image.getOriginalFilename());
+//			logger.info(image.getContentType());
+//		}
+//		if(cmsUser != null){
+//			logger.info(cmsUser.toString());
+//		}
+//
+//		try{
+//
+//			HttpHeaders headers = new HttpHeaders();
+//
+//			// NullPointerException
+//			cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
+//
+//			// DataIntegrityViolationException
+//			CMSUser CMSUserSaved = cmsUserService.save(cmsUser);
+//
+//			URI locationUri =
+//					ucb.path("/services/rest/users/")
+//							.path(String.valueOf(CMSUserSaved.getId()))
+//							.build()
+//							.toUri();
+//			headers.setLocation(locationUri);
+//			return new ResponseEntity<>(CMSUserSaved, headers, HttpStatus.CREATED);
+//
+//		} catch (NullPointerException npe) {
+//			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+//
+//		} catch (DataIntegrityViolationException dee) {
+//			throw new ResourceConflictException(CMSUser.class.toString());
+//		}
+//	}
+
 	/**
 	 * Create a User instance
 	 * @param cmsUser The user instance to create
@@ -83,7 +146,7 @@ public class CMSUserRestEndpoint {
 			method=RequestMethod.POST
 	)
 	public ResponseEntity<CMSUser> saveCMSUser(
-			@Valid @RequestBody CMSUser cmsUser,
+			CMSUserForm cmsUserForm,
 			Errors errors,
 			UriComponentsBuilder ucb){
 
@@ -91,21 +154,31 @@ public class CMSUserRestEndpoint {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
+		if(cmsUserForm != null){
+			logger.info(cmsUserForm.toString());
+			if(cmsUserForm.getImage() != null){
+				logger.info("name: " +cmsUserForm.getImage().getName());
+				logger.info("Original name: " +cmsUserForm.getImage().getOriginalFilename());
+				logger.info("size: " + String.valueOf(cmsUserForm.getImage().getSize()));
+			}
+		}
+
 		try{
 
 			HttpHeaders headers = new HttpHeaders();
 
 			// NullPointerException
-			cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
+			CMSUser cmsUser = cmsUserForm.toCMSUser();
+			cmsUser.setPassword(passwordEncoder.encode(cmsUserForm.getPassword()));
 
 			// DataIntegrityViolationException
 			CMSUser CMSUserSaved = cmsUserService.save(cmsUser);
 
 			URI locationUri =
 					ucb.path("/services/rest/users/")
-					   .path(String.valueOf(CMSUserSaved.getId()))
-					   .build()
-					   .toUri();
+							.path(String.valueOf(CMSUserSaved.getId()))
+							.build()
+							.toUri();
 			headers.setLocation(locationUri);
 			return new ResponseEntity<>(CMSUserSaved, headers, HttpStatus.CREATED);
 

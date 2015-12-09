@@ -35,7 +35,7 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.setMultipartConfig(
 		 		new MultipartConfigElement(
-		 				"/home/jeffrey/Projects/ContentManager/uploads",
+                        "/home/jeffrey/Projects/ContentManager/uploads",
 		 				2097152, // max size (bytes) file
 		 				4194304, // max size (bytes) total request
 		 				0));
@@ -53,6 +53,12 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher = servletContext.addServlet(
              "cmRestDispatcher", servlet
         );
+        dispatcher.setMultipartConfig(
+                new MultipartConfigElement(
+                        "/home/jeffrey/Projects/ContentManager/uploads",
+                        2097152, // max size (bytes) file
+                        4194304, // max size (bytes) total request
+                        0));
         dispatcher.setLoadOnStartup(2);
         dispatcher.addMapping("/services/*");
 		

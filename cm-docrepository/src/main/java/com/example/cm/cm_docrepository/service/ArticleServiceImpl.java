@@ -43,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService {
             Integer pageSize,
             String author) {
         PageRequest pageRequest =
-                new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
+                new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "lastModifiedDate");
         return articleRepository.findByAuthor(author, pageRequest);
     }
 

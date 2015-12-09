@@ -9,17 +9,19 @@ import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.FileInputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -123,15 +125,27 @@ public class CMSUserRestEndpointTest {
 
         Mockito.when(mockPasswordEncoder.encode(org.mockito.Matchers.anyString()))
                 .thenReturn(mockUser.getPassword());
-        Mockito.when(mockCmsUserService.save(org.mockito.Matchers.any(CMSUser.class))).thenReturn(mockUser);
+        Mockito.when(mockCmsUserService.save(org.mockito.Matchers.any(CMSUser.class)))
+                .thenReturn(mockUser);
 
-        Gson gson = new Gson();
-        String jsonOut = gson.toJson(mockUser);
+        FileInputStream fis
+                = new FileInputStream("/home/jeffrey/Projects/ContentManager/cm-web/src/test/resources/images/user_male.png");
+        //MockMultipartFile(String name,
+        //                  String originalFilename,
+        //                  String contentType,
+        //                  byte[] content)
+        MockMultipartFile mockFile
+                = new MockMultipartFile("image", "icon.png", "image/png", fis);
 
-        mockMvc.perform(post("/rest/users/")
-                .contentType(MIME_JSON)
-                .content(jsonOut))
-
+        mockMvc.perform(fileUpload("/rest/users/")
+                .file(mockFile)
+                .param("fullName", "First Last")
+                .param("username", "someUsername")
+                .param("password", "somePassword")
+                .param("passwordConfirm", "somePasswordConfirm")
+                .param("email", "some@email.org")
+                .contentType("multipart/form-data")
+                .accept(MIME_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MIME_JSON))
                 .andExpect(header().string("location", containsString("/services/rest/users/")))
