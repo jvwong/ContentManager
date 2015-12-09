@@ -3,6 +3,7 @@ package com.example.cm.cm_web.rest;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
 import com.example.cm.cm_repository.service.CMSUserService;
+import com.example.cm.cm_web.form.CMSUserForm;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -15,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
 import java.util.Arrays;
@@ -127,6 +130,14 @@ public class CMSUserRestEndpointTest {
                 .thenReturn(mockUser.getPassword());
         Mockito.when(mockCmsUserService.save(org.mockito.Matchers.any(CMSUser.class)))
                 .thenReturn(mockUser);
+
+        MultipartFile mockPartfile = Mockito.mock(MultipartFile.class);
+
+        File mockioFile = Mockito.mock(File.class);
+        Mockito.when(mockioFile.mkdir()).thenReturn(true);
+        Mockito.doNothing()
+                .when(mockPartfile).transferTo(org.mockito.Matchers.any(File.class));
+
 
         FileInputStream fis
                 = new FileInputStream("/home/jeffrey/Projects/ContentManager/cm-web/src/test/resources/images/user_male.png");

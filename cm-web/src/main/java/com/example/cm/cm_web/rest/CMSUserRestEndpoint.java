@@ -15,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
@@ -24,6 +25,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -108,15 +111,6 @@ public class CMSUserRestEndpoint {
 					CMSUserForm.class.getName());
 		}
 
-		if(cmsUserForm != null){
-			logger.info(cmsUserForm.toString());
-			if(cmsUserForm.getImage() != null){
-				logger.info("name: " +cmsUserForm.getImage().getName());
-				logger.info("Original name: " +cmsUserForm.getImage().getOriginalFilename());
-				logger.info("size: " + String.valueOf(cmsUserForm.getImage().getSize()));
-			}
-		}
-
 		try{
 
 			HttpHeaders headers = new HttpHeaders();
@@ -128,6 +122,37 @@ public class CMSUserRestEndpoint {
 			// DataIntegrityViolationException
 			CMSUser CMSUserSaved = cmsUserService.save(cmsUser);
 
+			if(cmsUserForm.getImage() != null){
+//				logger.info("name: " + cmsUserForm.getImage().getName());
+//				logger.info("Original name: " + cmsUserForm.getImage().getOriginalFilename());
+//				logger.info("size: " + String.valueOf(cmsUserForm.getImage().getSize()));
+
+				// Do some type checking
+				if( !cmsUserForm.getImage().getContentType()
+						.equalsIgnoreCase(MediaType.IMAGE_JPEG_VALUE) &&
+					!cmsUserForm.getImage().getContentType()
+							.equalsIgnoreCase(MediaType.IMAGE_PNG_VALUE))
+				{
+					throw new UnprocessableEntityException(
+							"Invalid file type",
+							CMSUserForm.class.getName());
+				}
+
+				String destination
+						= "/home/jeffrey/Projects/ContentManager/uploads/" +
+						CMSUserSaved.getUsername() + "/" +
+						cmsUserForm.getImage().getOriginalFilename();
+				File file = new File(destination);
+				boolean exists = file.getParentFile().mkdirs();
+
+				if(exists)
+				{
+					cmsUserForm
+							.getImage()
+							.transferTo(file);
+				}
+			}
+
 			URI locationUri =
 					ucb.path("/services/rest/users/")
 							.path(String.valueOf(CMSUserSaved.getId()))
@@ -137,6 +162,10 @@ public class CMSUserRestEndpoint {
 			return new ResponseEntity<>(CMSUserSaved, headers, HttpStatus.CREATED);
 
 		} catch (NullPointerException npe) {
+			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+
+		} catch (IOException ioe) {
+			logger.error("IOE: ", ioe);
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 
 		} catch (DataIntegrityViolationException dee) {

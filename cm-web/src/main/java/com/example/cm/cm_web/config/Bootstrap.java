@@ -35,10 +35,10 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.setMultipartConfig(
 		 		new MultipartConfigElement(
-                        "/home/jeffrey/Projects/ContentManager/uploads",
-		 				2097152, // max size (bytes) file
-		 				4194304, // max size (bytes) total request
-		 				0));
+                        "/home/jeffrey/Projects/ContentManager/uploads", // temp location
+		 				2097152,    // max size (bytes) file
+		 				4194304,    // max size (bytes) total request
+		 				0));        // size threshold after which files will be written to disk
         dispatcher.addMapping("/");
 
         /*
@@ -56,10 +56,10 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(2);
         dispatcher.setMultipartConfig(
                 new MultipartConfigElement(
-                        "/home/jeffrey/Projects/ContentManager/uploads",
+                        "/home/jeffrey/Projects/ContentManager/uploads", // temp location
                         2097152, // max size (bytes) file
                         4194304, // max size (bytes) total request
-                        0));
+                        0)); // size threshold after which files will be written to disk
         dispatcher.addMapping("/services/*");
 		
         // Activate the profile

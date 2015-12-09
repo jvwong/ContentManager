@@ -1,6 +1,7 @@
 logs/
 build/
 bin/
+uploads/
 .classpath
 .project
 .settings
