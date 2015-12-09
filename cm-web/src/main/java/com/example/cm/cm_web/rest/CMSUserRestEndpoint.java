@@ -25,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -81,61 +80,6 @@ public class CMSUserRestEndpoint {
 		return cmsUser;
 	}
 
-//	/**
-//	 * Create a User instance
-//	 * @param cmsUser The user instance to create
-//	 * @param ucb The uri component builder to return
-//	 * @return ResponseEntity<CMSUser>
-//	 */
-//	@RequestMapping(
-//			value="/",
-//			method=RequestMethod.POST
-//	)
-//	public ResponseEntity<CMSUser> saveCMSUser(
-//			@RequestPart(name="image", required=false) MultipartFile image,
-//			CMSUser cmsUser,
-//			Errors errors,
-//			UriComponentsBuilder ucb){
-//
-//		if(errors.hasErrors()){
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//
-//		if(image != null){
-//			logger.info(image.getName());
-//			logger.info(image.getOriginalFilename());
-//			logger.info(image.getContentType());
-//		}
-//		if(cmsUser != null){
-//			logger.info(cmsUser.toString());
-//		}
-//
-//		try{
-//
-//			HttpHeaders headers = new HttpHeaders();
-//
-//			// NullPointerException
-//			cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
-//
-//			// DataIntegrityViolationException
-//			CMSUser CMSUserSaved = cmsUserService.save(cmsUser);
-//
-//			URI locationUri =
-//					ucb.path("/services/rest/users/")
-//							.path(String.valueOf(CMSUserSaved.getId()))
-//							.build()
-//							.toUri();
-//			headers.setLocation(locationUri);
-//			return new ResponseEntity<>(CMSUserSaved, headers, HttpStatus.CREATED);
-//
-//		} catch (NullPointerException npe) {
-//			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-//
-//		} catch (DataIntegrityViolationException dee) {
-//			throw new ResourceConflictException(CMSUser.class.toString());
-//		}
-//	}
-
 	/**
 	 * Create a User instance
 	 * @param cmsUserForm The user instance to create
@@ -153,7 +97,11 @@ public class CMSUserRestEndpoint {
 
 		if(errors.hasErrors()){
 			logger.error("CMSUserForm Errors");
-			logger.error(errors.toString());
+			for(FieldError error: errors.getFieldErrors())
+			{
+				logger.error(error.getField());
+				logger.error(error.getDefaultMessage());
+			}
 
 			throw new UnprocessableEntityException(
 					errors.getFieldErrors().toString(),
