@@ -51,7 +51,7 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(2);
         dispatcher.setMultipartConfig(
                 new MultipartConfigElement(
-                        "/var/www/tomcat/uploads", // temp location
+                        "/var/www/tomcat/temp", // temp location
                         2097152, // max size (bytes) file
                         4194304, // max size (bytes) total request
                         0)); // size threshold after which files will be written to disk
