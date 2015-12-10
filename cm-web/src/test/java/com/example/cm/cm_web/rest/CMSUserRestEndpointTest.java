@@ -140,6 +140,7 @@ public class CMSUserRestEndpointTest {
 
         FileInputStream fis
                 = new FileInputStream("/home/jeffrey/Projects/ContentManager/cm-web/src/test/resources/images/user_male.png");
+
         MockMultipartFile mockFile
                 = new MockMultipartFile("image", "icon.png", "image/png", fis);
 

@@ -6,6 +6,8 @@ import com.example.cm.cm_web.config.annotation.RestEndpointAdvice;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -24,6 +26,7 @@ import java.io.IOException;
         	RestEndpoint.class,
         	RestEndpointAdvice.class})
 )
+@PropertySource("classpath:rest.properties")
 public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
 
         @Bean
@@ -31,6 +34,12 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
                 Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
                 marshaller.setClassesToBeBound(Article.class);
                 return marshaller;
+        }
+
+        // application.properties bean
+        @Bean
+        public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+                return new PropertySourcesPlaceholderConfigurer();
         }
 
         @Override

@@ -11,6 +11,8 @@ import com.example.cm.cm_web.form.CMSUserForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +38,13 @@ import java.util.List;
 public class CMSUserRestEndpoint {
 	private static final Logger logger
 			= LoggerFactory.getLogger(CMSUserRestEndpoint.class);
+
+	@Value( "${image.directory}" )
+	private String imageDirectory;
+
+	@Autowired
+	private ApplicationContext appContext;
+
 
 	private CMSUserService cmsUserService;
 	private PasswordEncoder passwordEncoder;
@@ -138,12 +147,11 @@ public class CMSUserRestEndpoint {
 							CMSUserForm.class.getName());
 				}
 
-				String destination
-						= "/home/jeffrey/Projects/ContentManager/uploads/" +
-						CMSUserSaved.getUsername() + "/" +
-						cmsUserForm.getImage().getOriginalFilename();
-				File file = new File(destination);
-				boolean exists = file.getParentFile().mkdir();
+				// Note: This must create a directory in accordance with the
+				// directory set in Bootstrap --> MultipartConfigElement
+				String destination = CMSUserSaved.getUsername() + "/" + cmsUserForm.getImage().getOriginalFilename();
+				File file = new File(imageDirectory, destination);
+				boolean exists = file.getParentFile().mkdirs();
 				if(exists)
 				{
 					cmsUserForm

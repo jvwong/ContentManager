@@ -9,6 +9,7 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import java.util.ResourceBundle;
 
 public class Bootstrap implements WebApplicationInitializer {
 
@@ -33,12 +34,6 @@ public class Bootstrap implements WebApplicationInitializer {
                 "cmWebDispatcher", new DispatcherServlet(webContext)
         );
         dispatcher.setLoadOnStartup(1);
-        dispatcher.setMultipartConfig(
-		 		new MultipartConfigElement(
-                        "/home/jeffrey/Projects/ContentManager/uploads", // temp location
-		 				2097152,    // max size (bytes) file
-		 				4194304,    // max size (bytes) total request
-		 				0));        // size threshold after which files will be written to disk
         dispatcher.addMapping("/");
 
         /*
@@ -56,7 +51,7 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(2);
         dispatcher.setMultipartConfig(
                 new MultipartConfigElement(
-                        "/home/jeffrey/Projects/ContentManager/uploads", // temp location
+                        "/var/www/tomcat/uploads", // temp location
                         2097152, // max size (bytes) file
                         4194304, // max size (bytes) total request
                         0)); // size threshold after which files will be written to disk
