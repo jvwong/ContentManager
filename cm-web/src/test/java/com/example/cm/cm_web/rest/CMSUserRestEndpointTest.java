@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,7 +22,6 @@ import java.io.FileInputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -40,6 +38,7 @@ public class CMSUserRestEndpointTest {
 
     private MockMvc mockMvc;
     private CMSUser mockUser;
+    private CMSUserForm mockUserForm;
     private CMSUserService mockCmsUserService;
     private PasswordEncoder mockPasswordEncoder;
     private List<CMSUser> cmsUserList;
@@ -49,6 +48,8 @@ public class CMSUserRestEndpointTest {
     public void setUp() {
         mockPasswordEncoder = Mockito.mock(PasswordEncoder.class);
         mockCmsUserService = Mockito.mock(CMSUserService.class);
+        mockUserForm = Mockito.mock(CMSUserForm.class);
+
         id = 24L;
 
         CMSUserRestEndpoint endpoint = new CMSUserRestEndpoint(
@@ -132,17 +133,15 @@ public class CMSUserRestEndpointTest {
                 .thenReturn(mockUser);
 
         MultipartFile mockPartfile = Mockito.mock(MultipartFile.class);
+        Mockito.when(mockUserForm.getImage()).thenReturn(null);
 
         File mockioFile = Mockito.mock(File.class);
         Mockito.when(mockioFile.mkdir()).thenReturn(false);
         Mockito.doNothing()
                 .when(mockPartfile).transferTo(org.mockito.Matchers.any(File.class));
 
-        FileInputStream fis
-                = new FileInputStream("/home/jeffrey/Projects/ContentManager/cm-web/src/test/resources/images/user_male.png");
-
         MockMultipartFile mockFile
-                = new MockMultipartFile("image", "icon.png", "image/png", fis);
+                = new MockMultipartFile("image", "icon.png", "image/png", "".getBytes());
 
         mockMvc.perform(fileUpload("/rest/users/")
                 .file(mockFile)
