@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aws-context="http://www.springframework.org/schema/cloud/aws/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/cloud/aws/context
+        http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.0.xsd">
+
+    <context:property-placeholder location="classpath:rest.properties"/>
+    <aws-context:context-credentials>
+        <aws-context:simple-credentials
+                access-key="${id.amazons3}"
+                secret-key="${secret.amazons3}" />
+    </aws-context:context-credentials>
+    <aws-context:context-region region="us-west-2"/>
+    <aws-context:context-resource-loader/>
+</beans>

@@ -48,6 +48,9 @@ dependencies {
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-tx:$springVersion"
 
+    //Spring AWS cloud
+    compile "org.springframework.cloud:spring-cloud-aws-context:$springCloudAwsContextVersion"
+
     // Spring Security
     compile "org.springframework.security:spring-security-web:$springSecurityVersion"
 

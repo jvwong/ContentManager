@@ -1,9 +1,13 @@
 package com.example.cm.cm_web.rest;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.transfer.TransferManager;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
+import com.example.cm.cm_web.exceptions.ImageUploadException;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
 import com.example.cm.cm_web.exceptions.UnprocessableEntityException;
@@ -13,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.WritableResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -23,12 +30,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.List;
 
@@ -39,12 +48,11 @@ public class CMSUserRestEndpoint {
 	private static final Logger logger
 			= LoggerFactory.getLogger(CMSUserRestEndpoint.class);
 
+	@Autowired
+	private AmazonS3 amazonS3;
+
 	@Value( "${image.directory}" )
 	private String imageDirectory;
-
-	@Autowired
-	private ApplicationContext appContext;
-
 
 	private CMSUserService cmsUserService;
 	private PasswordEncoder passwordEncoder;
@@ -154,6 +162,7 @@ public class CMSUserRestEndpoint {
 				boolean exists = file.getParentFile().mkdirs();
 				if(exists)
 				{
+					withTransferManager();
 					cmsUserForm
 							.getImage()
 							.transferTo(file);
@@ -232,5 +241,9 @@ public class CMSUserRestEndpoint {
 	}
 
 
+	public void withTransferManager() {
+		TransferManager transferManager = new TransferManager(this.amazonS3);
+		transferManager.upload("beantack-media", "raptor.png", new File("/home/jeffrey/Projects/ContentManager/uploads/raptors.png"));
+	}
 
 }

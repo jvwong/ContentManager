@@ -63,5 +63,11 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
+	@ExceptionHandler(ImageUploadException.class)
+	public ResponseEntity<Error> imageUploadError(ImageUploadException e) {
+		Error error = new Error(e.getMessage(), e.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+
 
 }
