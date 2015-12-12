@@ -3,9 +3,8 @@ package com.example.cm.cm_repository.config;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -28,6 +27,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 		entityManagerFactoryRef = "entityManagerFactory",
 		transactionManagerRef = "transactionManager")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
+@ImportResource("classpath:awscloud-config.xml")
+@PropertySource("classpath:repo.properties")
 public class DataConfig {
 
 	@Bean
@@ -90,6 +91,12 @@ public class DataConfig {
 	@Bean
 	public JpaTransactionManager transactionManager() {
 		return new JpaTransactionManager(); 
+	}
+
+	// application.properties bean
+	@Bean
+	public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+		return new PropertySourcesPlaceholderConfigurer();
 	}
 }
 

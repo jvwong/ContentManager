@@ -1,7 +1,10 @@
 package com.example.cm.cm_web.rest;
 
+import com.example.cm.cm_model.domain.CMSImage;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
+import com.example.cm.cm_model.domain.Updatable;
+import com.example.cm.cm_repository.service.CMSImageService;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.form.CMSUserForm;
 import com.google.gson.Gson;
@@ -17,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,6 +41,7 @@ public class CMSUserRestEndpointTest {
     private CMSUser mockUser;
     private CMSUserForm mockUserForm;
     private CMSUserService mockCmsUserService;
+    private CMSImageService cmsImageService;
     private PasswordEncoder mockPasswordEncoder;
     private List<CMSUser> cmsUserList;
     private Long id;
@@ -48,12 +50,12 @@ public class CMSUserRestEndpointTest {
     public void setUp() {
         mockPasswordEncoder = Mockito.mock(PasswordEncoder.class);
         mockCmsUserService = Mockito.mock(CMSUserService.class);
-        mockUserForm = Mockito.mock(CMSUserForm.class);
+        cmsImageService = Mockito.mock(CMSImageService.class);
 
         id = 24L;
 
         CMSUserRestEndpoint endpoint = new CMSUserRestEndpoint(
-                mockCmsUserService, mockPasswordEncoder);
+                mockCmsUserService, cmsImageService, mockPasswordEncoder);
         mockMvc = standaloneSetup(endpoint).build();
 
         mockUser = new CMSUser(id, "fullname24", "username24", "password24",
@@ -132,34 +134,65 @@ public class CMSUserRestEndpointTest {
         Mockito.when(mockCmsUserService.save(org.mockito.Matchers.any(CMSUser.class)))
                 .thenReturn(mockUser);
 
-        MultipartFile mockPartfile = Mockito.mock(MultipartFile.class);
-        Mockito.when(mockUserForm.getImage()).thenReturn(null);
+        mockUserForm = new CMSUserForm();
+        mockUserForm.setFullName(mockUser.getFullName());
+        mockUserForm.setUsername(mockUser.getUsername());
+        mockUserForm.setPassword(mockUser.getPassword());
+        mockUserForm.setPasswordConfirm(mockUser.getPassword());
+        mockUserForm.setEmail(mockUser.getEmail());
 
-        File mockioFile = Mockito.mock(File.class);
-        Mockito.when(mockioFile.mkdir()).thenReturn(false);
-        Mockito.doNothing()
-                .when(mockPartfile).transferTo(org.mockito.Matchers.any(File.class));
+        Gson gson = new Gson();
+        String jsonOut = gson.toJson(mockUserForm);
 
-        MockMultipartFile mockFile
-                = new MockMultipartFile("image", "icon.png", "image/png", "".getBytes());
+        mockMvc.perform(post("/rest/users/")
+                .contentType(MIME_JSON)
+                .content(jsonOut))
 
-        mockMvc.perform(fileUpload("/rest/users/")
-                .file(mockFile)
-                .param("fullName", "First Last")
-                .param("username", "someUsername")
-                .param("password", "somePassword")
-                .param("passwordConfirm", "somePassword")
-                .param("email", "some@email.com")
-                .contentType("multipart/form-data")
-                .accept(MIME_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MIME_JSON))
                 .andExpect(header().string("location", containsString("/services/rest/users/")))
-                ;
+        ;
 
         Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).save(org.mockito.Matchers.any(CMSUser.class));
     }
 
+    /*
+     * Create a CMSImage instance
+     **/
+//    @Test
+//    public void saveCMSImageTest() throws Exception {
+//
+//        CMSImage mockCMSImage = Mockito.mock(CMSImage.class);
+//        CMSImage mockCMSImageReturned = new CMSImage();
+//        mockCMSImageReturned.setStatus(Updatable.STATUS.PENDING);
+//        mockCMSImageReturned.setContentType("image/png");
+//        mockCMSImageReturned.setImage("asd".getBytes());
+//        mockCMSImageReturned.setFilename("icon.png");
+//        mockCMSImageReturned.setId(0L);
+//        mockCMSImageReturned.setSizeInBytes(3);
+//
+//        Mockito.doNothing().when(mockCMSImage).build(org.mockito.Matchers.any(MultipartFile.class));
+//        Mockito.when(mockCMSImage.isValid()).thenReturn(true);
+//        Mockito.when(cmsImageService.save(org.mockito.Matchers.any(CMSImage.class)))
+//                .thenReturn(mockCMSImageReturned);
+//
+//        MockMultipartFile mockFile
+//                = new MockMultipartFile("image", "icon.png", "image/png", "asd".getBytes());
+//        MockMultipartFile mockMultipartFile = Mockito.mock(MockMultipartFile.class);
+//        Mockito.when(mockMultipartFile.isEmpty()).thenReturn(false);
+//
+//        mockMvc.perform(fileUpload("/rest/users/avatar/")
+//                .file(mockFile)
+//                .contentType("multipart/form-data")
+//                .accept(MIME_JSON))
+//                .andExpect(status().isCreated())
+//                .andExpect(content().contentType(MIME_JSON))
+//                .andExpect(header().string("location", containsString("/services/rest/users/avatar/")))
+//        ;
+//
+//        Mockito.verify(cmsImageService,
+//                Mockito.atLeastOnce()).save(org.mockito.Matchers.any(CMSImage.class));
+//    }
 
     /**
      * Delete an existing CMSUser

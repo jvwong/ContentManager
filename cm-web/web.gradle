@@ -43,14 +43,6 @@ repositories {
 
 dependencies {
 
-    // Spring
-    compile "org.springframework:spring-webmvc:$springVersion"
-    compile "org.springframework:spring-web:$springVersion"
-    compile "org.springframework:spring-tx:$springVersion"
-
-    //Spring AWS cloud
-    compile "org.springframework.cloud:spring-cloud-aws-context:$springCloudAwsContextVersion"
-
     // Spring Security
     compile "org.springframework.security:spring-security-web:$springSecurityVersion"
 
@@ -61,7 +53,7 @@ dependencies {
     compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:$thymeleafSpringExtrasVersion"
 	compile "org.thymeleaf:thymeleaf-spring4:$thymeleafSpring4Version"
 
-	//Logging
+    //Logging
     compile "org.slf4j:jcl-over-slf4j:$jclOverSlf4jVersion"
     compile "ch.qos.logback:logback-classic:$logbackClassicVersion"
 

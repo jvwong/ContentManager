@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
         @ComponentScan.Filter({Controller.class, ControllerAdvice.class})
 )
 @Import({ SecurityConfig.class })
-@ImportResource("classpath:awscloud-config.xml")
 @PropertySource("classpath:application.properties")
 public class RootContextConfiguration {
 

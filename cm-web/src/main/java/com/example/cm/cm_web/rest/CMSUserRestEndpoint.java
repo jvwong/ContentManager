@@ -1,13 +1,11 @@
 package com.example.cm.cm_web.rest;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.transfer.TransferManager;
+import com.example.cm.cm_model.domain.CMSImage;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
+import com.example.cm.cm_repository.service.CMSImageService;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
-import com.example.cm.cm_web.exceptions.ImageUploadException;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
 import com.example.cm.cm_web.exceptions.UnprocessableEntityException;
@@ -15,11 +13,6 @@ import com.example.cm.cm_web.form.CMSUserForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.WritableResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -35,9 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.List;
 
@@ -48,20 +39,17 @@ public class CMSUserRestEndpoint {
 	private static final Logger logger
 			= LoggerFactory.getLogger(CMSUserRestEndpoint.class);
 
-	@Autowired
-	private AmazonS3 amazonS3;
-
-	@Value( "${image.directory}" )
-	private String imageDirectory;
-
 	private CMSUserService cmsUserService;
+	private CMSImageService cmsImageService;
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	public CMSUserRestEndpoint(
 			CMSUserService cmsUserService,
+			CMSImageService cmsImageService,
 			PasswordEncoder passwordEncoder){
 		this.cmsUserService = cmsUserService;
+		this.cmsImageService = cmsImageService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -102,7 +90,7 @@ public class CMSUserRestEndpoint {
 
 	/**
 	 * Create a User instance
-	 * @param cmsUserForm The user instance to create
+	 * @param cmsUser The user instance to create
 	 * @param ucb The uri component builder to return
 	 * @return ResponseEntity<CMSUser>
 	 */
@@ -111,7 +99,7 @@ public class CMSUserRestEndpoint {
 			method=RequestMethod.POST
 	)
 	public ResponseEntity<CMSUser> saveCMSUser(
-			@Valid CMSUserForm cmsUserForm,
+			@Valid @RequestBody CMSUserForm cmsUserForm,
 			Errors errors,
 			UriComponentsBuilder ucb){
 
@@ -132,42 +120,13 @@ public class CMSUserRestEndpoint {
 
 			HttpHeaders headers = new HttpHeaders();
 
+			CMSUser pendingCMSUser = cmsUserForm.toCMSUser();
+
 			// NullPointerException
-			CMSUser cmsUser = cmsUserForm.toCMSUser();
-			cmsUser.setPassword(passwordEncoder.encode(cmsUserForm.getPassword()));
+			pendingCMSUser.setPassword(passwordEncoder.encode(cmsUserForm.getPassword()));
 
 			// DataIntegrityViolationException
-			CMSUser CMSUserSaved = cmsUserService.save(cmsUser);
-
-			if(cmsUserForm.getImage() != null){
-//				logger.info("name: " + cmsUserForm.getImage().getName());
-//				logger.info("Original name: " + cmsUserForm.getImage().getOriginalFilename());
-//				logger.info("size: " + String.valueOf(cmsUserForm.getImage().getSize()));
-
-				// Do some type checking
-				if( !cmsUserForm.getImage().getContentType()
-						.equalsIgnoreCase(MediaType.IMAGE_JPEG_VALUE) &&
-					!cmsUserForm.getImage().getContentType()
-							.equalsIgnoreCase(MediaType.IMAGE_PNG_VALUE))
-				{
-					throw new UnprocessableEntityException(
-							"Invalid file type",
-							CMSUserForm.class.getName());
-				}
-
-				// Note: This must create a directory in accordance with the
-				// directory set in Bootstrap --> MultipartConfigElement
-				String destination = CMSUserSaved.getUsername() + "/" + cmsUserForm.getImage().getOriginalFilename();
-				File file = new File(imageDirectory, destination);
-				boolean exists = file.getParentFile().mkdirs();
-				if(exists)
-				{
-					withTransferManager();
-					cmsUserForm
-							.getImage()
-							.transferTo(file);
-				}
-			}
+			CMSUser CMSUserSaved = cmsUserService.save(pendingCMSUser);
 
 			URI locationUri =
 					ucb.path("/services/rest/users/")
@@ -180,11 +139,54 @@ public class CMSUserRestEndpoint {
 		} catch (NullPointerException npe) {
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 
+		} catch (DataIntegrityViolationException dee) {
+			throw new ResourceConflictException(CMSUser.class.toString());
+		}
+	}
+
+	/**
+	 * Create a CMSImage instance
+	 * @param ucb The uri component builder to return
+	 * @return ResponseEntity<CMSUser>
+	 */
+	@RequestMapping(
+			value = "/avatar/",
+			method = RequestMethod.POST,
+			consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
+	)
+	public ResponseEntity<CMSImage> saveCMSImage(
+			@RequestParam("image") MultipartFile multipartFile,
+			UriComponentsBuilder ucb){
+
+		try{
+
+			HttpHeaders headers = new HttpHeaders();
+
+			if(multipartFile.isEmpty()){
+				throw new UnprocessableEntityException("No data", CMSImage.class.getName());
+			}
+
+			CMSImage image = new CMSImage();
+			image.build(multipartFile); //throws IOException
+
+			if(image.isValid()){
+				CMSImage savedImage = cmsImageService.save(image);
+				URI locationUri =
+						ucb.path("/services/rest/users/avatar/")
+								.build()
+								.toUri();
+				headers.setLocation(locationUri);
+				return new ResponseEntity<>(savedImage, headers, HttpStatus.CREATED);
+			}
+
+			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+
 		} catch (IOException ioe) {
-			logger.error("IOE: ", ioe);
+			logger.error("Image build error", ioe);
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 
 		} catch (DataIntegrityViolationException dee) {
+			logger.error("Repository conflict", dee);
 			throw new ResourceConflictException(CMSUser.class.toString());
 		}
 	}
@@ -241,9 +243,6 @@ public class CMSUserRestEndpoint {
 	}
 
 
-	public void withTransferManager() {
-		TransferManager transferManager = new TransferManager(this.amazonS3);
-		transferManager.upload("beantack-media", "raptor.png", new File("/home/jeffrey/Projects/ContentManager/uploads/raptors.png"));
-	}
+
 
 }

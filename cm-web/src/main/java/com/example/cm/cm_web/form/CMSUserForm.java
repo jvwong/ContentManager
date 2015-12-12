@@ -1,18 +1,15 @@
 package com.example.cm.cm_web.form;
 
 import com.example.cm.cm_model.domain.CMSUser;
+import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.Email;
-import org.springframework.web.multipart.MultipartFile;
 
 public class CMSUserForm {
 
     private final String DEFAULT_ROLE = "ROLE_CMSUSER";
-
-    private MultipartFile image;
 
     private String fullName;
 
@@ -31,14 +28,6 @@ public class CMSUserForm {
     @NotNull
     @Email
     private String email;
-
-    public MultipartFile getImage() {
-        return this.image;
-    }
-
-    public void setImage(MultipartFile file) {
-        this.image = file;
-    }
 
     public String getFullName() {
         return fullName;

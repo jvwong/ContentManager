@@ -65,6 +65,15 @@ subprojects {
     apply plugin: 'java'
 
     dependencies {
+
+        // Spring
+        compile "org.springframework:spring-webmvc:$springVersion"
+        compile "org.springframework:spring-web:$springVersion"
+        compile "org.springframework:spring-tx:$springVersion"
+
+        //Spring AWS cloud
+        compile "org.springframework.cloud:spring-cloud-aws-context:$springCloudAwsContextVersion"
+
         compile "javax.inject:javax.inject:$javaxInjectVersion"
 
         compile "org.apache.commons:commons-lang3:$apacheCommonsLangVersion"
