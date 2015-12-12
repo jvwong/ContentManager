@@ -26,30 +26,30 @@ import java.nio.file.Paths;
 public class CMSImageServiceImpl implements CMSImageService {
     private static final Logger logger
             = LoggerFactory.getLogger(CMSImageServiceImpl.class);
-
-    @Autowired
-    private AmazonS3 amazonS3;
-
-    @Autowired
-    private CMSImageRepository cmsImageRepository;
-
-    @Value( "${bucket.amazons3}" )
-    private String imageS3Bucket;
-
-    public CMSImage save(CMSImage cmsImage){
-        CMSImage saved = cmsImageRepository.save(cmsImage);
-
-        logger.info(saved.toString());
-
-        TransferManager transferManager = new TransferManager(this.amazonS3);
-        Path destination = Paths.get(saved.getCreatedBy(), saved.getFilename());
-        ObjectMetadata meta = new ObjectMetadata();
-        ByteArrayInputStream bis = new ByteArrayInputStream(saved.getImage());
-
-        Upload upload = transferManager.upload(imageS3Bucket, destination.toString(), bis, meta);
-        AWSUploadProgressListener progressListener
-                = new AWSUploadProgressListener(saved);
-        upload.addProgressListener(progressListener);
-        return saved;
-    }
+//
+//    @Autowired
+//    private AmazonS3 amazonS3;
+//
+//    @Autowired
+//    private CMSImageRepository cmsImageRepository;
+//
+//    @Value( "${bucket.amazons3}" )
+//    private String imageS3Bucket;
+//
+//    public void save(CMSImage cmsImage){
+//        CMSImage saved = cmsImageRepository.save(cmsImage);
+//
+//        logger.info(saved.toString());
+//
+//        TransferManager transferManager = new TransferManager(this.amazonS3);
+//        Path destination = Paths.get(saved.getCreatedBy(), saved.getFilename());
+//        ObjectMetadata meta = new ObjectMetadata();
+//        ByteArrayInputStream bis = new ByteArrayInputStream(saved.getImage());
+//
+//        Upload upload = transferManager.upload(imageS3Bucket, destination.toString(), bis, meta);
+//        AWSUploadProgressListener progressListener
+//                = new AWSUploadProgressListener(saved);
+//        upload.addProgressListener(progressListener);
+//        return saved;
+//    }
 }

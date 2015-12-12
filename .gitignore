@@ -11,3 +11,4 @@ uploads/
 *.ipr
 *.iws
 .idea/
+*.properties
