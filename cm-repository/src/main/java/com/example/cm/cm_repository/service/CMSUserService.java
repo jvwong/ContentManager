@@ -21,6 +21,7 @@ public interface CMSUserService {
 
     CMSUser getUser(String username);
 
+    @Transactional(readOnly = false)
     CMSUser save(CMSUser cmsUser);
 
     boolean exists(String id);

@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.AttributeOverride;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
+import java.net.URI;
 
 
 @Entity
@@ -21,6 +22,7 @@ import javax.validation.constraints.NotNull;
 @AttributeOverride(name = "id", column = @Column(name = "Id"))
 public class CMSUser extends DateAuditedEntity{
 
+	private URI avatar;
 	private String fullName;
 
 	@NotNull
@@ -59,6 +61,14 @@ public class CMSUser extends DateAuditedEntity{
 		this.password = password;
 		this.email = email;
 		this.role = role;
+	}
+
+	public URI getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(URI avatar) {
+		this.avatar = avatar;
 	}
 
 	public String getFullName() {
@@ -125,6 +135,7 @@ public class CMSUser extends DateAuditedEntity{
 				+ ", role=" + this.role
 				+ ", username=" + this.username
 				+ ", email=" + this.email
+				+ ", avatar=" + this.avatar.toString()
 				+ "]";
 	}
 }

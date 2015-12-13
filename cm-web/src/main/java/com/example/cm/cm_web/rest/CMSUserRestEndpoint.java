@@ -1,11 +1,11 @@
 package com.example.cm.cm_web.rest;
 
-import com.example.cm.cm_model.domain.CMSImage;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
 import com.example.cm.cm_repository.service.CMSImageService;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
+import com.example.cm.cm_web.exceptions.ImageUploadException;
 import com.example.cm.cm_web.exceptions.ResourceConflictException;
 import com.example.cm.cm_web.exceptions.ResourceNotFoundException;
 import com.example.cm.cm_web.exceptions.UnprocessableEntityException;
@@ -30,7 +30,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 
 @RestEndpoint
@@ -90,7 +94,7 @@ public class CMSUserRestEndpoint {
 
 	/**
 	 * Create a User instance
-	 * @param cmsUser The user instance to create
+	 * @param cmsUserForm The user instance to create
 	 * @param ucb The uri component builder to return
 	 * @return ResponseEntity<CMSUser>
 	 */
@@ -145,49 +149,46 @@ public class CMSUserRestEndpoint {
 	}
 
 	/**
-	 * Create a CMSImage instance
-	 * @param ucb The uri component builder to return
+	 * Set the CMSImage avatar
+	 * @param multipartFile the multipart file
+	 * @param username CMSUser unique ID
 	 * @return ResponseEntity<CMSUser>
 	 */
 	@RequestMapping(
-			value = "/avatar/",
+			value = "/{username}/avatar/",
 			method = RequestMethod.POST,
 			consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
 	)
-	public ResponseEntity<CMSImage> saveCMSImage(
-			@RequestParam("image") MultipartFile multipartFile,
+
+
+	public ResponseEntity<URI> setAvatar(
+			@RequestParam("avatar") MultipartFile multipartFile,
+			@PathVariable(value="username") String username,
 			UriComponentsBuilder ucb){
+
 
 		try{
 
-			HttpHeaders headers = new HttpHeaders();
-
 			if(multipartFile.isEmpty()){
-				throw new UnprocessableEntityException("No data", CMSImage.class.getName());
+				throw new UnprocessableEntityException("No data", MultipartFile.class.getName());
 			}
 
-			CMSImage image = new CMSImage();
-			image.build(multipartFile); //throws IOException
+			if(multipartFile.getContentType().equals(MediaType.IMAGE_PNG_VALUE) ||
+					multipartFile.getContentType().equals(MediaType.IMAGE_JPEG_VALUE)){
 
-			if(image.isValid()){
-				CMSImage savedImage = cmsImageService.save(image);
-				URI locationUri =
-						ucb.path("/services/rest/users/avatar/")
-								.build()
-								.toUri();
+				HttpHeaders headers = new HttpHeaders();
+				URI locationUri = cmsImageService.uploadAvatar(username, multipartFile);
 				headers.setLocation(locationUri);
-				return new ResponseEntity<>(savedImage, headers, HttpStatus.CREATED);
+				return new ResponseEntity<>(locationUri, headers, HttpStatus.ACCEPTED);
+			} else {
+				String ErrorMessage = "Invalid file type";
+				throw new UnprocessableEntityException(ErrorMessage, MultipartFile.class.getName());
 			}
 
-			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-
-		} catch (IOException ioe) {
-			logger.error("Image build error", ioe);
-			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-
-		} catch (DataIntegrityViolationException dee) {
-			logger.error("Repository conflict", dee);
-			throw new ResourceConflictException(CMSUser.class.toString());
+		} catch (InterruptedException | IOException | URISyntaxException e) {
+			String ErrorMessage = "Error saving avatar";
+			logger.error(ErrorMessage , e);
+			throw new UnprocessableEntityException(ErrorMessage, MultipartFile.class.getName());
 		}
 	}
 

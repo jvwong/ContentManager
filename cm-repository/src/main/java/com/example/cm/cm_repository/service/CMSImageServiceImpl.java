@@ -1,55 +1,94 @@
 package com.example.cm.cm_repository.service;
 
+import com.amazonaws.event.ProgressEvent;
+import com.amazonaws.event.ProgressEventType;
+import com.amazonaws.event.ProgressListener;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
-import com.example.cm.cm_model.domain.CMSImage;
-import com.example.cm.cm_repository.event.AWSUploadProgressListener;
-import com.example.cm.cm_repository.repository.CMSImageRepository;
+import com.example.cm.cm_model.domain.CMSUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.nio.file.Path;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.UUID;
+import java.util.concurrent.Future;
 
 /**
  * Implementation of CMSImageService
  */
 @Service
-@Transactional
 public class CMSImageServiceImpl implements CMSImageService {
     private static final Logger logger
             = LoggerFactory.getLogger(CMSImageServiceImpl.class);
-//
-//    @Autowired
-//    private AmazonS3 amazonS3;
-//
-//    @Autowired
-//    private CMSImageRepository cmsImageRepository;
-//
-//    @Value( "${bucket.amazons3}" )
-//    private String imageS3Bucket;
-//
-//    public void save(CMSImage cmsImage){
-//        CMSImage saved = cmsImageRepository.save(cmsImage);
-//
-//        logger.info(saved.toString());
-//
-//        TransferManager transferManager = new TransferManager(this.amazonS3);
-//        Path destination = Paths.get(saved.getCreatedBy(), saved.getFilename());
-//        ObjectMetadata meta = new ObjectMetadata();
-//        ByteArrayInputStream bis = new ByteArrayInputStream(saved.getImage());
-//
-//        Upload upload = transferManager.upload(imageS3Bucket, destination.toString(), bis, meta);
-//        AWSUploadProgressListener progressListener
-//                = new AWSUploadProgressListener(saved);
-//        upload.addProgressListener(progressListener);
-//        return saved;
-//    }
+
+    @Value( "${bucket.amazons3}" )
+    private String imageS3Bucket;
+
+    @Autowired
+    CMSUserService cmsUserService;
+
+    private AmazonS3 amazonS3;
+    private AmazonS3Client amazonS3Client;
+    private TransferManager transferManager = new TransferManager(this.amazonS3);
+
+    @Autowired
+    public CMSImageServiceImpl(AmazonS3 amazonS3)
+    {
+        assert(amazonS3 != null);
+        this.amazonS3 = amazonS3;
+        this.transferManager
+                = new TransferManager(this.amazonS3);
+        this.amazonS3Client
+                = (AmazonS3Client) this.transferManager.getAmazonS3Client();
+    }
+
+    public URI uploadAvatar(String username, MultipartFile avatar)
+            throws URISyntaxException, IOException, InterruptedException {
+        // check if an avatar exists already
+
+        String key = Paths.get(username, "avatar", UUID.randomUUID().toString().concat("_").concat(avatar.getOriginalFilename())).toString();
+        ObjectMetadata meta = new ObjectMetadata();
+        Upload upload = this.transferManager.upload(
+                imageS3Bucket,
+                key,
+                avatar.getInputStream(),
+                meta);
+        URI resourceUri = new URI(this.amazonS3Client.getResourceUrl(imageS3Bucket, key));
+
+        upload.addProgressListener(new ProgressListener() {
+            @Override
+            public void progressChanged(ProgressEvent progressEvent) {
+                if(progressEvent.getEventType().equals(ProgressEventType.TRANSFER_COMPLETED_EVENT))
+                {
+                    logger.info("Status: " + ProgressEventType.TRANSFER_COMPLETED_EVENT);
+                }
+            }
+        });
+
+        upload.waitForUploadResult(); //backgroudn thread?
+
+        CMSUser user = cmsUserService.getUser(username);
+        logger.info("user retrieved: " + user.getUsername());
+
+        user.setAvatar(resourceUri);
+        logger.info("user avatar set @ " + resourceUri);
+
+        cmsUserService.save(user);
+        logger.info("user avatar saved @ " + resourceUri);
+
+        return resourceUri;
+    }
 }

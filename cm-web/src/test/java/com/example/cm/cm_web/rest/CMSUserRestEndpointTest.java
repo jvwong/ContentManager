@@ -1,9 +1,7 @@
 package com.example.cm.cm_web.rest;
 
-import com.example.cm.cm_model.domain.CMSImage;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
-import com.example.cm.cm_model.domain.Updatable;
 import com.example.cm.cm_repository.service.CMSImageService;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.form.CMSUserForm;
@@ -156,42 +154,31 @@ public class CMSUserRestEndpointTest {
         Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).save(org.mockito.Matchers.any(CMSUser.class));
     }
 
-    /*
-     * Create a CMSImage instance
-     **/
+//    /*
+//     * Set the avatar for the CMSUser
+//     **/
 //    @Test
-//    public void saveCMSImageTest() throws Exception {
+//    public void setAvatarTest() throws Exception {
 //
-//        CMSImage mockCMSImage = Mockito.mock(CMSImage.class);
-//        CMSImage mockCMSImageReturned = new CMSImage();
-//        mockCMSImageReturned.setStatus(Updatable.STATUS.PENDING);
-//        mockCMSImageReturned.setContentType("image/png");
-//        mockCMSImageReturned.setImage("asd".getBytes());
-//        mockCMSImageReturned.setFilename("icon.png");
-//        mockCMSImageReturned.setId(0L);
-//        mockCMSImageReturned.setSizeInBytes(3);
-//
-//        Mockito.doNothing().when(mockCMSImage).build(org.mockito.Matchers.any(MultipartFile.class));
-//        Mockito.when(mockCMSImage.isValid()).thenReturn(true);
-//        Mockito.when(cmsImageService.save(org.mockito.Matchers.any(CMSImage.class)))
-//                .thenReturn(mockCMSImageReturned);
-//
+//        URI mockURI = new URI("some/path");
+//        Mockito.when(cmsImageService.uploadAvatar(org.mockito.Matchers.any(String.class), org.mockito.Matchers.any(MultipartFile.class)))
+//                .thenReturn(mockURI);
 //        MockMultipartFile mockFile
-//                = new MockMultipartFile("image", "icon.png", "image/png", "asd".getBytes());
-//        MockMultipartFile mockMultipartFile = Mockito.mock(MockMultipartFile.class);
-//        Mockito.when(mockMultipartFile.isEmpty()).thenReturn(false);
+//                = new MockMultipartFile("avatar", "icon.png", "image/png", "asd".getBytes());
 //
-//        mockMvc.perform(fileUpload("/rest/users/avatar/")
+//        mockMvc.perform(fileUpload("/rest/users/{username}/avatar/", mockUser.getUsername())
 //                .file(mockFile)
 //                .contentType("multipart/form-data")
 //                .accept(MIME_JSON))
-//                .andExpect(status().isCreated())
+//                .andExpect(status().isAccepted())
 //                .andExpect(content().contentType(MIME_JSON))
-//                .andExpect(header().string("location", containsString("/services/rest/users/avatar/")))
-//        ;
+//                .andExpect(header().string("location",
+//                        containsString(mockURI.toString())));
 //
 //        Mockito.verify(cmsImageService,
-//                Mockito.atLeastOnce()).save(org.mockito.Matchers.any(CMSImage.class));
+//                Mockito.atLeastOnce()).uploadAvatar(
+//                org.mockito.Matchers.any(String.class),
+//                org.mockito.Matchers.any(MultipartFile.class));
 //    }
 
     /**

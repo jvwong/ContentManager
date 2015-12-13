@@ -3,21 +3,31 @@ package com.example.cm.cm_repository.event;
 import com.amazonaws.event.ProgressEvent;
 import com.amazonaws.event.ProgressEventType;
 import com.amazonaws.event.ProgressListener;
-import com.example.cm.cm_model.domain.Updatable;
+import com.example.cm.cm_model.domain.CMSUser;
+import com.example.cm.cm_repository.service.CMSUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.net.URI;
 
 public class AWSUploadProgressListener implements ProgressListener {
 
     private static final Logger logger
             = LoggerFactory.getLogger(AWSUploadProgressListener.class);
 
-    private ProgressEventType status;
-    private Updatable target;
+    @Autowired
+    CMSUserService cmsUserService;
 
-    public AWSUploadProgressListener(Updatable target)
+    private ProgressEventType status;
+    private URI resourceUri;
+    private String username;
+
+    public AWSUploadProgressListener(String username, URI resourceUri)
     {
-        this.target = target;
+        assert(resourceUri != null && username != null);
+        this.username = username;
+        this.resourceUri = resourceUri;
     }
 
     /*
@@ -30,11 +40,14 @@ public class AWSUploadProgressListener implements ProgressListener {
 
         if(getStatus().equals(ProgressEventType.TRANSFER_COMPLETED_EVENT))
         {
-            // Set some flags here
             logger.info("Status: " + ProgressEventType.TRANSFER_COMPLETED_EVENT);
-             target.setStatus(Updatable.STATUS.LIVE);
-            // service.save(target);
-            logger.info("Object Status: " + target.getStatus().toString());
+
+            // None of this works - thread?
+            CMSUser user = cmsUserService.getUser(this.username);
+            logger.info("user retrieved: " + user.getUsername());
+            user.setAvatar(this.resourceUri);
+            cmsUserService.save(user);
+            logger.info("user avatar available @ " + this.resourceUri);
         }
     }
 
