@@ -5,14 +5,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * @author jvowng
  */
 public interface CMSImageService {
 
+    @Async
     URI uploadAvatar(String username, MultipartFile avatar)
-            throws URISyntaxException, IOException, InterruptedException;
+            throws IOException;
 }
 

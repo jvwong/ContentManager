@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -24,7 +22,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.UUID;
-import java.util.concurrent.Future;
 
 /**
  * Implementation of CMSImageService
@@ -55,8 +52,10 @@ public class CMSImageServiceImpl implements CMSImageService {
                 = (AmazonS3Client) this.transferManager.getAmazonS3Client();
     }
 
+    @Override
+    @Async
     public URI uploadAvatar(String username, MultipartFile avatar)
-            throws URISyntaxException, IOException, InterruptedException {
+            throws IOException {
         // check if an avatar exists already
 
         String key = Paths.get(username, "avatar", UUID.randomUUID().toString().concat("_").concat(avatar.getOriginalFilename())).toString();
@@ -66,7 +65,7 @@ public class CMSImageServiceImpl implements CMSImageService {
                 key,
                 avatar.getInputStream(),
                 meta);
-        URI resourceUri = new URI(this.amazonS3Client.getResourceUrl(imageS3Bucket, key));
+
 
         upload.addProgressListener(new ProgressListener() {
             @Override
@@ -78,16 +77,25 @@ public class CMSImageServiceImpl implements CMSImageService {
             }
         });
 
-        upload.waitForUploadResult(); //backgroudn thread?
+        URI resourceUri = null;
 
-        CMSUser user = cmsUserService.getUser(username);
-        logger.info("user retrieved: " + user.getUsername());
+        try {
+            resourceUri = new URI(this.amazonS3Client.getResourceUrl(imageS3Bucket, key));
+            upload.waitForUploadResult(); //background thread?
 
-        user.setAvatar(resourceUri);
-        logger.info("user avatar set @ " + resourceUri);
+            Thread.sleep(5_000L);
 
-        cmsUserService.save(user);
-        logger.info("user avatar saved @ " + resourceUri);
+            CMSUser user = cmsUserService.getUser(username);
+            logger.info("user retrieved: " + user.getUsername());
+
+            user.setAvatar(resourceUri);
+            logger.info("user avatar set @ " + resourceUri);
+
+            cmsUserService.save(user);
+            logger.info("user avatar saved @ " + resourceUri);
+
+        }
+        catch (URISyntaxException  | InterruptedException ignore) {}
 
         return resourceUri;
     }

@@ -185,9 +185,9 @@ public class CMSUserRestEndpoint {
 				throw new UnprocessableEntityException(ErrorMessage, MultipartFile.class.getName());
 			}
 
-		} catch (InterruptedException | IOException | URISyntaxException e) {
+		} catch (IOException ioe) {
 			String ErrorMessage = "Error saving avatar";
-			logger.error(ErrorMessage , e);
+			logger.error(ErrorMessage , ioe);
 			throw new UnprocessableEntityException(ErrorMessage, MultipartFile.class.getName());
 		}
 	}

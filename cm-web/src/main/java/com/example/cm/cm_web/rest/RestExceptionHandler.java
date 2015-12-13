@@ -69,5 +69,4 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
-
 }
