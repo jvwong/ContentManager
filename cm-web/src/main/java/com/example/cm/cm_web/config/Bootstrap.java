@@ -32,6 +32,8 @@ public class Bootstrap implements WebApplicationInitializer {
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
                 "cmWebDispatcher", new DispatcherServlet(webContext)
         );
+        // Needs to be set for @EnableAsync and @Async
+        dispatcher.setAsyncSupported(true);
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
 
@@ -47,6 +49,8 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher = servletContext.addServlet(
              "cmRestDispatcher", servlet
         );
+        // Needs to be set for @EnableAsync and @Async
+        dispatcher.setAsyncSupported(true);
         dispatcher.setLoadOnStartup(2);
         dispatcher.setMultipartConfig(
                 new MultipartConfigElement(

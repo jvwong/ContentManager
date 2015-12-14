@@ -31,6 +31,7 @@ import java.util.concurrent.Executor;
 )
 @Import({ SecurityConfig.class })
 @PropertySource("classpath:application.properties")
+@EnableAsync
 public class RootContextConfiguration
         implements AsyncConfigurer, SchedulingConfigurer {
 

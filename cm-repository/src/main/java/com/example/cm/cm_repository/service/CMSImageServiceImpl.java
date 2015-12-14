@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -54,16 +55,17 @@ public class CMSImageServiceImpl implements CMSImageService {
 
     @Override
     @Async
-    public URI uploadAvatar(String username, MultipartFile avatar)
+//    public URI uploadAvatar(String username, MultipartFile avatar)
+    public URI uploadAvatar(String username, InputStream in, String originalFilename)
             throws IOException {
         // check if an avatar exists already
 
-        String key = Paths.get(username, "avatar", UUID.randomUUID().toString().concat("_").concat(avatar.getOriginalFilename())).toString();
+        String key = Paths.get(username, "avatar", UUID.randomUUID().toString().concat("_").concat(originalFilename)).toString();
         ObjectMetadata meta = new ObjectMetadata();
         Upload upload = this.transferManager.upload(
                 imageS3Bucket,
                 key,
-                avatar.getInputStream(),
+                in,
                 meta);
 
 
@@ -82,8 +84,7 @@ public class CMSImageServiceImpl implements CMSImageService {
         try {
             resourceUri = new URI(this.amazonS3Client.getResourceUrl(imageS3Bucket, key));
             upload.waitForUploadResult(); //background thread?
-
-            Thread.sleep(5_000L);
+            Thread.sleep(10000L);
 
             CMSUser user = cmsUserService.getUser(username);
             logger.info("user retrieved: " + user.getUsername());
