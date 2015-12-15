@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 		entityManagerFactoryRef = "entityManagerFactory",
 		transactionManagerRef = "transactionManager")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
-@ImportResource("classpath:awscloud-config.xml")
+@ImportResource({ "classpath:awscloud-config.xml" })
 @PropertySource("classpath:repo.properties")
 public class DataConfig {
 
@@ -98,5 +98,6 @@ public class DataConfig {
 	public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
 		return new PropertySourcesPlaceholderConfigurer();
 	}
+
 }
 

@@ -21,14 +21,13 @@ public interface CMSUserService {
 
     CMSUser getUser(String username);
 
-    @Transactional(readOnly = false)
     CMSUser save(CMSUser cmsUser);
 
     boolean exists(String id);
 
-    @Transactional(readOnly = false)
+    @Transactional
     void delete(String id);
 
-    @Transactional(readOnly = false)
+    @Transactional
     CMSUser update(String username, List<JsonPatch> patches);
 }

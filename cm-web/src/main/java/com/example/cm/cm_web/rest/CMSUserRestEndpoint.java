@@ -27,12 +27,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 
 @RestEndpoint
@@ -157,14 +157,13 @@ public class CMSUserRestEndpoint {
 			method = RequestMethod.POST,
 			consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
 	)
-	public Callable<ResponseEntity<URI>> setAvatar(
+	public Callable<ResponseEntity> setAvatar(
 			@RequestParam("avatar") final MultipartFile multipartFile,
 			@PathVariable(value="username") final String username,
 			UriComponentsBuilder ucb){
 
 
 		try{
-
 			if(multipartFile.isEmpty()){
 				throw new UnprocessableEntityException("No data", MultipartFile.class.getName());
 			}
@@ -174,18 +173,15 @@ public class CMSUserRestEndpoint {
 
 				final InputStream in = multipartFile.getInputStream();
 				final String originalFilename = multipartFile.getOriginalFilename();
-				final HttpHeaders headers = new HttpHeaders();
 
-				return new Callable<ResponseEntity<URI>>() {
+				return new Callable<ResponseEntity>() {
 					@Override
-					public ResponseEntity<URI> call() throws Exception {
+					public ResponseEntity call() throws Exception {
 
 						logger.info("Request received");
-						URI locationURI = cmsImageService.uploadAvatar(username, in, originalFilename);
+						cmsImageService.uploadAvatar(username, in, originalFilename);
 						logger.info("Servlet thread released");
-
-						//headers.setLocation(locationURI);
-						return new ResponseEntity<>(locationURI, headers, HttpStatus.ACCEPTED);
+						return new ResponseEntity(HttpStatus.ACCEPTED);
 					}
 				};
 			} else {
@@ -200,36 +196,6 @@ public class CMSUserRestEndpoint {
 		}
 	}
 
-//	public ResponseEntity<URI> setAvatar(
-//			@RequestParam("avatar") MultipartFile multipartFile,
-//			@PathVariable(value="username") String username,
-//			UriComponentsBuilder ucb){
-//
-//
-//		try{
-//
-//			if(multipartFile.isEmpty()){
-//				throw new UnprocessableEntityException("No data", MultipartFile.class.getName());
-//			}
-//
-//			if(multipartFile.getContentType().equals(MediaType.IMAGE_PNG_VALUE) ||
-//					multipartFile.getContentType().equals(MediaType.IMAGE_JPEG_VALUE)){
-//
-//				HttpHeaders headers = new HttpHeaders();
-//				URI locationUri = cmsImageService.uploadAvatar(username, multipartFile);
-//				headers.setLocation(locationUri);
-//				return new ResponseEntity<>(locationUri, headers, HttpStatus.ACCEPTED);
-//			} else {
-//				String ErrorMessage = "Invalid file type";
-//				throw new UnprocessableEntityException(ErrorMessage, MultipartFile.class.getName());
-//			}
-//
-//		} catch (IOException ioe) {
-//			String ErrorMessage = "Error saving avatar";
-//			logger.error(ErrorMessage , ioe);
-//			throw new UnprocessableEntityException(ErrorMessage, MultipartFile.class.getName());
-//		}
-//	}
 
 	/**
 	 * Delete an existing {@link CMSUser} instance

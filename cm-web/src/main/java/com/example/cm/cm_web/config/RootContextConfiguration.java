@@ -82,9 +82,9 @@ public class RootContextConfiguration
     @Bean
     public ThreadPoolTaskScheduler taskScheduler()
     {
-        logger.info("Setting up thread pool task scheduler with 20 threads.");
+        logger.info("Setting up thread pool task scheduler with 10 threads.");
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(20);
+        scheduler.setPoolSize(10);
         scheduler.setThreadNamePrefix("task-");
         scheduler.setAwaitTerminationSeconds(60);
         scheduler.setWaitForTasksToCompleteOnShutdown(true);

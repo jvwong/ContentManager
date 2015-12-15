@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,6 @@ import java.util.List;
  * @author jvwong
  */
 @Service
-@Transactional
 public class CMSUserServiceImpl implements CMSUserService {
     private static final Logger logger
             = LoggerFactory.getLogger(CMSUserServiceImpl.class);
@@ -28,27 +28,35 @@ public class CMSUserServiceImpl implements CMSUserService {
     @Autowired
     private CMSUserRepository cmsUserRepository;
 
+    @Override
+    @Secured("ROLE_ADMIN")
     public Page<CMSUser> cmsUserList(Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest =
                 new PageRequest(pageNumber - 1, pageSize, Sort.Direction.DESC, "createdDate");
         return cmsUserRepository.findAll(pageRequest);
     }
 
+    @Override
+    @Secured("ROLE_ADMIN")
     public CMSUser cmsUser(String username){
         CMSUser cmsUser = cmsUserRepository.findByUsername(username);
         return cmsUser;
     }
 
+    @Override
     public CMSUser getUser(String username){
         CMSUser cmsUser = cmsUserRepository.findByUsername(username);
         return cmsUser;
     }
 
+    @Override
+    @Transactional
     public CMSUser save(CMSUser cmsUser){
         CMSUser saved = cmsUserRepository.save(cmsUser);
         return saved;
     }
 
+    @Override
     public boolean exists(String username){
         return cmsUserRepository.findByUsername(username) != null;
     }
@@ -57,6 +65,8 @@ public class CMSUserServiceImpl implements CMSUserService {
      * Delete the record with the given username if it exists
      * @param username the username for the CMSUser
      */
+    @Override
+    @Transactional
     public void delete(String username){
         CMSUser user = cmsUserRepository.findByUsername(username);
         cmsUserRepository.delete(user.getId());
@@ -68,6 +78,8 @@ public class CMSUserServiceImpl implements CMSUserService {
      * @param patches the List of JsonPatch updates
      * @return Article representation of updated {@link CMSUser}
      */
+    @Override
+    @Transactional
     public CMSUser update(String username, List<JsonPatch> patches){
         CMSUser user = cmsUserRepository.findByUsername(username);
         Class aClass = user.getClass();
