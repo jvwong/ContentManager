@@ -86,19 +86,19 @@ public class CMSUserRestEndpointTest {
      **/
     @Test
     public void cmsUserListTest() throws Exception {
-//        int pageNumber = 1;
-//        int pageSize = 3;
-//        Page<CMSUser> mockPage = new PageImpl<>(cmsUserList);
-//        Mockito.when(mockCmsUserService.cmsUserList(pageNumber, pageSize)).thenReturn(mockPage);
-//
-//        mockMvc.perform(get("/rest/users/?page=" + pageNumber + "&size=" + pageSize))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MIME_JSON))
-//                .andExpect(jsonPath("$.content", isA(Collection.class)))
-//                .andExpect(jsonPath("$.content", hasSize(cmsUserList.size())))
-//        ;
-//
-//        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).cmsUserList(pageNumber, pageSize);
+        int pageNumber = 1;
+        int pageSize = 3;
+        Page<CMSUser> mockPage = new PageImpl<>(cmsUserList);
+        Mockito.when(mockCmsUserService.cmsUserList(pageNumber, pageSize)).thenReturn(mockPage);
+
+        mockMvc.perform(get("/rest/users/?page=" + pageNumber + "&size=" + pageSize))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MIME_JSON))
+                .andExpect(jsonPath("$.content", isA(Collection.class)))
+                .andExpect(jsonPath("$.content", hasSize(cmsUserList.size())))
+        ;
+
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).cmsUserList(pageNumber, pageSize);
     }
 
     /*
@@ -162,32 +162,32 @@ public class CMSUserRestEndpointTest {
     @Test
     public void setAvatarTest() throws Exception {
 
-//        MultipartFile mockMultipartFile = Mockito.mock(MultipartFile.class);
-//        Mockito.when(mockMultipartFile.isEmpty()).thenReturn(false);
-//
-//        Mockito.doNothing().when(cmsImageService)
-//                .uploadAvatar(
-//                        org.mockito.Matchers.any(String.class),
-//                        org.mockito.Matchers.any(InputStream.class),
-//                        org.mockito.Matchers.any(String.class));
-//        MockMultipartFile mockFile
-//                = new MockMultipartFile("avatar", "icon.png", "image/png", "asd".getBytes());
-//
-//        MvcResult mvcResult
-//                = mockMvc.perform(fileUpload("/rest/users/{username}/avatar/",
-//                mockUser.getUsername())
-//                .file(mockFile).contentType("multipart/form-data").accept(MIME_JSON))
-//                .andExpect(request().asyncStarted())
-//                .andReturn();
-//
-//        mockMvc.perform(asyncDispatch(mvcResult))
-//                .andExpect(status().isAccepted());
-//
-//        Mockito.verify(cmsImageService,
-//                Mockito.atLeastOnce()).uploadAvatar(
-//                org.mockito.Matchers.any(String.class),
-//                org.mockito.Matchers.any(InputStream.class),
-//                org.mockito.Matchers.any(String.class));
+        MultipartFile mockMultipartFile = Mockito.mock(MultipartFile.class);
+        Mockito.when(mockMultipartFile.isEmpty()).thenReturn(false);
+
+        Mockito.doNothing().when(cmsImageService)
+                .uploadAvatar(
+                        org.mockito.Matchers.any(String.class),
+                        org.mockito.Matchers.any(InputStream.class),
+                        org.mockito.Matchers.any(String.class));
+        MockMultipartFile mockFile
+                = new MockMultipartFile("avatar", "icon.png", "image/png", "asd".getBytes());
+
+        MvcResult mvcResult
+                = mockMvc.perform(fileUpload("/rest/users/{username}/avatar/",
+                mockUser.getUsername())
+                .file(mockFile).contentType("multipart/form-data").accept(MIME_JSON))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(mvcResult))
+                .andExpect(status().isAccepted());
+
+        Mockito.verify(cmsImageService,
+                Mockito.atLeastOnce()).uploadAvatar(
+                org.mockito.Matchers.any(String.class),
+                org.mockito.Matchers.any(InputStream.class),
+                org.mockito.Matchers.any(String.class));
     }
 
     /**

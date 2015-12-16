@@ -72,31 +72,31 @@ public class CMSImageServiceImpl implements CMSImageService {
 
         ObjectMetadata meta = new ObjectMetadata();
 
-        Upload upload = this.transferManager.upload(
-                imageS3Bucket,
-                key,
-                in,
-                meta);
-
-
-        upload.addProgressListener(new ProgressListener() {
-            @Override
-            public void progressChanged(ProgressEvent progressEvent) {
-                if(progressEvent.getEventType().equals(ProgressEventType.TRANSFER_COMPLETED_EVENT))
-                {
-                    //logger.info("Status: " + ProgressEventType.TRANSFER_COMPLETED_EVENT);
-                }
-            }
-        });
-
+//        Upload upload = this.transferManager.upload(
+//                imageS3Bucket,
+//                key,
+//                in,
+//                meta);
+//
+//
+//        upload.addProgressListener(new ProgressListener() {
+//            @Override
+//            public void progressChanged(ProgressEvent progressEvent) {
+//                if(progressEvent.getEventType().equals(ProgressEventType.TRANSFER_COMPLETED_EVENT))
+//                {
+//                    //logger.info("Status: " + ProgressEventType.TRANSFER_COMPLETED_EVENT);
+//                }
+//            }
+//        });
+//
         try
         {
-            upload.waitForUploadResult();
+//            upload.waitForUploadResult();
             URI resourceUri = new URI(this.amazonS3Client.getResourceUrl(imageS3Bucket, key));
             CMSUser fetched = cmsUserService.getUser(username);
             fetched.setAvatar(resourceUri);
             alertService.sendCMSAlert(fetched);
         }
-        catch (URISyntaxException  | InterruptedException ignore){}
+        catch (URISyntaxException  ignore){}
     }
 }
