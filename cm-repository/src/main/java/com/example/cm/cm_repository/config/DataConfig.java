@@ -29,6 +29,7 @@ import javax.sql.DataSource;
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @ImportResource({ "classpath:awscloud-config.xml" })
 @PropertySource("classpath:repo.properties")
+@Import({ AMPQConfig.class })
 public class DataConfig {
 
 	@Bean

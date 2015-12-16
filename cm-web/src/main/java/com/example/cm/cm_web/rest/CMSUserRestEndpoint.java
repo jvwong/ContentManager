@@ -2,6 +2,7 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
+import com.example.cm.cm_repository.alerts.AlertService;
 import com.example.cm.cm_repository.service.CMSImageService;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
@@ -32,7 +33,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 
 
 @RestEndpoint
@@ -40,6 +40,7 @@ import java.util.concurrent.Future;
 public class CMSUserRestEndpoint {
 	private static final Logger logger
 			= LoggerFactory.getLogger(CMSUserRestEndpoint.class);
+
 
 	private CMSUserService cmsUserService;
 	private CMSImageService cmsImageService;
@@ -71,8 +72,8 @@ public class CMSUserRestEndpoint {
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public Page<CMSUser> cmsUserList(
 			@RequestParam(value="page", defaultValue="1") Integer pageNumber,
-			@RequestParam(value="size", defaultValue="10") Integer pageSize
-	){
+			@RequestParam(value="size", defaultValue="10") Integer pageSize)
+	{
 		return cmsUserService.cmsUserList(pageNumber, pageSize);
 	}
 
