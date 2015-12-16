@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.alerts.AlertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +35,16 @@ public class CMSImageServiceImpl implements CMSImageService {
     @Value( "${bucket.amazons3}" )
     private String imageS3Bucket;
 
+    @Autowired
+    CMSUserService cmsUserService;
+
     private AmazonS3 amazonS3;
     private AmazonS3Client amazonS3Client;
     private TransferManager transferManager = new TransferManager(this.amazonS3);
 
     @Autowired
     private AlertService alertService;
-    
+
     @Autowired
     public CMSImageServiceImpl(AmazonS3 amazonS3)
     {
@@ -89,7 +93,9 @@ public class CMSImageServiceImpl implements CMSImageService {
         {
             upload.waitForUploadResult();
             URI resourceUri = new URI(this.amazonS3Client.getResourceUrl(imageS3Bucket, key));
-            alertService.sendCMSAlert("This is the message");
+            CMSUser fetched = cmsUserService.getUser(username);
+            fetched.setAvatar(resourceUri);
+            alertService.sendCMSAlert(fetched);
         }
         catch (URISyntaxException  | InterruptedException ignore){}
     }

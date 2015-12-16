@@ -8,13 +8,14 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 
 public class AMPQConfig {
 
-    public static final String queueName = "cmsqueue";
-    public static final String exchangeName = "cmsexchange";
-    public static final String routingKey = "cmskey";
+    public static final String queueName = "cms.queue";
+    public static final String exchangeName = "cms.exchange";
+    public static final String routingKey = "cms.key";
 
     static final String AMPQ_HOST = "localhost";
     static final int AMPQ_PORT = 5672;
@@ -42,6 +43,7 @@ public class AMPQConfig {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
         template.setRoutingKey(routingKey);
         template.setQueue(queueName);
+        template.setMessageConverter(jsonMessageConverter());
         return template;
     }
 
@@ -78,11 +80,19 @@ public class AMPQConfig {
         return new CMSAlertHandler();
     }
 
+    @Bean
+    public Jackson2JsonMessageConverter jsonMessageConverter()
+    {
+        return new Jackson2JsonMessageConverter();
+    }
+
     /**
      * Wrap a POJO - CMSAlertHandler - as a listener
      */
     @Bean
     public MessageListenerAdapter listenerAdapter(CMSAlertHandler receiver) {
-        return new MessageListenerAdapter(receiver, "handleMessage");
+        MessageListenerAdapter adapter = new MessageListenerAdapter(receiver, "handleMessage");
+        adapter.setMessageConverter(jsonMessageConverter());
+        return adapter;
     }
 }

@@ -1,13 +1,21 @@
 package com.example.cm.cm_repository.alerts;
 
+import com.example.cm.cm_model.domain.CMSUser;
+import com.example.cm.cm_repository.service.CMSUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CMSAlertHandler  {
     private static final Logger logger
             = LoggerFactory.getLogger(CMSAlertHandler.class);
 
-    public void handleMessage(String message) {
-        logger.info("handleMessage received: " + message);
+    @Autowired
+    CMSUserService cmsUserService;
+
+    public void handleMessage(CMSUser user) {
+        logger.info("handleMessage received: " + user.toString());
+//        CMSUser saved = cmsUserService.save(user);
+//        logger.info("saved: " + saved.toString());
     }
 }

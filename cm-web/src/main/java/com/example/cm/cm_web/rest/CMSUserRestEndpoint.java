@@ -2,7 +2,6 @@ package com.example.cm.cm_web.rest;
 
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_model.domain.JsonPatch;
-import com.example.cm.cm_repository.alerts.AlertService;
 import com.example.cm.cm_repository.service.CMSImageService;
 import com.example.cm.cm_repository.service.CMSUserService;
 import com.example.cm.cm_web.config.annotation.RestEndpoint;
