@@ -178,10 +178,7 @@ public class CMSUserRestEndpoint {
 				return new Callable<ResponseEntity>() {
 					@Override
 					public ResponseEntity call() throws Exception {
-
-						logger.info("Request received");
 						cmsImageService.uploadAvatar(username, in, originalFilename);
-						logger.info("Servlet thread released");
 						return new ResponseEntity(HttpStatus.ACCEPTED);
 					}
 				};

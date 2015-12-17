@@ -73,7 +73,9 @@ public class CMSUserServiceImpl implements CMSUserService {
     }
 
     /**
-     * Update the record with the given username if it exists
+     * Update the record with the given username if it exists.
+     *
+     * BUG
      * @param username  the username  for the {@link CMSUser}
      * @param patches the List of JsonPatch updates
      * @return Article representation of updated {@link CMSUser}
@@ -83,6 +85,9 @@ public class CMSUserServiceImpl implements CMSUserService {
     public CMSUser update(String username, List<JsonPatch> patches){
         CMSUser user = cmsUserRepository.findByUsername(username);
         Class aClass = user.getClass();
+
+        // TODO - Case: change password?
+        // TODO - Case: not changing a @UniqueConstraint for CMSUser?
 
         for(JsonPatch patch: patches){
             String operation = patch.getOp();

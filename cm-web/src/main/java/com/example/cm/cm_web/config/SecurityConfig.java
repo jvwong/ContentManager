@@ -6,6 +6,7 @@ import com.example.cm.cm_repository.repository.CMSUserRepository;
 import com.example.cm.cm_web.security.RestAuthenticationFilter;
 import com.example.cm.cm_web.security.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +57,20 @@ public class SecurityConfig {
 		//return new BCryptPasswordEncoder(10);
 		return new StandardPasswordEncoder("ifarted");
 	}
+
+
+	/**
+	 * Other threads need to have non-null access
+	 * @return
+     */
+	@Bean
+	public MethodInvokingFactoryBean methodInvokingFactoryBean() {
+		MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+		methodInvokingFactoryBean.setTargetClass(SecurityContextHolder.class);
+		methodInvokingFactoryBean.setTargetMethod("setStrategyName");
+		methodInvokingFactoryBean.setArguments(new String[]{SecurityContextHolder.MODE_INHERITABLETHREADLOCAL});
+		return methodInvokingFactoryBean;
+	}
 	
 	/*
 	 * User-details services
@@ -65,9 +81,8 @@ public class SecurityConfig {
 			//<T extends UserDetailsService> DaoAuthenticationConfigurer<AuthenticationManagerBuilder,T>
 			// userDetailsService(T userDetailsService)
 			.userDetailsService(userDetailsService)		
-			.passwordEncoder(passwordEncoder);
-		
-		//System.out.println(passwordEncoder.encode("asdasdasd"));
+			.passwordEncoder(passwordEncoder)
+		;
 	}
 		
 	
@@ -118,7 +133,8 @@ public class SecurityConfig {
 					.disable()
 
 				.addFilterBefore(new RestAuthenticationFilter(tokenAuthenticationService),
-						UsernamePasswordAuthenticationFilter.class);
+						UsernamePasswordAuthenticationFilter.class)
+			;
 		}
 	}	// END RestSecurityConfig
 		

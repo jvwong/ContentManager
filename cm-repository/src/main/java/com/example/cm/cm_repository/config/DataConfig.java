@@ -10,6 +10,7 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,6 +21,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
@@ -47,10 +49,10 @@ public class DataConfig {
 
 //	@Bean
 //	@Profile("dev")
-//	public JndiObjectFactoryBean entityManagerFactory() {
-//		JndiObjectFactoryBean jndiObjectFB = new JndiObjectFactoryBean();
-//		jndiObjectFB.setJndiName("jdbc/cms");
-//		return jndiObjectFB;
+//	public DataSource dataSource()
+//	{
+//		JndiDataSourceLookup lookup = new JndiDataSourceLookup();
+//		return lookup.getDataSource("jdbc/cms");
 //	}
 
 	@Bean
@@ -75,13 +77,12 @@ public class DataConfig {
 //	}
 	
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-			DataSource dataSource, JpaVendorAdapter jpaVendorAdapter){
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
 		LocalContainerEntityManagerFactoryBean factoryBean =
 				new LocalContainerEntityManagerFactoryBean();
 		factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-		factoryBean.setDataSource(dataSource);
-		factoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+		factoryBean.setDataSource(dataSource());
+		factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
 		factoryBean.setPackagesToScan("com.example.cm.cm_model.domain");
 		return factoryBean;
 	}
@@ -110,9 +111,9 @@ public class DataConfig {
 	}
 	
 	@Bean
-	public JpaTransactionManager transactionManager() {
+	public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 		JpaTransactionManager txManager = new JpaTransactionManager();
-		//txManager.setEntityManagerFactory(entityManagerFactory());
+		txManager.setEntityManagerFactory(entityManagerFactory);
 		return txManager;
 	}
 
