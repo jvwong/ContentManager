@@ -1,14 +1,13 @@
 package com.example.cm.cm_repository.config;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -21,40 +20,41 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
+@PropertySource({ "classpath:repo.properties" })
+@ImportResource({ "classpath:awscloud-config.xml" })
 @EnableTransactionManagement
 @EnableJpaRepositories(
 		basePackages="com.example.cm.cm_repository.repository",
 		entityManagerFactoryRef = "entityManagerFactory",
 		transactionManagerRef = "transactionManager")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
-@ImportResource({ "classpath:awscloud-config.xml" })
-@PropertySource("classpath:repo.properties")
 @Import({ AMPQConfig.class })
 public class DataConfig {
 
-	@Bean
-	@Profile("prod")
-	public DataSource dataSource() {
-//		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//		dataSource.setUrl("jdbc:mysql://localhost:3306/cms");
-//		dataSource.setUsername("cmsUser");
-//		dataSource.setPassword("cmsPassword");
-//		return dataSource;
-		
-		JndiDataSourceLookup lookup = new JndiDataSourceLookup();
-		return lookup.getDataSource("jdbc/SpringJpa");
-	}
-	
+	@Value( "${mysql.username}" ) private String mysqlUsername;
+	@Value( "${mysql.password}" ) private String mysqlPassword;
+
+
 	@Bean
 	@Profile("dev")
-	public DataSource embeddedDataSource() {
-		return new EmbeddedDatabaseBuilder()
-	            .setType(EmbeddedDatabaseType.H2)
-	            .addScript("schema_H2.sql")
-	            .addScript("data_H2.sql")
-	            .build();
+	public DataSource dataSource() {
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/cms");
+		dataSource.setUsername("cmsUser");
+		dataSource.setPassword("cmsPassword");
+		return dataSource;
 	}
+	
+//	@Bean
+//	@Profile("dev")
+//	public DataSource embeddedDataSource() {
+//		return new EmbeddedDatabaseBuilder()
+//	            .setType(EmbeddedDatabaseType.H2)
+//	            .addScript("schema_H2.sql")
+//	            .addScript("data_H2.sql")
+//	            .build();
+//	}
 	
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
@@ -71,11 +71,13 @@ public class DataConfig {
 	@Bean 
 	public JpaVendorAdapter jpaVendorAdapter(){
 		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-		adapter.setDatabase(Database.H2);
-//		adapter.setDatabase(Database.MYSQL);
+//		adapter.setDatabase(Database.H2);
+
+		adapter.setDatabase(Database.MYSQL);
 		adapter.setShowSql(false);
-		adapter.setGenerateDdl(true);		
-		//adapter.setDatabasePlatform("org.hiberate.dialect.MySQL5Dialect");
+		adapter.setGenerateDdl(true);
+
+//		adapter.setDatabasePlatform("org.hiberate.dialect.MySQLInnoDBDialect");
 		return adapter;
 	}
 	
@@ -91,7 +93,9 @@ public class DataConfig {
 	
 	@Bean
 	public JpaTransactionManager transactionManager() {
-		return new JpaTransactionManager(); 
+		JpaTransactionManager txManager = new JpaTransactionManager();
+		//txManager.setEntityManagerFactory(entityManagerFactory());
+		return txManager;
 	}
 
 	// application.properties bean

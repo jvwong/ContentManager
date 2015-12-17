@@ -1,6 +1,5 @@
 package com.example.cm.cm_web.config;
 
-import com.example.cm.cm_repository.config.AMPQConfig;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
