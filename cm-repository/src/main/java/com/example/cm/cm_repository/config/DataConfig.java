@@ -1,6 +1,8 @@
 package com.example.cm.cm_repository.config;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -20,8 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource({ "classpath:repo.properties" })
-@ImportResource({ "classpath:awscloud-config.xml" })
 @EnableTransactionManagement
 @EnableJpaRepositories(
 		basePackages="com.example.cm.cm_repository.repository",
@@ -29,10 +29,18 @@ import javax.sql.DataSource;
 		transactionManagerRef = "transactionManager")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @Import({ AMPQConfig.class })
+@PropertySource({ "classpath:application.properties" })
+@ImportResource({ "classpath:awscloud-config.xml" })
 public class DataConfig {
 
-	@Value( "${mysql.username}" ) private String mysqlUsername;
-	@Value( "${mysql.password}" ) private String mysqlPassword;
+	@Value( "${mysql.username}" )
+	private String mysqlUsername = "cmsUser";
+
+	@Value( "${mysql.password}" )
+	private String mysqlPassword = "cmsPassword";
+
+	private static final Logger logger
+			= LoggerFactory.getLogger(DataConfig.class);
 
 
 	@Bean
@@ -41,8 +49,8 @@ public class DataConfig {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/cms");
-		dataSource.setUsername("cmsUser");
-		dataSource.setPassword("cmsPassword");
+		dataSource.setUsername(mysqlUsername);
+		dataSource.setPassword(mysqlPassword);
 		return dataSource;
 	}
 	
@@ -100,7 +108,7 @@ public class DataConfig {
 
 	// application.properties bean
 	@Bean
-	public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 

@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/cloud/aws/context
         http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.0.xsd">
 
-    <context:property-placeholder location="classpath:rest.properties"/>
+    <context:property-placeholder location="classpath:aws.properties"/>
     <aws-context:context-credentials>
         <aws-context:simple-credentials
                 access-key="${id.amazons3}"

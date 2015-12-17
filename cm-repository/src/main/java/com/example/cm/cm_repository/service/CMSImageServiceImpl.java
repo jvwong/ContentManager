@@ -1,19 +1,16 @@
 package com.example.cm.cm_repository.service;
 
-import com.amazonaws.event.ProgressEvent;
-import com.amazonaws.event.ProgressEventType;
-import com.amazonaws.event.ProgressListener;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.Upload;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.alerts.AlertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +25,7 @@ import java.util.UUID;
  * Implementation of CMSImageService
  */
 @Service
+@PropertySource({ "classpath:aws.properties" })
 public class CMSImageServiceImpl implements CMSImageService {
     private static final Logger logger
             = LoggerFactory.getLogger(CMSImageServiceImpl.class);
