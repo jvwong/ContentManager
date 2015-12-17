@@ -148,6 +148,7 @@ public class CMSUserRestEndpoint {
 
 	/**
 	 * Set the CMSImage avatar
+	 * Beware here that the username is set by client - should defer to Principal
 	 * @param multipartFile the multipart file
 	 * @param username CMSUser unique ID
 	 * @return ResponseEntity<CMSUser>

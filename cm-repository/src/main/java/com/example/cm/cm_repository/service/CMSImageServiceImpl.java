@@ -90,11 +90,14 @@ public class CMSImageServiceImpl implements CMSImageService {
         try
         {
 //            upload.waitForUploadResult();
+            logger.info("uploading...");
             URI resourceUri = new URI(this.amazonS3Client.getResourceUrl(imageS3Bucket, key));
             CMSUser fetched = cmsUserService.getUser(username);
             fetched.setAvatar(resourceUri);
             alertService.sendCMSAlert(fetched);
         }
-        catch (URISyntaxException  ignore){}
+        catch (URISyntaxException  err){
+            logger.error("Failed S3 upload", err);
+        }
     }
 }

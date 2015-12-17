@@ -118,8 +118,7 @@ public class SecurityConfig {
 					.disable()
 
 				.addFilterBefore(new RestAuthenticationFilter(tokenAuthenticationService),
-						UsernamePasswordAuthenticationFilter.class)
-				;
+						UsernamePasswordAuthenticationFilter.class);
 		}
 	}	// END RestSecurityConfig
 		

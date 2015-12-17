@@ -10,6 +10,7 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -29,19 +30,28 @@ import javax.sql.DataSource;
 		transactionManagerRef = "transactionManager")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @Import({ AMPQConfig.class })
-@PropertySource({ "classpath:application.properties" })
 @ImportResource({ "classpath:awscloud-config.xml" })
+@PropertySource({ "classpath:application.properties" })
 public class DataConfig {
 
 	@Value( "${mysql.username}" )
 	private String mysqlUsername = "cmsUser";
+//	private String mysqlUsername;
 
 	@Value( "${mysql.password}" )
 	private String mysqlPassword = "cmsPassword";
+//	private String mysqlPassword;
 
 	private static final Logger logger
 			= LoggerFactory.getLogger(DataConfig.class);
 
+//	@Bean
+//	@Profile("dev")
+//	public JndiObjectFactoryBean entityManagerFactory() {
+//		JndiObjectFactoryBean jndiObjectFB = new JndiObjectFactoryBean();
+//		jndiObjectFB.setJndiName("jdbc/cms");
+//		return jndiObjectFB;
+//	}
 
 	@Bean
 	@Profile("dev")
@@ -67,10 +77,10 @@ public class DataConfig {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
 			DataSource dataSource, JpaVendorAdapter jpaVendorAdapter){
-		LocalContainerEntityManagerFactoryBean factoryBean = 
+		LocalContainerEntityManagerFactoryBean factoryBean =
 				new LocalContainerEntityManagerFactoryBean();
 		factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-		factoryBean.setDataSource(dataSource);		
+		factoryBean.setDataSource(dataSource);
 		factoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 		factoryBean.setPackagesToScan("com.example.cm.cm_model.domain");
 		return factoryBean;

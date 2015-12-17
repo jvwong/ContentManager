@@ -26,7 +26,6 @@ import java.io.IOException;
         	RestEndpoint.class,
         	RestEndpointAdvice.class})
 )
-@PropertySource("classpath:rest.properties")
 public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
 
         @Bean
