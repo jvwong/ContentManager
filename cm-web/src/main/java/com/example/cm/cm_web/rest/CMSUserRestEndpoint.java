@@ -30,6 +30,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -86,6 +87,19 @@ public class CMSUserRestEndpoint {
 	      @PathVariable("username") String username) {
 
 		CMSUser cmsUser = cmsUserService.cmsUser(username);
+		if(cmsUser == null) throw new ResourceNotFoundException(CMSUser.class.getSimpleName());
+		return cmsUser;
+	}
+
+	/**
+	 * Retrieve the current User instance
+	 * @param principal the current logged in user
+	 * @return
+	 */
+	@RequestMapping(value="/current/", method=RequestMethod.GET)
+	public CMSUser getUserDetail(Principal principal) {
+
+		CMSUser cmsUser = cmsUserService.getUser(principal.getName());
 		if(cmsUser == null) throw new ResourceNotFoundException(CMSUser.class.getSimpleName());
 		return cmsUser;
 	}

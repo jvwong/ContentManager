@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -110,7 +111,7 @@ public class CMSUserRestEndpointTest {
         Mockito.when(mockCmsUserService.cmsUser(mockUser.getUsername()))
                 .thenReturn(mockUser);
 
-        mockMvc.perform(get("/rest/users/" + mockUser.getUsername() + "/"))
+        mockMvc.perform(get("/rest/users/{username}/", mockUser.getUsername()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MIME_JSON))
                 .andExpect(jsonPath("$.username", is(mockUser.getUsername())))
@@ -121,6 +122,32 @@ public class CMSUserRestEndpointTest {
         ;
 
         Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).cmsUser(mockUser.getUsername());
+    }
+
+    /*
+     * Return the current user
+     **/
+    @Test
+    public void getUserDetailTest() throws Exception {
+
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName())
+                .thenReturn(mockUser.getUsername());
+        Mockito.when(mockCmsUserService.getUser(mockUser.getUsername()))
+                .thenReturn(mockUser);
+
+        mockMvc.perform(get("/rest/users/current/")
+                        .principal(mockPrincipal))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MIME_JSON))
+                .andExpect(jsonPath("$.username", is(mockUser.getUsername())))
+                .andExpect(jsonPath("$.version", is(mockUser.getVersion())))
+                .andExpect(jsonPath("$.lastModifiedDate", is(mockUser.getLastModifiedDate())))
+                .andExpect(jsonPath("$.fullName", is(mockUser.getFullName())))
+                .andExpect(jsonPath("$.role", is(mockUser.getRole())))
+        ;
+
+        Mockito.verify(mockCmsUserService, Mockito.atLeastOnce()).getUser(mockUser.getUsername());
     }
 
     /*
@@ -157,7 +184,7 @@ public class CMSUserRestEndpointTest {
     }
 
     /*
-     * Set the avatar for the CMSUser
+     * Set the avatar for the CMSUser using multipart/form-data
      **/
     @Test
     public void setAvatarTest() throws Exception {

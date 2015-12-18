@@ -77,7 +77,10 @@ subprojects {
 
         compile "javax.inject:javax.inject:$javaxInjectVersion"
 
+
+        // commons / io
         compile "org.apache.commons:commons-lang3:$apacheCommonsLangVersion"
+        compile "commons-io:commons-io:$commonsIOVersion"
 
         // Message Conversion
         compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
