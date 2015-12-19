@@ -183,16 +183,18 @@ public class CMSUserRestEndpoint {
 				throw new UnprocessableEntityException("No data", MultipartFile.class.getName());
 			}
 
-			if(multipartFile.getContentType().equals(MediaType.IMAGE_PNG_VALUE) ||
-					multipartFile.getContentType().equals(MediaType.IMAGE_JPEG_VALUE)){
+			final String contentType = multipartFile.getContentType();
+
+			// TODO: Validate file input - do not trust the meta-data
+			if(contentType.equals(MediaType.IMAGE_PNG_VALUE) ||
+					contentType.equals(MediaType.IMAGE_JPEG_VALUE)){
 
 				final InputStream in = multipartFile.getInputStream();
-				final String originalFilename = multipartFile.getOriginalFilename();
 
 				return new Callable<ResponseEntity>() {
 					@Override
 					public ResponseEntity call() throws Exception {
-						cmsImageService.uploadAvatar(username, in, originalFilename);
+						cmsImageService.uploadAvatar(username, in, contentType);
 						return new ResponseEntity(HttpStatus.ACCEPTED);
 					}
 				};

@@ -47,24 +47,25 @@ public class DataConfig {
 	private static final Logger logger
 			= LoggerFactory.getLogger(DataConfig.class);
 
-//	@Bean
-//	@Profile("dev")
-//	public DataSource dataSource()
-//	{
-//		JndiDataSourceLookup lookup = new JndiDataSourceLookup();
-//		return lookup.getDataSource("jdbc/cms");
-//	}
-
 	@Bean
 	@Profile("dev")
-	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/cms");
-		dataSource.setUsername(mysqlUsername);
-		dataSource.setPassword(mysqlPassword);
-		return dataSource;
+	public DataSource dataSource()
+	{
+		JndiDataSourceLookup lookup = new JndiDataSourceLookup();
+		lookup.setResourceRef(true);
+		return lookup.getDataSource("jdbc/cms");
 	}
+
+//	@Bean
+//	@Profile("dev")
+//	public DataSource dataSource() {
+//		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//		dataSource.setUrl("jdbc:mysql://localhost:3306/cms");
+//		dataSource.setUsername(mysqlUsername);
+//		dataSource.setPassword(mysqlPassword);
+//		return dataSource;
+//	}
 	
 //	@Bean
 //	@Profile("dev")

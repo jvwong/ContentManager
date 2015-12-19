@@ -12,18 +12,16 @@ import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
 import com.example.cm.cm_model.domain.CMSUser;
 import com.example.cm.cm_repository.alerts.AlertService;
-import com.example.cm.cm_repository.image.utils.ImageConverter;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +39,8 @@ public class CMSImageServiceImpl implements CMSImageService {
 
     private final String AVATAR_BUCKET_VALUE = "avatar";
     private final String AVATAR_NAME_VALUE = "avatar";
-    private final String AVATAR_IMAGE_FORMAT_VALUE = "jpg";
+    private final String JPG_EXTENSION_VALUE = "jpg";
+    private final String PNG_EXTENSION_VALUE = "png";
 
     @Value( "${bucket.amazons3}" )
     private String imageS3Bucket;
@@ -67,14 +66,22 @@ public class CMSImageServiceImpl implements CMSImageService {
                 = (AmazonS3Client) this.transferManager.getAmazonS3Client();
     }
 
+    /**
+     * Upload an image inputstream to AWS S3 storage
+     * Don't trust the meta data coming from the user
+     * @param username
+     * @param in
+     * @param contentType restricted to jpg or png
+     * @throws IOException
+     */
     @Override
     @Async
     public void uploadAvatar(String username,
                              InputStream in,
-                             String originalFilename)
+                             String contentType)
             throws IOException {
 
-        String key = getKey(username);
+        String key = getKey(username, contentType);
         ObjectMetadata meta = getMetadata(getBucket(username).toString(), key);
 
         try {
@@ -112,15 +119,13 @@ public class CMSImageServiceImpl implements CMSImageService {
     private UploadResult upload(String key, InputStream in, ObjectMetadata meta)
     {
         UploadResult result = null;
-        ByteArrayInputStream convertedIn;
 
         try
         {
-            convertedIn = ImageConverter.convertToJPEG(in);
             Upload upload = this.transferManager.upload(
                     imageS3Bucket,
                     key,
-                    convertedIn,
+                    in,
                     meta);
 
             upload.addProgressListener(new ProgressListener() {
@@ -137,20 +142,34 @@ public class CMSImageServiceImpl implements CMSImageService {
         catch (InterruptedException ire){
             logger.error("Upload cancelled", ire);
         }
-        catch (IOException ioe){
-            logger.error("Upload error", ioe);
-        }
 
         return result;
     }
 
-    private String getKey(String username)
+    private String getKey(String username, String contentType)
+            throws IOException
     {
-        // Add the user to the bucket name
+        String extension;
+
+        if(contentType.equals(MediaType.IMAGE_PNG_VALUE))
+        {
+            extension = PNG_EXTENSION_VALUE;
+        }
+        else if (contentType.equals(MediaType.IMAGE_JPEG_VALUE))
+        {
+            extension = JPG_EXTENSION_VALUE;
+        }
+        else
+        {
+            throw new IOException("Invalid file type");
+        }
+
         File bucket = getBucket(username);
 
         // Normalize the image name
-        String newFileName = AVATAR_NAME_VALUE.concat(".").concat(AVATAR_IMAGE_FORMAT_VALUE);
+        String newFileName = AVATAR_NAME_VALUE
+                .concat(".")
+                .concat(extension);
 
         String path = FilenameUtils.concat(bucket.getPath(), newFileName);
         return path;
